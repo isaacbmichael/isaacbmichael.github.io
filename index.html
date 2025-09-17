@@ -4,46 +4,132 @@
   <meta charset="UTF-8">
   <title>Isaac B. Michael – Portfolio</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; color: #333; }
-    h1 { color: #2c3e50; }
-    h2 { margin-top: 40px; color: #34495e; }
-    a { color: #0066cc; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .section { margin-bottom: 30px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 10px 0 0;
+      font-size: 2.2em;
+    }
+    header p {
+      margin-top: 8px;
+      font-size: 1.1em;
+      color: #ecf0f1;
+    }
+    .profile-photo {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;   /* makes it circular */
+      object-fit: cover;    /* crops neatly if not square */
+      border: 3px solid #ecf0f1;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .section h2 {
+      margin-top: 0;
+      color: #34495e;
+      font-size: 1.5em;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #2c3e50;
+      color: #fff;
+      margin-top: 40px;
+    }
+    footer a {
+      color: #ecf0f1;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <h1>Isaac B. Michael – Technical Portfolio</h1>
-  <p>This site showcases selected projects in R, Python, SAS, and LaTeX.</p>
+  <header>
+    <img src="IM_Pic.jpeg" alt="Isaac B. Michael" class="profile-photo">
+    <h1>Isaac B. Michael</h1>
+    <p>Data Scientist • Educator • Technical Consultant</p>
+  </header>
 
-  <div class="section">
-    <h2>🔹 R Projects</h2>
-    <ul>
-      <li><a href="eda_demo.html" target="_blank">Exploratory Applicant Data Report (Demo)</a></li>
-    </ul>
-  </div>
+  <main>
+    <p>Welcome to my technical portfolio. This site highlights selected projects in <strong>R</strong>, <strong>Python</strong>, <strong>SAS</strong>, and <strong>LaTeX</strong>, demonstrating data analysis, automation, and reporting expertise.</p>
 
-  <div class="section">
-    <h2>🔹 Python Projects</h2>
-    <ul>
-      <li><a href="#" target="_blank">Coming soon</a></li>
-    </ul>
-  </div>
+    <div class="section">
+      <h2>📊 R Projects</h2>
+      <ul>
+        <li><a href="eda_demo.html" target="_blank">Exploratory Applicant Data Report (Demo)</a> — R Markdown with data cleaning, visualization, and SES enrichment.</li>
+      </ul>
+    </div>
 
-  <div class="section">
-    <h2>🔹 SAS Projects</h2>
-    <ul>
-      <li><a href="#" target="_blank">Coming soon</a></li>
-    </ul>
-  </div>
+    <div class="section">
+      <h2>🐍 Python Projects</h2>
+      <ul>
+        <li><a href="#" target="_blank">Coming soon</a> — automation scripts, data pipelines, and visualization tools.</li>
+      </ul>
+    </div>
 
-  <div class="section">
-    <h2>🔹 LaTeX Projects</h2>
-    <ul>
-      <li><a href="#" target="_blank">Coming soon</a></li>
-    </ul>
-  </div>
+    <div class="section">
+      <h2>📈 SAS Projects</h2>
+      <ul>
+        <li><a href="#" target="_blank">Coming soon</a> — macros for survey weighting, duplicate handling, and decision trees.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>📝 LaTeX Projects</h2>
+      <ul>
+        <li><a href="#" target="_blank">Coming soon</a> — CV and report templates using LaTeX (AltaCV and custom styles).</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <p>Connect with me:</p>
+    <p>
+      <a href="https://github.com/isaacbmichael" target="_blank">GitHub</a> |
+      <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank">LinkedIn</a> |
+      <a href="mailto:isaacbmichael@gmail.com">Email</a>
+    </p>
+  </footer>
 </body>
 </html>
-
-
