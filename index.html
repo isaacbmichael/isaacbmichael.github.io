@@ -90,11 +90,17 @@
       text-decoration: underline;
     }
     footer {
-      text-align: center;
-      padding: 20px;
       background: #2c3e50;
       color: #fff;
       margin-top: 40px;
+
+      /* new/changed */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;   /* <- vertical centering */
+      min-height: 110px;         /* tweak this to taste */
+      padding: 0 20px;           /* keep some side padding */
     }
     footer a {
       color: #ecf0f1;
@@ -103,6 +109,9 @@
     }
     footer a:hover {
       text-decoration: underline;
+    }
+    footer p {
+      margin: 6px 0;             /* tighten vertical spacing */
     }
   </style>
 </head>
@@ -154,4 +163,5 @@
   </footer>
 </body>
 </html>
+
 
