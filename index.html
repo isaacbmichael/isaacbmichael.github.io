@@ -28,11 +28,10 @@
       color: #bdc3c7;
     }
     header p {
-      margin-top: 10px;        /* was 12px */
+      margin-top: 10px;      
       font-size: 1.1em;
       color: #ecf0f1;
     }
-    /* Remove extra space under the tagline line */
     header p:last-of-type {
       margin-bottom: 0;
     }
@@ -47,7 +46,7 @@
     }
     main {
       max-width: 100%;
-      margin: 18px auto;       /* was 22px */
+      margin: 18px auto;       
       padding: 0 40px;
     }
     .section {
@@ -93,14 +92,12 @@
       background: #2c3e50;
       color: #fff;
       margin-top: 40px;
-
-      /* new/changed */
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;   /* <- vertical centering */
-      min-height: 110px;         /* tweak this to taste */
-      padding: 0 20px;           /* keep some side padding */
+      justify-content: center;   
+      min-height: 110px;         
+      padding: 0 20px;          
     }
     footer a {
       color: #ecf0f1;
@@ -111,7 +108,7 @@
       text-decoration: underline;
     }
     footer p {
-      margin: 6px 0;             /* tighten vertical spacing */
+      margin: 6px 0;            
     }
     /* --- FIX: Social icon sizing, color, spacing, and sr-only --- */
     .footer-socials { text-align: center; }
@@ -129,11 +126,27 @@
       display:block;
       fill: currentColor;           /* use the link's color */
     }
-
     /* Hide the screen-reader only label visually */
     .sr-only {
       position:absolute; width:1px; height:1px; padding:0; margin:-1px;
       overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+    /* Tighter vertical alignment */
+    .socials a { 
+      display:inline-flex; 
+      align-items:center; 
+      gap:8px; 
+      line-height:1;               /* avoids extra baseline slack */
+    }
+    /* Lock icon size + nudge down 1px to sit on the text baseline */
+    .socials .icon, .socials svg {
+      width:18px; 
+      height:18px;                 /* try 18–20px; 18 often aligns best */
+      flex:0 0 18px;
+      display:block;
+      fill: currentColor;
+      position: relative; 
+      top: 1px;                    /* fine-tune: 0 or 2px if needed */
     }
   </style>
 </head>
@@ -210,6 +223,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
