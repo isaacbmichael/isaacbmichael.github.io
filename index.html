@@ -113,6 +113,28 @@
     footer p {
       margin: 6px 0;             /* tighten vertical spacing */
     }
+    /* --- FIX: Social icon sizing, color, spacing, and sr-only --- */
+    .footer-socials { text-align: center; }
+    .socials { display:flex; justify-content:center; gap:22px; margin-top:6px; }
+
+    .socials a {
+      display:inline-flex; align-items:center; gap:8px;
+      color:#ecf0f1;                /* icon + text color */
+      font-weight:700; text-decoration:none;
+    }
+    .socials a:hover { text-decoration:underline; opacity:0.9; }
+    /* Size the SVGs and make them inherit the link color */
+    .socials .icon, .socials svg {
+      width:20px; height:20px;      /* control size */
+      display:block;
+      fill: currentColor;           /* use the link's color */
+    }
+
+    /* Hide the screen-reader only label visually */
+    .sr-only {
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
   </style>
 </head>
 <body>
@@ -188,6 +210,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
