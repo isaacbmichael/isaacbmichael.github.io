@@ -48,6 +48,12 @@
 
     /* ===== Main ===== */
     main { max-width: 100%; margin: 18px auto; padding: 0 40px; }
+    /* intro matches .section width + padding */
+    .intro {
+      max-width: 1200px;
+      margin: 0 auto 18px;
+      padding: 0 25px;   /* same inner padding as .section */
+    }
     .section {
       background: #fff; border-radius: 12px; padding: 20px 25px; margin-bottom: 30px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05); max-width: 1200px; margin-left: auto; margin-right: auto;
@@ -97,9 +103,9 @@
     .icon-svg { fill: currentColor; } /* envelope inherits link color */
 
     /* Per-icon vertical nudges — ADJUST HERE */
-    .icon-github   { top: -2px; }  /* raise/lower GitHub */
-    .icon-linkedin { top: -3px; }  /* raise/lower LinkedIn */
-    .icon-email    { top:  0px; }  /* raise/lower Email */
+    .icon-github   { top: -2px; }
+    .icon-linkedin { top: -3px; }
+    .icon-email    { top:  0px; }
 
     /* Screen-reader-only helper (used for mobile label hiding) */
     .sr-only {
@@ -132,7 +138,12 @@
   </header>
 
   <main>
-    <p>Welcome to my technical portfolio. This site highlights selected projects demonstrating <strong>data analysis, survey methodology, automation, investment strategy, and executive-level reporting</strong>.</p>
+    <div class="intro">
+      <p>
+        Welcome to my technical portfolio. This site highlights selected projects demonstrating
+        <strong>data analysis, survey methodology, automation, investment strategy, and executive-level reporting</strong>.
+      </p>
+    </div>
 
     <!-- Project 1: Capital Allocation Report -->
     <div class="section project-card">
