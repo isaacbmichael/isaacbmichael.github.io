@@ -54,7 +54,7 @@
     .footer-socials { text-align: center; }
     .socials {
       display: flex; justify-content: center; align-items: center;
-      gap: 24px; margin-top: 6px;
+      gap: 24px; margin-top: 10px;
     }
     .social-link {
       display: inline-flex; align-items: center; gap: 10px;
@@ -78,9 +78,9 @@
     .icon-svg { fill: currentColor; } /* envelope inherits link color */
 
     /* Per-icon vertical nudges — ADJUST HERE */
-    .icon-github   { top: -1px; }  /* raise/lower GitHub */
-    .icon-linkedin { top: -2px; }  /* raise/lower LinkedIn */
-    .icon-email    { top: -1px; }  /* raise/lower Email */
+    .icon-github   { top: -2px; }  /* was -1px → raise 1px */
+    .icon-linkedin { top: -3px; }  /* was -2px → raise 1px */
+    .icon-email    { top:  0px; }  /* was -1px → lower 1px (i.e., closer to 0) */
 
     /* Screen-reader-only helper (used for mobile label hiding) */
     .sr-only {
@@ -169,4 +169,5 @@
   </footer>
 </body>
 </html>
+
 
