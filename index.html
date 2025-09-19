@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
+      margin: 0;FF
       background: #f9f9f9;
       color: #333;
       line-height: 1.6;
@@ -131,10 +131,14 @@
     }
     .social-link {
       display: inline-flex; align-items: center; gap: 10px;
-      color: #ecf0f1; font-weight: 700; text-decoration: none; line-height: 1;
+      color: #ecf0f1; font-weight: 400; text-decoration: none; line-height: 1;
       border-radius: 6px;
       /* Optional: set a base size so icons scale predictably with labels */
       font-size: clamp(16px, 1.6vw, 20px);
+    }
+    .social-link .label{
+      letter-spacing: .2px;
+      font-weight: 400;
     }
     .social-link:hover .label,
     .social-link:focus-visible .label { text-decoration: underline; }
@@ -269,3 +273,4 @@
   </footer>
 </body>
 </html>
+
