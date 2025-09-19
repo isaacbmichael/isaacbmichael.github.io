@@ -65,10 +65,10 @@
     /* Base icon styling */
     .icon { width: 20px; height: 20px; flex: 0 0 20px; display: block; fill: currentColor; position: relative; }
 
-    /* Per-icon vertical nudges (tweak to taste) */
-    .icon-github   { top: -1px; }
-    .icon-linkedin { top: -2px; }
-    .icon-email    { top: -1px; }
+    /* Per-icon vertical nudges — ADJUST HERE */
+    .icon-github   { top: -1px; }  /* raise/lower GitHub */
+    .icon-linkedin { top: -2px; }  /* raise/lower LinkedIn */
+    .icon-email    { top: -1px; }  /* raise/lower Email */
 
     /* Screen-reader-only text */
     .sr-only {
@@ -145,12 +145,9 @@
         <a href="mailto:isaac.b.michael@gmail.com">
           <!-- White-filled envelope with colored outline/flap -->
           <svg class="icon icon-email" viewBox="0 0 24 24" aria-hidden="true">
-            <!-- white body (stays white on hover) -->
             <rect x="3" y="5" width="18" height="14" rx="2" ry="2" fill="#ffffff"/>
-            <!-- flap -->
             <path d="M3 7l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- outline -->
             <rect x="3" y="5" width="18" height="14" rx="2" ry="2"
                   fill="none" stroke="currentColor" stroke-width="2"/>
           </svg>
@@ -162,4 +159,3 @@
   </footer>
 </body>
 </html>
-
