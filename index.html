@@ -39,9 +39,9 @@
     }
     .name{
       margin: 2px 0 4px;
-      font-size: clamp(28px, 4.3vw, 56px);
+      font-size: clamp(28px, 3.8vw, 50px);
       line-height: 1.05;
-      letter-spacing: .2px;
+      letter-spacing: .1px;
       text-align: left;
     }
     .subtitle{
@@ -52,13 +52,13 @@
     }
     .tagline{
       margin: 0;
-      font-size: clamp(16px, 1.6vw, 24px);
+      font-size: clamp(16px, 1.4vw, 22px);
       line-height: 1.3;
       letter-spacing: .1px;
       color:#e8eef2;
-      white-space: nowrap;         /* keep single line on wide screens */
-      overflow: hidden;
-      text-overflow: ellipsis;     /* safety if viewport gets tight */
+      white-space: normal;         /* keep single line on wide screens */
+      overflow: visible;
+      text-overflow: clip;     /* safety if viewport gets tight */
       text-align: left;
     }
 
@@ -260,3 +260,4 @@
   </footer>
 </body>
 </html>
+
