@@ -11,23 +11,43 @@
       color: #333;
       line-height: 1.6;
     }
+
+    /* ===== Header ===== */
     header {
-      background: #2c3e50;
-      color: #fff;
-      padding: 32px 20px 12px;
-      text-align: center;
+      background:#2c3e50; color:#fff; text-align:center;
+      padding: 28px 20px 18px; /* tighter top, a bit more bottom */
     }
-    header h1 { margin: 10px 0 0; font-size: 2.2em; }
-    .subtitle { margin-top: 5px; font-size: 1em; font-weight: normal; color: #bdc3c7; }
-    header p { margin-top: 10px; font-size: 1.1em; color: #ecf0f1; }
-    header p:last-of-type { margin-bottom: 0; }
+    .header-inner { max-width: 1100px; margin: 0 auto; }
 
-    .profile-photo {
-      width: 200px; height: 200px; border-radius: 50%; object-fit: cover;
-      border: 4px solid #ecf0f1; margin-bottom: 15px; box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    .profile-photo{
+      width: clamp(140px, 22vw, 220px);
+      height: clamp(140px, 22vw, 220px);
+      border-radius:50%; object-fit:cover;
+      border:4px solid #ecf0f1; margin-bottom:16px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.28);
     }
+    header h1{
+      margin: 8px 0 6px;
+      font-size: clamp(28px, 4.5vw, 56px);
+      line-height: 1.1;
+      letter-spacing: .2px;
+    }
+    .subtitle{
+      margin: 0 0 12px;
+      font-size: clamp(14px, 1.6vw, 20px);
+      color:#d7dee4;
+    }
+    header .tagline{
+      margin: 0;
+      font-size: clamp(16px, 2.1vw, 28px);
+      line-height: 1.35;
+      color:#e8eef2;
+      max-width: 980px;   /* shorter for comfortable reading */
+      margin-left:auto; margin-right:auto;
+    }
+
+    /* ===== Main ===== */
     main { max-width: 100%; margin: 18px auto; padding: 0 40px; }
-
     .section {
       background: #fff; border-radius: 12px; padding: 20px 25px; margin-bottom: 30px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05); max-width: 1200px; margin-left: auto; margin-right: auto;
@@ -42,7 +62,7 @@
     a { color: #0066cc; text-decoration: none; font-weight: bold; }
     a:hover { text-decoration: underline; }
 
-    /* Footer */
+    /* ===== Footer ===== */
     footer {
       background: #2c3e50; color: #fff; margin-top: 40px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -50,7 +70,6 @@
     }
     footer p { margin: 6px 0; }
 
-    /* Socials (icons + labels) */
     .footer-socials { text-align: center; }
     .socials {
       display: flex; justify-content: center; align-items: center;
@@ -78,9 +97,9 @@
     .icon-svg { fill: currentColor; } /* envelope inherits link color */
 
     /* Per-icon vertical nudges — ADJUST HERE */
-    .icon-github   { top: -2px; }  /* was -1px → raise 1px */
-    .icon-linkedin { top: -3px; }  /* was -2px → raise 1px */
-    .icon-email    { top:  0px; }  /* was -1px → lower 1px (i.e., closer to 0) */
+    .icon-github   { top: -2px; }  /* raise/lower GitHub */
+    .icon-linkedin { top: -3px; }  /* raise/lower LinkedIn */
+    .icon-email    { top:  0px; }  /* raise/lower Email */
 
     /* Screen-reader-only helper (used for mobile label hiding) */
     .sr-only {
@@ -96,15 +115,20 @@
       }
       .socials { gap: 16px; }
       .icon-img, .icon-svg { width: 18px; height: 18px; }
+      header { padding: 22px 16px 16px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="IM_Pic.jpeg" alt="Isaac B. Michael" class="profile-photo">
-    <h1>Isaac B. Michael</h1>
-    <p class="subtitle">PhD • MS • MApSt</p>
-    <p>Executive Data & Research Leader | Mathematical Statistician | Driving Strategy Through Analytics</p>
+    <div class="header-inner">
+      <img src="IM_Pic.jpeg" alt="Isaac B. Michael" class="profile-photo">
+      <h1>Isaac B. Michael</h1>
+      <p class="subtitle">PhD • MS • MApSt</p>
+      <p class="tagline">
+        Executive Data & Research Leader | Mathematical Statistician | Driving Strategy Through Analytics
+      </p>
+    </div>
   </header>
 
   <main>
@@ -142,21 +166,21 @@
       <p>Connect with me:</p>
       <div class="socials">
 
-        <!-- LinkedIn (official file you uploaded) -->
+        <!-- LinkedIn -->
         <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener"
            class="social-link" aria-label="LinkedIn">
           <img class="icon-img icon-linkedin" src="assets/icons/linkedin-white.png" alt="" aria-hidden="true">
           <span class="label">LinkedIn</span>
         </a>
-        
-        <!-- GitHub (official file you uploaded) -->
+
+        <!-- GitHub -->
         <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener"
            class="social-link" aria-label="GitHub">
           <img class="icon-img icon-github" src="assets/icons/github-white.png" alt="" aria-hidden="true">
           <span class="label">GitHub</span>
         </a>
 
-        <!-- Email (your envelope SVG) -->
+        <!-- Email -->
         <a href="mailto:isaac.b.michael@gmail.com" class="social-link" aria-label="Email">
           <svg class="icon-svg icon-email" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M2 5h20a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm10 7L3.4 7.6a.5.5 0 0 0-.4.9L12 14l9-5.5a.5.5 0 1 0-.5-.87L12 12z"/>
@@ -169,6 +193,3 @@
   </footer>
 </body>
 </html>
-
-
-
