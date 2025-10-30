@@ -35,7 +35,7 @@
     .profile-photo{
       width: 170px; height: 170px; border-radius:50%; object-fit:cover;
       border:4px solid #ecf0f1; box-shadow: 0 8px 18px rgba(0,0,0,.28);
-      grid-row: span 3; /* spans name, degree, tagline on tall screens */
+      grid-row: span 3;
     }
     .name{
       margin: 2px 0 4px;
@@ -63,7 +63,7 @@
       max-width: 1000px;
     }
 
-    /* Right column card (bio / quote / image etc.) */
+    /* Right column card */
     .header-card{
       margin-top: 6px;
       max-width: 560px;
@@ -73,45 +73,49 @@
       padding: 16px 18px;
       box-shadow: 0 10px 24px rgba(0,0,0,0.28);
     }
-    .header-card h3{
-      margin: 0 0 8px;
-      font-size: clamp(16px, 1.5vw, 20px);
-      color: #ffffff;
-    }
-    .header-card p{
-      margin: 0;
-      color: #e6edf3;
-      font-size: clamp(14px, 1.25vw, 17px);
-      line-height: 1.45;
-    }
-    .header-card .quote{
-      margin-top: 10px;
-      font-style: italic;
-      opacity: .95;
-    }
-    .header-card .byline{
-      margin-top: 6px;
-      font-size: .95em;
-      color: #cfd9e2;
-    }
+    .header-card h3{ margin: 0 0 8px; font-size: clamp(16px, 1.5vw, 20px); color: #fff; }
+    .header-card p{ margin: 0; color: #e6edf3; font-size: clamp(14px, 1.25vw, 17px); line-height: 1.45; }
+    .header-card .quote{ margin-top: 10px; font-style: italic; opacity: .95; }
+    .header-card .byline{ margin-top: 6px; font-size: .95em; color: #cfd9e2; }
 
     /* ===== Main ===== */
     main { max-width: 100%; margin: 18px auto; padding: 0 40px; }
-    .intro {
-      max-width: 1200px;
-      margin: 0 auto 18px;
-      padding: 0 25px;
-    }
+    .intro { max-width: 1200px; margin: 0 auto 18px; padding: 0 25px; }
+
     .section {
-      background: #fff; border-radius: 12px; padding: 20px 25px; margin-bottom: 30px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05); max-width: 1200px; margin-left: auto; margin-right: auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 1200px;
+      margin-left: auto; margin-right: auto;
     }
-    .section h2 { margin-top: 0; color: #34495e; font-size: 1.5em; }
     .project-card { margin-bottom: 20px; }
-    .project-card h3 { margin-bottom: 5px; }
+    .project-card h3 { margin: 0 0 5px; }
     .project-card p { margin: 5px 0 10px; }
     .project-card ul { list-style: none; padding-left: 0; }
     .project-card li { margin: 6px 0; }
+
+    /* Meta row + badges */
+    .meta {
+      margin-top: 6px;
+      color: #6b7280;
+      font-size: 0.95em;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: #eef2ff;
+      color: #1f2a44;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: .75rem;
+      letter-spacing: .02em;
+    }
+    .badge--new { background: #d1fae5; color: #065f46; }
 
     a { color: #0066cc; text-decoration: none; font-weight: bold; }
     a:hover { text-decoration: underline; }
@@ -139,9 +143,7 @@
     .social-link:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
     .social-link .label { letter-spacing: .05em; font-size: 1em; }
-    .icon-img, .icon-svg {
-      height: 1em; width: auto; display: block; object-fit: contain;
-    }
+    .icon-img, .icon-svg { height: 1em; width: auto; display: block; object-fit: contain; }
     .icon-svg { fill: currentColor; }
 
     .sr-only {
@@ -179,7 +181,7 @@
         <p class="tagline">Executive Data & Research Leader | Mathematical Statistician | Driving Strategy Through Analytics</p>
       </div>
 
-      <!-- Right: Bio / Quote / Image -->
+      <!-- Right: Bio / Quote -->
       <aside class="header-card" aria-label="About">
         <p> Executive leader blending analytics, automation, and operational strategy to deliver measurable impact. Proven record in modernizing national data systems, shaping policy, and guiding C-suite decision-making. </p>
         <p class="quote">“In God we trust; all others must bring data.”</p>
@@ -197,13 +199,18 @@
       </p>
     </div>
 
-    <!-- Project 4 (NEW – newest goes first) -->
+    <!-- Newest first -->
     <div class="section project-card">
-      <h3><b>Project 4 — ATS-Ready altacv Resume Template</b></h3>
+      <h3><b>ATS-Ready altacv Resume Template</b></h3>
+      <div class="meta">
+        <span class="badge badge--new">NEW</span>
+        <span>Updated Oct 2025</span>
+        <span>LaTeX • GitHub Actions</span>
+      </div>
       <p>
-        ATS-ready, single-column LaTeX resume that <em>looks</em> like two columns while remaining parser-safe.
-        Built on <b>AltaCV</b>; adds an <b>ATS toggle</b>, faux right-rail alignment helpers, icon-silent
-        <code>ActualText</code>, dash normalization, and CI that publishes both PDFs.
+        ATS-ready, single-column <b>LaTeX</b> resume that <em>looks</em> like two columns while remaining parser-safe.
+        Built on <b>AltaCV</b>; adds an <b>ATS mode</b>, icon-silent <code>ActualText</code>, dash normalization,
+        and CI that publishes both PDFs.
       </p>
       <ul>
         <li>📄 <a href="https://github.com/isaacbmichael/ats-ready-altacv-template/releases/latest/download/template.pdf" target="_blank" rel="noopener">Download Showcase PDF</a></li>
@@ -212,12 +219,14 @@
       </ul>
     </div>
 
-    <!-- Project 3 -->
     <div class="section project-card">
-      <h3><b>Project 3 — Capital Allocation Monte Carlo Simulation</b></h3>
+      <h3><b>Capital Allocation Monte Carlo Simulation</b></h3>
+      <div class="meta">
+        <span>Updated 2025</span>
+        <span>Python • NumPy • Matplotlib • yFinance</span>
+      </div>
       <p>
-        Executive-level risk/return simulation using real market data and Monte Carlo methods.
-        Implemented in <b>Python (NumPy, Matplotlib, yFinance)</b>.
+        Risk/return simulation using real market data and Monte Carlo methods; executive-level outputs for allocation decisions.
       </p>
       <ul>
         <li>🌐 <a href="https://isaacbmichael.github.io/capital-allocation-report/capital_allocation_report.html" target="_blank" rel="noopener">View Interactive HTML Report</a></li>
@@ -225,12 +234,14 @@
       </ul>
     </div>
 
-    <!-- Project 2 -->
     <div class="section project-card">
-      <h3><b>Project 2 — Exploratory Applicant Data Report</b></h3>
+      <h3><b>Exploratory Applicant Data Report</b></h3>
+      <div class="meta">
+        <span>Updated 2025</span>
+        <span>R • RMarkdown • ggplot2</span>
+      </div>
       <p>
         Interactive analysis of applicant demographics, cleaning pipelines, and SES enrichment.
-        Built with <b>R (RMarkdown, ggplot2)</b>.
       </p>
       <ul>
         <li>🌐 <a href="https://isaacbmichael.github.io/eda-applicant-report/eda_report.html" target="_blank" rel="noopener">View Interactive HTML Report</a></li>
@@ -238,13 +249,15 @@
       </ul>
     </div>
 
-    <!-- Project 1 -->
     <div class="section project-card">
-      <h3><b>Project 1 — Academic Program Site Template</b></h3>
+      <h3><b>Academic Program Site Template</b></h3>
+      <div class="meta">
+        <span>Updated 2025</span>
+        <span>HTML/CSS • Vanilla JS</span>
+      </div>
       <p>
-        Lightweight, static microsite template for academic programs, featuring accessible UI patterns
-        (hero/CTAs, proposal cards, accordions, badges), responsive spacing, and print-friendly styles.
-        Built with <b>pure HTML/CSS</b> and a touch of <b>vanilla JS</b>—no build step.
+        Lightweight, static microsite template for academic programs—accessible UI (hero/CTAs, proposal cards, accordions, badges),
+        responsive spacing, and print-friendly styles.
       </p>
       <ul>
         <li>🌐 <a href="https://isaacbmichael.github.io/academic-program-site-template/" target="_blank" rel="noopener">View Live Demo</a></li>
@@ -258,21 +271,16 @@
     <div class="footer-socials">
       <p>Connect with me:</p>
       <div class="socials">
-        <!-- LinkedIn -->
         <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener"
            class="social-link" aria-label="LinkedIn">
           <img class="icon-img" src="assets/icons/linkedin-white.png" alt="" aria-hidden="true">
           <span class="label">LinkedIn</span>
         </a>
-
-        <!-- GitHub -->
         <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener"
            class="social-link" aria-label="GitHub">
           <img class="icon-img" src="assets/icons/github-white.png" alt="" aria-hidden="true">
           <span class="label">GitHub</span>
         </a>
-
-        <!-- Email -->
         <a href="mailto:isaac.b.michael@gmail.com" class="social-link" aria-label="Email">
           <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M2 5h20a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm10 7L3.4 7.6a.5.5 0 0 0-.4.9L12 14l9-5.5a.5.5 0 1 0-.5-.87L12 12z"/>
