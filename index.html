@@ -73,7 +73,6 @@
       padding: 16px 18px;
       box-shadow: 0 10px 24px rgba(0,0,0,0.28);
     }
-    .header-card h3{ margin: 0 0 8px; font-size: clamp(16px, 1.5vw, 20px); color: #fff; }
     .header-card p{ margin: 0; color: #e6edf3; font-size: clamp(14px, 1.25vw, 17px); line-height: 1.45; }
     .header-card .quote{ margin-top: 10px; font-style: italic; opacity: .95; }
     .header-card .byline{ margin-top: 6px; font-size: .95em; color: #cfd9e2; }
@@ -143,13 +142,13 @@
     .social-link:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
     .social-link .label { letter-spacing: .05em; font-size: 1em; }
-    .icon-img, .icon-svg { height: 1em; width: auto; display: block; object-fit: contain; }
-    .icon-svg { fill: currentColor; }
 
-    .sr-only {
-      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    /* Icons: keep email SVG as-is; nudge PNGs up slightly for optical baseline alignment */
+    .icon-img { height: 1em; width: auto; display: block; object-fit: contain; transform: translateY(-0.06em); }
+    @supports not (transform: translateY(0)) {
+      .icon-img { position: relative; top: -1px; }
     }
+    .icon-svg { height: 1em; width: auto; display: block; object-fit: contain; fill: currentColor; }
 
     /* ===== Responsive ===== */
     @media (max-width: 840px){
@@ -215,7 +214,7 @@
       <ul>
         <li>📄 <a href="/assets/pdfs/template.pdf" download>Download Showcase PDF</a></li>
         <li>📄 <a href="/assets/pdfs/resume-ats.pdf" download>Download ATS PDF</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/ats-ready-altacv-template" target="_blank" rel="noopener">View Repository</a></li>
+        <li>🔗 <a href="https://github.com/isaacbmichael/ats-ready-altacv-template" target="_blank" rel="noopener noreferrer">View Repository</a></li>
       </ul> 
     </div>
 
@@ -230,8 +229,8 @@
         responsive spacing, and print-friendly styles.
       </p>
       <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/academic-program-site-template/" target="_blank" rel="noopener">View Live Demo</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/academic-program-site-template" target="_blank" rel="noopener">View Repository</a></li>
+        <li>🌐 <a href="https://isaacbmichael.github.io/academic-program-site-template/" target="_blank" rel="noopener noreferrer">View Live Demo</a></li>
+        <li>🔗 <a href="https://github.com/isaacbmichael/academic-program-site-template" target="_blank" rel="noopener noreferrer">View Repository</a></li>
       </ul>
     </div>
     
@@ -245,8 +244,8 @@
         Risk/return simulation using real market data and Monte Carlo methods; executive-level outputs for allocation decisions.
       </p>
       <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/capital-allocation-report/capital_allocation_report.html" target="_blank" rel="noopener">View Interactive HTML Report</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/capital-allocation-report/blob/main/capital_allocation_montecarlo.py" target="_blank" rel="noopener">View Python Source Code</a></li>
+        <li>🌐 <a href="https://isaacbmichael.github.io/capital-allocation-report/capital_allocation_report.html" target="_blank" rel="noopener noreferrer">View Interactive HTML Report</a></li>
+        <li>🔗 <a href="https://github.com/isaacbmichael/capital-allocation-report/blob/main/capital_allocation_montecarlo.py" target="_blank" rel="noopener noreferrer">View Python Source Code</a></li>
       </ul>
     </div>
     
@@ -260,8 +259,8 @@
         Interactive analysis of applicant demographics, cleaning pipelines, and SES enrichment.
       </p>
       <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/eda-applicant-report/eda_report.html" target="_blank" rel="noopener">View Interactive HTML Report</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/eda-applicant-report/blob/main/eda_report.Rmd" target="_blank" rel="noopener">View R Markdown Source Code</a></li>
+        <li>🌐 <a href="https://isaacbmichael.github.io/eda-applicant-report/eda_report.html" target="_blank" rel="noopener noreferrer">View Interactive HTML Report</a></li>
+        <li>🔗 <a href="https://github.com/isaacbmichael/eda-applicant-report/blob/main/eda_report.Rmd" target="_blank" rel="noopener noreferrer">View R Markdown Source Code</a></li>
       </ul>
     </div>
   </main>
@@ -271,12 +270,12 @@
     <div class="footer-socials">
       <p>Connect with me:</p>
       <div class="socials">
-        <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener"
+        <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer"
            class="social-link" aria-label="LinkedIn">
           <img class="icon-img" src="assets/icons/linkedin-white.png" alt="" aria-hidden="true">
           <span class="label">LinkedIn</span>
         </a>
-        <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener"
+        <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer"
            class="social-link" aria-label="GitHub">
           <img class="icon-img" src="assets/icons/github-white.png" alt="" aria-hidden="true">
           <span class="label">GitHub</span>
@@ -292,5 +291,3 @@
   </footer>
 </body>
 </html>
-
-
