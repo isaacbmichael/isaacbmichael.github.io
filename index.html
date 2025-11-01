@@ -2,292 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Isaac B. Michael, PhD, MS, MApSt – Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Isaac B. Michael — Executive Data & Research Leader</title>
+  <meta name="description" content="Survey methodology, analytics automation, and decision analytics.">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f9f9f9;
-      color: #333;
-      line-height: 1.6;
-    }
+    /* Base */
+    :root { --bg:#f9f9f9; --ink:#333; --muted:#6b7280; --brand:#2c3e50; --accent:#0066cc; --radius:12px; --w:1200px; }
+    *{box-sizing:border-box} body{margin:0;font-family:Arial, sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+    a{color:var(--accent);text-decoration:none;font-weight:700} a:hover{text-decoration:underline}
+    .wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
 
-    /* ===== Header (Two-column) ===== */
-    header {
-      background:#2c3e50; color:#fff;
-      padding: 28px 20px 24px;
-    }
-    .header-wrap{
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;  /* left:wide / right:narrow */
-      gap: 32px;
-      align-items: center;
-    }
-    /* Left column */
-    .identity{
-      display: grid;
-      grid-template-columns: auto 1fr;      /* photo | text */
-      gap: 18px 24px;
-      align-items: center;
-    }
-    .profile-photo{
-      width: 170px; height: 170px; border-radius:50%; object-fit:cover;
-      border:4px solid #ecf0f1; box-shadow: 0 8px 18px rgba(0,0,0,.28);
-      grid-row: span 3;
-    }
-    .name{
-      margin: 2px 0 4px;
-      font-size: clamp(28px, 3.6vw, 48px);
-      line-height: 1.05;
-      letter-spacing: .1px;
-      text-align: left;
-    }
-    .subtitle{
-      margin: 6px 0 12px;
-      font-size: clamp(14px, 1.6vw, 20px);
-      color:#d7dee4;
-      text-align: left;
-    }
-    .tagline{
-      margin: 0;
-      font-size: clamp(16px, 1.45vw, 22px);
-      line-height: 1.3;
-      letter-spacing: .1px;
-      color:#e8eef2;
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      text-align: left;
-      max-width: 1000px;
-    }
+    /* Header / Nav */
+    header{background:var(--brand);color:#fff;border-bottom:1px solid rgba(255,255,255,.15)}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800}
+    .brand img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:3px solid #ecf0f1}
+    nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
+    nav a{color:#e6edf3} nav a:hover{color:#fff;text-decoration:none}
+    .btn{display:inline-block;padding:.65rem 1rem;border-radius:999px;background:#fff;color:var(--brand);border:1px solid rgba(0,0,0,.05);font-weight:800}
+    .btn-outline{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
 
-    /* Right column card */
-    .header-card{
-      margin-top: 6px;
-      max-width: 560px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 16px;
-      padding: 16px 18px;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
-    }
-    .header-card p{ margin: 0; color: #e6edf3; font-size: clamp(14px, 1.25vw, 17px); line-height: 1.45; }
-    .header-card .quote{ margin-top: 10px; font-style: italic; opacity: .95; }
-    .header-card .byline{ margin-top: 6px; font-size: .95em; color: #cfd9e2; }
+    /* Hero */
+    .hero{padding:36px 0 24px}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .h1{margin:0 0 6px;font-size:clamp(28px,3.6vw,44px);line-height:1.15}
+    .lead{color:#d7dee4;margin:10px 0 18px}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:16px 18px}
+    .card p{margin:0;color:#e6edf3}
+    .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{background:rgba(255,255,255,.14);color:#fff;padding:4px 10px;border-radius:999px;font-weight:700;font-size:.78rem}
 
-    /* ===== Main ===== */
-    main { max-width: 100%; margin: 18px auto; padding: 0 40px; }
-    .intro { max-width: 1200px; margin: 0 auto 18px; padding: 0 25px; }
+    /* Sections */
+    section{padding:26px 0}
+    .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .tile{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:0 4px 10px rgba(0,0,0,.06)}
+    .tile h3{margin:0 0 6px}
 
-    .section {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px 25px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      max-width: 1200px;
-      margin-left: auto; margin-right: auto;
-    }
-    .project-card { margin-bottom: 20px; }
-    .project-card h3 { margin: 0 0 5px; }
-    .project-card p { margin: 5px 0 10px; }
-    .project-card ul { list-style: none; padding-left: 0; }
-    .project-card li { margin: 6px 0; }
+    /* Footer */
+    footer{background:var(--brand);color:#fff;margin-top:32px;padding:18px 0;text-align:center}
+    footer a{color:#e6edf3}
 
-    /* Meta row + badges */
-    .meta {
-      margin-top: 6px;
-      color: #6b7280;
-      font-size: 0.95em;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      background: #eef2ff;
-      color: #1f2a44;
-      padding: 2px 8px;
-      border-radius: 9999px;
-      font-weight: 700;
-      font-size: .75rem;
-      letter-spacing: .02em;
-    }
-    .badge--new { background: #d1fae5; color: #065f46; }
-
-    a { color: #0066cc; text-decoration: none; font-weight: bold; }
-    a:hover { text-decoration: underline; }
-
-    /* ===== Footer ===== */
-    footer {
-      background: #2c3e50; color: #fff; margin-top: 40px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 110px; padding: 0 20px;
-    }
-    footer p { margin: 6px 0; }
-
-    .footer-socials { text-align: center; }
-    .socials {
-      display: flex; justify-content: center; align-items: center;
-      gap: 28px; margin-top: 10px;
-    }
-    .social-link {
-      display: inline-flex; align-items: center; gap: 10px;
-      color: #ecf0f1; font-weight: 700; text-decoration: none; line-height: 1;
-      border-radius: 6px;
-    }
-    .social-link:hover .label,
-    .social-link:focus-visible .label { text-decoration: underline; }
-    .social-link:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
-
-    .social-link .label { letter-spacing: .05em; font-size: 1em; }
-
-    /* Icons: keep email SVG as-is; nudge PNGs up slightly for optical baseline alignment */
-    .icon-img { height: 1em; width: auto; display: block; object-fit: contain; transform: translateY(-0.06em); }
-    @supports not (transform: translateY(0)) {
-      .icon-img { position: relative; top: -1px; }
-    }
-    .icon-svg { height: 1em; width: auto; display: block; object-fit: contain; fill: currentColor; }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 840px){
-      .header-wrap{ grid-template-columns: 1fr; gap: 18px; }
-      .identity{ grid-template-columns: 1fr; text-align: center; }
-      .profile-photo{ margin: 0 auto; width: 160px; height: 160px; grid-row:auto; }
-      .name, .subtitle, .tagline{ text-align: center; white-space: normal; }
-      .header-card{ max-width: 100%; }
-    }
-    @media (max-width: 480px) {
-      .social-link .label {
-        position: absolute; width:1px; height:1px; padding:0; margin:-1px;
-        overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-      }
-      .socials { gap: 16px; }
-      header { padding: 22px 16px 18px; }
+    @media (max-width:860px){
+      .hero-grid{grid-template-columns:1fr}
+      .tiles{grid-template-columns:1fr}
+      nav ul{flex-wrap:wrap;gap:12px}
     }
   </style>
 </head>
 <body>
-  <!-- ===== Header ===== -->
+  <!-- Header -->
   <header>
-    <div class="header-wrap">
-      <!-- Left: Identity -->
-      <div class="identity">
-        <img src="IM_Pic.jpeg" alt="Isaac B. Michael" class="profile-photo">
-        <h1 class="name">Isaac B. Michael</h1>
-        <p class="subtitle">PhD • MS • MApSt</p>
-        <p class="tagline">Executive Data & Research Leader | Mathematical Statistician | Driving Strategy Through Analytics</p>
+    <div class="wrap nav">
+      <div class="brand">
+        <img src="/IM_Pic.jpeg" alt="Isaac B. Michael">
+        <div>Isaac B. Michael</div>
       </div>
-
-      <!-- Right: Bio / Quote -->
-      <aside class="header-card" aria-label="About">
-        <p> Executive leader blending analytics, automation, and operational strategy to deliver measurable impact. Proven record in modernizing national data systems, shaping policy, and guiding C-suite decision-making. </p>
-        <p class="quote">“In God we trust; all others must bring data.”</p>
-        <p class="byline">— W. Edwards Deming</p>
-      </aside>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="/portfolio/">Portfolio</a></li>
+          <li><a href="/writing/">Writing</a></li>
+          <li><a href="/speaking/">Speaking</a></li>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a class="btn" href="/cv/">CV</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="wrap hero">
+      <div class="hero-grid">
+        <div>
+          <h1 class="h1">Executive Data & Research Leader</h1>
+          <p class="lead">Survey methodology • analytics automation • decision analytics. I modernize national data systems and build audit-ready, reproducible pipelines that enable nontechnical analysts.</p>
+          <p>
+            <a class="btn" href="/contact/">Contact</a>
+            <a class="btn btn-outline" href="/portfolio/">View Portfolio</a>
+          </p>
+          <div class="stats">
+            <span class="chip">Public health & education</span>
+            <span class="chip">Reproducible pipelines</span>
+            <span class="chip">Mentorship & programs</span>
+          </div>
+        </div>
+        <aside class="card" aria-label="About">
+          <p><strong>What I do</strong>: design survey-analytics workflows, automate QA & parity, and ship executive-level reporting.</p>
+          <p style="margin-top:8px;opacity:.9"><em>“In God we trust; all others must bring data.” — W. Edwards Deming</em></p>
+        </aside>
+      </div>
     </div>
   </header>
 
-  <!-- ===== Main ===== -->
-  <main>
-    <div class="intro">
-      <p>
-        Welcome to my technical portfolio. This site highlights selected projects demonstrating
-        <strong>data analysis, survey methodology, automation, investment strategy, and executive-level reporting</strong>.
-      </p>
-    </div>
-
-    <!-- Newest first -->
-    <div class="section project-card">
-      <h3><b>ATS-Ready altacv Resume Template</b></h3>
-      <div class="meta">
-        <span class="badge badge--new">NEW</span>
-        <span>Updated Oct 2025</span>
-        <span>LaTeX • GitHub Actions</span>
+  <!-- Featured -->
+  <main class="wrap">
+    <section>
+      <h2>Featured</h2>
+      <div class="tiles">
+        <div class="tile">
+          <h3>Technical Portfolio</h3>
+          <p>Selected projects in survey methods, automation, reporting, and templates.</p>
+          <p><a href="/portfolio/">Explore the portfolio →</a></p>
+        </div>
+        <div class="tile">
+          <h3>Writing</h3>
+          <p>Notes and essays on methodology, automation, and governance.</p>
+          <p><a href="/writing/">Browse posts →</a></p>
+        </div>
+        <div class="tile">
+          <h3>Speaking & Services</h3>
+          <p>Talks, workshops, and consulting offers with clear outcomes.</p>
+          <p><a href="/speaking/">Speaking →</a> · <a href="/services/">Services →</a></p>
+        </div>
       </div>
-      <p>
-        ATS-ready, single-column <b>LaTeX</b> resume that <em>looks</em> like two columns while remaining parser-safe.
-        Built on <b>AltaCV</b>; adds an <b>ATS mode</b>, icon-silent <code>ActualText</code>, dash normalization,
-        and CI that publishes both PDFs.
-      </p>
-      <ul>
-        <li>📄 <a href="/assets/pdfs/template.pdf" download>Download Showcase PDF</a></li>
-        <li>📄 <a href="/assets/pdfs/resume-ats.pdf" download>Download ATS PDF</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/ats-ready-altacv-template" target="_blank" rel="noopener noreferrer">View Repository</a></li>
-      </ul> 
-    </div>
-
-    <div class="section project-card">
-      <h3><b>Academic Program Site Template</b></h3>
-      <div class="meta">
-        <span>Updated Oct 2025</span>
-        <span>HTML/CSS • Vanilla JS</span>
-      </div>
-      <p>
-        Lightweight, static microsite template for academic programs—accessible UI (hero/CTAs, proposal cards, accordions, badges),
-        responsive spacing, and print-friendly styles.
-      </p>
-      <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/academic-program-site-template/" target="_blank" rel="noopener noreferrer">View Live Demo</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/academic-program-site-template" target="_blank" rel="noopener noreferrer">View Repository</a></li>
-      </ul>
-    </div>
-    
-    <div class="section project-card">
-      <h3><b>Capital Allocation Monte Carlo Simulation</b></h3>
-      <div class="meta">
-        <span>Updated Oct 2025</span>
-        <span>Python • NumPy • Matplotlib • yFinance</span>
-      </div>
-      <p>
-        Risk/return simulation using real market data and Monte Carlo methods; executive-level outputs for allocation decisions.
-      </p>
-      <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/capital-allocation-report/capital_allocation_report.html" target="_blank" rel="noopener noreferrer">View Interactive HTML Report</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/capital-allocation-report/blob/main/capital_allocation_montecarlo.py" target="_blank" rel="noopener noreferrer">View Python Source Code</a></li>
-      </ul>
-    </div>
-    
-    <div class="section project-card">
-      <h3><b>Exploratory Applicant Data Report</b></h3>
-      <div class="meta">
-        <span>Updated Sep 2025</span>
-        <span>R • RMarkdown • ggplot2</span>
-      </div>
-      <p>
-        Interactive analysis of applicant demographics, cleaning pipelines, and SES enrichment.
-      </p>
-      <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/eda-applicant-report/eda_report.html" target="_blank" rel="noopener noreferrer">View Interactive HTML Report</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/eda-applicant-report/blob/main/eda_report.Rmd" target="_blank" rel="noopener noreferrer">View R Markdown Source Code</a></li>
-      </ul>
-    </div>
+    </section>
   </main>
 
-  <!-- ===== Footer ===== -->
   <footer>
-    <div class="footer-socials">
-      <p>Connect with me:</p>
-      <div class="socials">
-        <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer"
-           class="social-link" aria-label="LinkedIn">
-          <img class="icon-img" src="assets/icons/linkedin-white.png" alt="" aria-hidden="true">
-          <span class="label">LinkedIn</span>
-        </a>
-        <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer"
-           class="social-link" aria-label="GitHub">
-          <img class="icon-img" src="assets/icons/github-white.png" alt="" aria-hidden="true">
-          <span class="label">GitHub</span>
-        </a>
-        <a href="mailto:isaac.b.michael@gmail.com" class="social-link" aria-label="Email">
-          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M2 5h20a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm10 7L3.4 7.6a.5.5 0 0 0-.4.9L12 14l9-5.5a.5.5 0 1 0-.5-.87L12 12z"/>
-          </svg>
-          <span class="label">Email</span>
-        </a>
-      </div>
+    <div class="wrap">
+      © <span id="y"></span> Isaac B. Michael · <a href="mailto:isaac.b.michael@gmail.com">Email</a> ·
+      <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
     </div>
   </footer>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>
