@@ -1,0 +1,61 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CV & Résumé – Isaac B. Michael</title>
+<style>
+  body{font-family:Arial,sans-serif;margin:0;background:#f9f9f9;color:#111}
+  a{color:#0066cc;text-decoration:none;font-weight:700}
+  header,footer{background:#2c3e50;color:#fff}
+  .wrap{max-width:1100px;margin:0 auto;padding:18px 20px}
+  .btn{display:inline-block;padding:.7rem 1rem;border-radius:999px;border:1px solid rgba(0,0,0,.08);background:#fff}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.06);padding:16px 18px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  iframe,object{width:100%;height:75vh;border:0;border-radius:10px}
+</style>
+
+<header>
+  <div class="wrap">
+    <a href="/" style="color:#e6edf3">← Home</a>
+    <h1 style="margin:8px 0 0">CV & Résumé</h1>
+    <p style="margin:6px 0 0;opacity:.9">Download the version you need; the two-page résumé is the default.</p>
+  </div>
+</header>
+
+<main class="wrap" style="padding:20px 20px 28px">
+  <div class="grid">
+    <div class="card">
+      <h2 style="margin:6px 0 12px">Résumé (2 pages)</h2>
+      <p><a class="btn" href="/assets/pdfs/resume.pdf" download>⬇️ Download résumé (PDF)</a>
+         &nbsp; <a href="/assets/pdfs/resume-ats.pdf" class="btn" download>⬇️ ATS résumé</a></p>
+      <!-- Quick inline preview of the 2-page résumé -->
+      <object data="/assets/pdfs/resume.pdf" type="application/pdf">
+        <iframe src="/assets/pdfs/resume.pdf" title="Résumé PDF preview"></iframe>
+      </object>
+      <p style="margin-top:10px;color:#555">Tip: Use the ATS version for job portals that parse PDFs.</p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:6px 0 12px">Full CV</h2>
+      <p><a class="btn" href="/assets/pdfs/cv.pdf" download>⬇️ Download full CV (PDF)</a></p>
+      <ul style="margin:8px 0 0 18px;color:#333">
+        <li>Comprehensive roles, projects, teaching, publications, service.</li>
+        <li>Best for academic/consulting inquiries.</li>
+      </ul>
+      <hr style="margin:16px 0;border:none;border-top:1px solid #eee">
+      <h3 style="margin:0 0 8px;font-size:1rem">Other variants</h3>
+      <p style="margin:0">
+        <a href="/assets/pdfs/resume-usajobs.pdf" download>USAJobs résumé</a> (optional)
+      </p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    © <script>document.write(new Date().getFullYear())</script> Isaac B. Michael ·
+    <a href="mailto:isaac.b.michael@gmail.com" style="color:#e6edf3">Email</a> ·
+    <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" style="color:#e6edf3">LinkedIn</a> ·
+    <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener" style="color:#e6edf3">GitHub</a>
+  </div>
+</footer>
