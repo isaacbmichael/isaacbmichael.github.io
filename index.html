@@ -48,10 +48,21 @@
       background:var(--brand);color:#fff;border-bottom:1px solid rgba(255,255,255,.12);
       position:relative;
     }
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0} /* tighter */
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0}
     .brand{display:flex;align-items:center;gap:14px}
 
-    /* Avatar (logo/photo flip on click; hover = 3D float) */
+    /* Brand text (name + degrees) next to logo */
+    .brand-text{display:flex;flex-direction:column;line-height:1.1}
+    .brand-name{
+      font-weight:900;color:#fff;letter-spacing:.2px;
+      font-size:clamp(18px,1.8vw,24px);
+    }
+    .brand-creds{
+      color:#cfd8e3;font-weight:400;letter-spacing:.2px;
+      font-size:clamp(12px,1.2vw,14px);
+    }
+
+    /* Avatar (logo/photo flip) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
     .avatar-btn{all:unset;display:block;cursor:pointer;width:100%;height:100%;border-radius:50%;outline:none}
     .avatar-inner{
@@ -82,17 +93,16 @@
     nav a:hover::after{transform:scaleX(1)}
 
     /* ===== Hero ===== */
-    .hero{padding:28px 0 16px} /* tighter top & bottom */
+    .hero{padding:28px 0 16px}
     .hero-grid{
       display:grid;
       grid-template-columns:minmax(280px,.8fr) 1fr;
       grid-template-areas:
         "title title"
-        "creds quote"
         "tagline quote"
         "chips chips";
       column-gap:28px;
-      row-gap:6px; /* tighter */
+      row-gap:6px;
       align-items:start;
     }
     .h1{
@@ -102,28 +112,18 @@
       grid-area:title;
     }
 
-    /* Degrees line directly under name — lighter/thinner than tagline */
-    .creds{
-      grid-area:creds;
-      margin:2px 0 0;                 /* tighter */
-      color:#e5edf3;
-      font-weight:300;                 /* thin */
-      letter-spacing:.25px;
-      font-size:clamp(14px,1.3vw,18px);
-    }
-
-    /* Tagline (bottom-left under degrees) */
+    /* Tagline (one concise line) */
     .tagline{
       grid-area:tagline;
-      margin:4px 0 0;                 /* tighter */
+      margin:4px 0 0;
       color:#d7dee4;
       font-weight:800;
       letter-spacing:.15px;
-      max-width:58ch;
       font-size:clamp(14px,1.4vw,18px);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
 
-    /* Floating quote (bottom-right, no card) */
+    /* Quote (right column) */
     blockquote.quote{
       grid-area:quote;
       margin:0;
@@ -131,24 +131,22 @@
       font-style:italic;
       font-size:clamp(16px,2.1vw,22px);
       line-height:1.45;
-      text-shadow:
-        0 1px 0 rgba(0,0,0,.25),
-        0 8px 18px rgba(0,0,0,.35);
+      text-shadow:0 1px 0 rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.35);
       filter: drop-shadow(0 14px 22px rgba(0,0,0,.28));
-      text-align:right;   
+      text-align:right;
       animation: floaty 6s ease-in-out infinite alternate;
     }
     .quote small{
       display:block;margin-top:8px;color:#cfd8e3;font-weight:700;letter-spacing:.2px;
-      text-align:right;               /* right-align author */
+      text-align:right;
     }
     @keyframes floaty{ from{transform:translateY(0)} to{transform:translateY(-4px)} }
     @media (prefers-reduced-motion:reduce){ blockquote.quote{animation:none} }
 
-    /* Chips row — single line across bottom of hero */
+    /* Chips row */
     .chips{
       grid-area:chips;
-      display:flex;gap:10px;margin-top:4px;  /* tighter */
+      display:flex;gap:10px;margin-top:4px;
       white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
     }
     .chip{
@@ -183,7 +181,7 @@
     .icon-btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
     .icon{width:18px;height:18px;fill:currentColor}
 
-    /* ===== Buttons for modal ===== */
+    /* Buttons (modal) */
     .btn{
       display:inline-flex;align-items:center;gap:8px;padding:.65rem 1rem;border-radius:999px;
       font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--brand);
@@ -221,16 +219,16 @@
     /* ===== Responsive ===== */
     @media (max-width:960px){
       nav ul{display:none}
+      .brand-name{font-size:18px}
+      .brand-creds{font-size:12px}
       .hero-grid{
         grid-template-columns:1fr;
         grid-template-areas:
           "title"
-          "creds"
           "tagline"
           "quote"
           "chips";
       }
-      .tiles{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -253,7 +251,12 @@
             </div>
           </button>
         </div>
-        <!-- brand text removed per request -->
+
+        <!-- Name + degrees (top row, next to logo) -->
+        <div class="brand-text" aria-label="Site owner">
+          <div class="brand-name">Isaac B. Michael</div>
+          <div class="brand-creds">PhD · MS · MApSt</div>
+        </div>
       </div>
 
       <nav aria-label="Primary">
@@ -267,29 +270,26 @@
           <li><a href="#contact" id="contactOpen">Contact</a></li>
         </ul>
       </nav>
-      <!-- top social icons removed; moved to footer -->
     </div>
 
     <!-- ===== Hero ===== -->
     <div class="wrap hero">
       <div class="hero-grid">
-        <h1 class="h1">Isaac B. Michael</h1>
+        <!-- Professional intro title -->
+        <h1 class="h1">Executive Data & Research Leader</h1>
 
-        <!-- Degrees (thin/light) -->
-        <p class="creds">PhD · MS · MApSt</p>
-
-        <!-- Tagline (roles you’re targeting) -->
+        <!-- Short, one-line tagline -->
         <p class="tagline">
-          Director, Research &amp; Analytics | Principal Statistician | Data Modernization Leader | Program Director
+          Research &amp; Analytics Director | Principal Statistician | Program Director
         </p>
 
-        <!-- Free-floating quote on the right, under the name -->
+        <!-- Quote on the right -->
         <blockquote class="quote">
           “All models are wrong, but some are useful.”
           <small>— George E. P. Box</small>
         </blockquote>
 
-        <!-- Single-row chips at bottom of hero -->
+        <!-- Chips -->
         <div class="chips">
           <span class="chip">Public health &amp; education</span>
           <span class="chip">Reproducible pipelines</span>
@@ -333,7 +333,6 @@
   <!-- ===== Footer ===== -->
   <footer>
     <div class="wrap">
-      <!-- Contact icons centered -->
       <div class="social" aria-label="External profiles">
         <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
@@ -347,7 +346,7 @@
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2.5-1 .8-1.4.8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4.5-2.5 1.2-3.3-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c.6 1.7.2 3 .1 3.3.8.8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2.4.3.8 1 .8 2.1v3c0 .3.2.6.8.5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c.6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
         </a>
       </div>
       <div>© <span id="y"></span> Isaac B. Michael · All rights reserved.</div>
@@ -373,13 +372,10 @@
       <form id="quickForm" class="form-grid">
         <label for="qName">Name</label>
         <input id="qName" name="name" autocomplete="name" placeholder="Your name" />
-
         <label for="qEmail">Email</label>
         <input id="qEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
-
         <label for="qMsg">Message</label>
         <textarea id="qMsg" name="message" rows="4" placeholder="Tell me a little about your project or request…"></textarea>
-
         <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:6px">
           <button type="button" class="btn btn-outline" id="contactCancel">Cancel</button>
           <button type="submit" class="btn btn-primary">Send via Email</button>
@@ -444,4 +440,3 @@
   </script>
 </body>
 </html>
-
