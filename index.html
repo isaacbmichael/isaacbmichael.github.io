@@ -5,58 +5,140 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Isaac B. Michael — Executive Data & Research Leader</title>
   <meta name="description" content="Survey methodology, analytics automation, and decision analytics.">
+  <!-- Open Graph / social -->
+  <meta property="og:title" content="Isaac B. Michael — Executive Data & Research Leader">
+  <meta property="og:description" content="Modernizing data systems; reproducible analytics; executive reporting.">
+  <meta property="og:url" content="https://isaacbmichael.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
-    /* Base */
-    :root { --bg:#f9f9f9; --ink:#333; --muted:#6b7280; --brand:#2c3e50; --accent:#0066cc; --radius:12px; --w:1200px; }
-    *{box-sizing:border-box} body{margin:0;font-family:Arial, sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
-    a{color:var(--accent);text-decoration:none;font-weight:700} a:hover{text-decoration:underline}
+    /* ===== Design Tokens ===== */
+    :root{
+      --bg:#f7f9fb;
+      --surface:#ffffff;
+      --ink:#111827;
+      --muted:#5b6470;
+      --brand:#2c3e50;                  /* header background */
+      --accent:#0a66c2;                 /* LinkedIn blue as accent */
+      --ring:rgba(10,102,194,.35);
+      --radius:14px;
+      --w:1180px;
+      --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
+      --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
+    }
+
+    /* ===== Base ===== */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
     .wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
 
-    /* Header / Nav */
-    header{background:var(--brand);color:#fff;border-bottom:1px solid rgba(255,255,255,.15)}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800}
-    .brand img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:3px solid #ecf0f1}
+    /* ===== Header / Top Nav ===== */
+    header{background:var(--brand);color:#fff;border-bottom:1px solid rgba(255,255,255,.12)}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand-name{font-weight:800;letter-spacing:.2px}
+    .brand-name a{color:#fff;text-decoration:none}
+    .brand-name a:hover{text-decoration:none;opacity:.9}
+
+    /* Flip avatar (photo <-> logo) */
+    .avatar{width:48px;height:48px;perspective:1000px}
+    .avatar-btn{all:unset;display:block;cursor:pointer;width:48px;height:48px;border-radius:50%;outline:none}
+    .avatar-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+    .avatar.is-flipped .avatar-inner{transform:rotateY(180deg)}
+    .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden;border:3px solid rgba(255,255,255,.85);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+    .avatar-face img{width:100%;height:100%;object-fit:cover}
+    .avatar-face.back{transform:rotateY(180deg)}
+    .avatar-btn:focus-visible{box-shadow:0 0 0 6px var(--ring)}
+    @media (prefers-reduced-motion:reduce){
+      .avatar-inner{transition:none}
+    }
+
+    /* Primary nav */
     nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
-    nav a{color:#e6edf3} nav a:hover{color:#fff;text-decoration:none}
-    .btn{display:inline-block;padding:.65rem 1rem;border-radius:999px;background:#fff;color:var(--brand);border:1px solid rgba(0,0,0,.05);font-weight:800}
-    .btn-outline{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+    nav a{color:#e6edf3;font-weight:600}
+    nav a:hover{color:#fff;text-decoration:none}
 
-    /* Hero */
-    .hero{padding:36px 0 24px}
-    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
-    .h1{margin:0 0 6px;font-size:clamp(28px,3.6vw,44px);line-height:1.15}
-    .lead{color:#d7dee4;margin:10px 0 18px}
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:16px 18px}
+    /* Social buttons (Email/LinkedIn/GitHub) */
+    .social{display:flex;align-items:center;gap:10px}
+    .icon-btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:38px;height:38px;border-radius:999px;background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.25);color:#fff;transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .icon-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.25);background:rgba(255,255,255,.18)}
+    .icon-btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
+    .icon{width:18px;height:18px;fill:currentColor}
+
+    /* ===== Hero ===== */
+    .hero{padding:42px 0 26px}
+    .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:28px;align-items:center}
+    .h1{margin:0 0 10px;font-weight:900;letter-spacing:.2px;font-size:clamp(34px,4vw,56px);line-height:1.08;color:#fff}
+    .lead{color:#d7dee4;margin:10px 0 22px;max-width:70ch}
+    .cta-row{display:flex;flex-wrap:wrap;gap:10px}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;padding:.7rem 1.1rem;border-radius:999px;
+      font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--brand);
+      box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
+    .btn:active{transform:translateY(-1px)}
+    .btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
+    .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45)}
+    .btn-outline:hover{background:rgba(255,255,255,.08)}
+    .chip{display:inline-block;background:rgba(255,255,255,.14);color:#fff;padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;margin-right:8px;margin-top:10px}
+
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:18px 20px}
     .card p{margin:0;color:#e6edf3}
-    .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .chip{background:rgba(255,255,255,.14);color:#fff;padding:4px 10px;border-radius:999px;font-weight:700;font-size:.78rem}
 
-    /* Sections */
-    section{padding:26px 0}
+    /* ===== Sections ===== */
+    main{padding:10px 0 40px}
+    section{padding:24px 0}
+    h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
     .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .tile{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:0 4px 10px rgba(0,0,0,.06)}
-    .tile h3{margin:0 0 6px}
+    .tile{
+      position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;
+      box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+    .tile h3{margin:0 0 8px}
+    .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
-    /* Footer */
-    footer{background:var(--brand);color:#fff;margin-top:32px;padding:18px 0;text-align:center}
+    /* ===== Footer ===== */
+    footer{background:var(--brand);color:#fff;padding:18px 0;text-align:center;border-top:1px solid rgba(255,255,255,.12)}
     footer a{color:#e6edf3}
+    footer a:hover{color:#fff}
 
-    @media (max-width:860px){
+    /* ===== Responsive ===== */
+    @media (max-width:960px){
       .hero-grid{grid-template-columns:1fr}
-      .tiles{grid-template-columns:1fr}
-      nav ul{flex-wrap:wrap;gap:12px}
+      nav ul{display:none}         /* collapse simple on mobile; links still in tiles/footer */
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
+
+  <!-- ===== Header ===== -->
   <header>
-    <div class="wrap nav">
+    <div class="wrap topbar">
       <div class="brand">
-        <img src="/IM_Pic.jpeg" alt="Isaac B. Michael">
-        <div>Isaac B. Michael</div>
+        <!-- Flip avatar (click to toggle between photo and logo) -->
+        <div class="avatar" aria-hidden="true">
+          <button id="avatarToggle" class="avatar-btn" aria-label="Toggle portrait/logo" aria-pressed="false" title="Click to flip">
+            <div class="avatar-inner">
+              <div class="avatar-face front"><img src="/IM_Pic.jpeg" alt="Portrait of Isaac B. Michael"></div>
+              <div class="avatar-face back"><img src="/ibm_logo_circle.png" alt="Isaac B. Michael personal logo"></div>
+            </div>
+          </button>
+        </div>
+        <div class="brand-name">
+          <a href="/">Isaac B. Michael</a>
+        </div>
       </div>
+
       <nav aria-label="Primary">
         <ul>
           <li><a href="/portfolio/">Portfolio</a></li>
@@ -68,61 +150,95 @@
           <li><a class="btn" href="/cv/">CV</a></li>
         </ul>
       </nav>
+
+      <!-- Social (always visible) -->
+      <div class="social" aria-label="External profiles">
+        <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+        </a>
+        <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2.5-1 .8-1.4.8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4.5-2.5 1.2-3.3-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c.6 1.7.2 3 .1 3.3.8.8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2.4.3.8 1 .8 2.1v3c0 .3.2.6.8.5A12 12 0 0 0 12 .5Z"/></svg>
+        </a>
+      </div>
     </div>
+
+    <!-- ===== Hero ===== -->
     <div class="wrap hero">
       <div class="hero-grid">
         <div>
-          <h1 class="h1">Executive Data & Research Leader</h1>
+          <h1 class="h1">Executive Data &amp; Research Leader</h1>
           <p class="lead">Survey methodology • analytics automation • decision analytics. I modernize national data systems and build audit-ready, reproducible pipelines that enable nontechnical analysts.</p>
-          <p>
+          <div class="cta-row">
             <a class="btn" href="/contact/">Contact</a>
             <a class="btn btn-outline" href="/portfolio/">View Portfolio</a>
-          </p>
-          <div class="stats">
-            <span class="chip">Public health & education</span>
+            <a class="btn btn-outline" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">Connect on LinkedIn</a>
+          </div>
+          <div>
+            <span class="chip">Public health &amp; education</span>
             <span class="chip">Reproducible pipelines</span>
-            <span class="chip">Mentorship & programs</span>
+            <span class="chip">Mentorship &amp; programs</span>
           </div>
         </div>
+
         <aside class="card" aria-label="About">
-          <p><strong>What I do</strong>: design survey-analytics workflows, automate QA & parity, and ship executive-level reporting.</p>
-          <p style="margin-top:8px;opacity:.9"><em>“In God we trust; all others must bring data.” — W. Edwards Deming</em></p>
+          <p><strong>What I do</strong>: design survey-analytics workflows, automate QA &amp; parity, and ship executive-level reporting.</p>
+          <p style="margin-top:10px;opacity:.9"><em>“In God we trust; all others must bring data.” — W. Edwards Deming</em></p>
         </aside>
       </div>
     </div>
   </header>
 
-  <!-- Featured -->
-  <main class="wrap">
+  <!-- ===== Featured ===== -->
+  <main class="wrap" id="main">
     <section>
       <h2>Featured</h2>
       <div class="tiles">
         <div class="tile">
           <h3>Technical Portfolio</h3>
           <p>Selected projects in survey methods, automation, reporting, and templates.</p>
+          <a class="card-link" href="/portfolio/">View</a>
           <p><a href="/portfolio/">Explore the portfolio →</a></p>
         </div>
         <div class="tile">
           <h3>Writing</h3>
           <p>Notes and essays on methodology, automation, and governance.</p>
+          <a class="card-link" href="/writing/">View</a>
           <p><a href="/writing/">Browse posts →</a></p>
         </div>
         <div class="tile">
-          <h3>Speaking & Services</h3>
+          <h3>Speaking &amp; Services</h3>
           <p>Talks, workshops, and consulting offers with clear outcomes.</p>
+          <a class="card-link" href="/speaking/">View</a>
           <p><a href="/speaking/">Speaking →</a> · <a href="/services/">Services →</a></p>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- ===== Footer ===== -->
   <footer>
     <div class="wrap">
-      © <span id="y"></span> Isaac B. Michael · <a href="mailto:isaac.b.michael@gmail.com">Email</a> ·
+      © <span id="y"></span> Isaac B. Michael ·
+      <a href="mailto:isaac.b.michael@gmail.com">Email</a> ·
       <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a> ·
       <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
     </div>
   </footer>
-  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+
+  <script>
+    // Current year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Avatar flip (click to toggle portrait <-> logo)
+    const avatar = document.querySelector('.avatar');
+    const btn = document.getElementById('avatarToggle');
+    btn.addEventListener('click', () => {
+      const flipped = avatar.classList.toggle('is-flipped');
+      btn.setAttribute('aria-pressed', String(flipped));
+    });
+  </script>
 </body>
 </html>
