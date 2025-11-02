@@ -222,7 +222,7 @@
           <li><a href="/speaking/">Speaking</a></li>
           <li><a href="/services/">Services</a></li>
           <li><a href="/about/">About</a></li>
-          <!-- Contact removed from nav to reduce redundancy -->
+          <li><a href="#contact" id="contactOpen">Contact</a></li>
         </ul>
       </nav>
 
@@ -409,6 +409,7 @@
     // ===== Contact modal =====
     const dialog = document.getElementById('contactDialog');
     const emailCta = document.getElementById('emailCta');
+    const contactOpen = document.getElementById('contactOpen');
     const contactClose = document.getElementById('contactClose');
     const contactCancel = document.getElementById('contactCancel');
     const quickForm = document.getElementById('quickForm');
@@ -422,6 +423,7 @@
       if (dialog.open) dialog.close();
     }
 
+    contactOpen?.addEventListener('click', openDialog);
     emailCta.addEventListener('click', openDialog);
     contactClose.addEventListener('click', closeDialog);
     contactCancel.addEventListener('click', closeDialog);
