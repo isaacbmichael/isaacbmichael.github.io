@@ -19,50 +19,75 @@
       --surface:#ffffff;
       --ink:#111827;
       --muted:#5b6470;
-      --brand:#2c3e50;                  /* header background */
+      --brand:#2c3e50;                  /* header + footer background */
       --accent:#0a66c2;                 /* LinkedIn blue as accent */
       --ring:rgba(10,102,194,.35);
       --radius:14px;
-      --w:1180px;
+      --w:1180px;                       /* content max-width */
+      --wrap-pad:clamp(16px,3.2vw,28px);/* (7) standard gutters */
       --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
       --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
+      --avatar-size:72px;               /* (1) larger photo */
     }
 
-    /* ===== Base ===== */
+    /* ===== Base / Layout ===== */
     *{box-sizing:border-box}
+    html{background:var(--brand)}        /* (2) ensure bottom of page is blue */
     html,body{height:100%}
-    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    body{
+      margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      color:var(--ink);background:var(--bg);
+      min-height:100svh;display:flex;flex-direction:column; /* keep footer at bottom */
+    }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    .wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
+    .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
 
     /* ===== Header / Top Nav ===== */
-    header{background:var(--brand);color:#fff;border-bottom:1px solid rgba(255,255,255,.12)}
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+    header{
+      background:var(--brand);color:#fff;border-bottom:1px solid rgba(255,255,255,.12);
+      position:relative;
+    }
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0}
     .brand{display:flex;align-items:center;gap:14px}
     .brand-name{font-weight:800;letter-spacing:.2px}
     .brand-name a{color:#fff;text-decoration:none}
-    .brand-name a:hover{text-decoration:none;opacity:.9}
+    .brand-name a:hover{opacity:.9}
 
-    /* Flip avatar (photo <-> logo) */
-    .avatar{width:48px;height:48px;perspective:1000px}
-    .avatar-btn{all:unset;display:block;cursor:pointer;width:48px;height:48px;border-radius:50%;outline:none}
-    .avatar-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+    /* (1) Flip badge (photo <-> white logo), larger and more premium */
+    .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1000px}
+    .avatar-btn{all:unset;display:block;cursor:pointer;width:100%;height:100%;border-radius:50%;outline:none}
+    .avatar-inner{
+      position:relative;width:100%;height:100%;transform-style:preserve-3d;
+      transition:transform .7s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+    }
     .avatar.is-flipped .avatar-inner{transform:rotateY(180deg)}
-    .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden;border:3px solid rgba(255,255,255,.85);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+    .avatar-face{
+      position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden;
+      border:3px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(0,0,0,.28);
+    }
     .avatar-face img{width:100%;height:100%;object-fit:cover}
-    .avatar-face.back{transform:rotateY(180deg)}
+    .avatar-face.back{transform:rotateY(180deg);background:transparent}
     .avatar-btn:focus-visible{box-shadow:0 0 0 6px var(--ring)}
+    .avatar:hover .avatar-inner{filter:brightness(1.05)}
     @media (prefers-reduced-motion:reduce){
       .avatar-inner{transition:none}
+    }
+    @media (max-width:960px){
+      :root{ --avatar-size:56px; }
     }
 
     /* Primary nav */
     nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
-    nav a{color:#e6edf3;font-weight:600}
+    nav a{color:#e6edf3;font-weight:600;position:relative}
+    nav a::after{
+      content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:#e6edf355;transform:scaleX(0);
+      transform-origin:left;transition:transform .22s ease;
+    }
     nav a:hover{color:#fff;text-decoration:none}
+    nav a:hover::after{transform:scaleX(1)}
 
-    /* Social buttons (Email/LinkedIn/GitHub) */
+    /* Social buttons (Email/LinkedIn/GitHub) — single contact location kept */
     .social{display:flex;align-items:center;gap:10px}
     .icon-btn{
       display:inline-flex;align-items:center;justify-content:center;
@@ -74,10 +99,10 @@
     .icon{width:18px;height:18px;fill:currentColor}
 
     /* ===== Hero ===== */
-    .hero{padding:42px 0 26px}
+    .hero{padding:48px 0 28px}
     .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:28px;align-items:center}
-    .h1{margin:0 0 10px;font-weight:900;letter-spacing:.2px;font-size:clamp(34px,4vw,56px);line-height:1.08;color:#fff}
-    .lead{color:#d7dee4;margin:10px 0 22px;max-width:70ch}
+    .h1{margin:0 0 12px;font-weight:900;letter-spacing:.2px;font-size:clamp(34px,4vw,56px);line-height:1.08;color:#fff}
+    .lead{color:#d7dee4;margin:12px 0 24px;max-width:70ch}
     .cta-row{display:flex;flex-wrap:wrap;gap:10px}
     .btn{
       display:inline-flex;align-items:center;gap:8px;padding:.7rem 1.1rem;border-radius:999px;
@@ -91,11 +116,15 @@
     .btn-outline:hover{background:rgba(255,255,255,.08)}
     .chip{display:inline-block;background:rgba(255,255,255,.14);color:#fff;padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;margin-right:8px;margin-top:10px}
 
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:18px 20px}
+    /* Glass card */
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:18px 20px;backdrop-filter:blur(6px)
+    }
     .card p{margin:0;color:#e6edf3}
 
     /* ===== Sections ===== */
-    main{padding:10px 0 40px}
+    main{padding:10px 0 40px;flex:1 0 auto}
     section{padding:24px 0}
     h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
     .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -107,15 +136,14 @@
     .tile h3{margin:0 0 8px}
     .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
-    /* ===== Footer ===== */
+    /* ===== Footer (2) full blue; simplified content to avoid duplication per item 4) ===== */
     footer{background:var(--brand);color:#fff;padding:18px 0;text-align:center;border-top:1px solid rgba(255,255,255,.12)}
-    footer a{color:#e6edf3}
-    footer a:hover{color:#fff}
+    footer .wrap{opacity:.95}
 
     /* ===== Responsive ===== */
     @media (max-width:960px){
       .hero-grid{grid-template-columns:1fr}
-      nav ul{display:none}         /* collapse simple on mobile; links still in tiles/footer */
+      nav ul{display:none} /* simple collapse on mobile; links remain in tiles/footer */
     }
   </style>
 </head>
@@ -125,12 +153,16 @@
   <header>
     <div class="wrap topbar">
       <div class="brand">
-        <!-- Flip avatar (click to toggle between photo and logo) -->
+        <!-- (1)+(5) Flip avatar (click to toggle between photo and WHITE SVG logo) -->
         <div class="avatar" aria-hidden="true">
           <button id="avatarToggle" class="avatar-btn" aria-label="Toggle portrait/logo" aria-pressed="false" title="Click to flip">
             <div class="avatar-inner">
-              <div class="avatar-face front"><img src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael"></div>
-              <div class="avatar-face back"><img src="/assets/brand/logo-graphite-wbg.png" alt="Isaac B. Michael personal logo"></div>
+              <div class="avatar-face front">
+                <img src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael">
+              </div>
+              <div class="avatar-face back">
+                <img src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo">
+              </div>
             </div>
           </button>
         </div>
@@ -147,11 +179,11 @@
           <li><a href="/services/">Services</a></li>
           <li><a href="/about/">About</a></li>
           <li><a href="/contact/">Contact</a></li>
-          <li><a class="btn" href="/cv/">CV</a></li>
+          <!-- (3) CV moved out of nav into hero CTAs for balance -->
         </ul>
       </nav>
 
-      <!-- Social (always visible) -->
+      <!-- (4) Single contact location kept here; footer links removed to avoid duplication -->
       <div class="social" aria-label="External profiles">
         <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
@@ -175,6 +207,8 @@
             <a class="btn" href="/contact/">Contact</a>
             <a class="btn btn-outline" href="/portfolio/">View Portfolio</a>
             <a class="btn btn-outline" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">Connect on LinkedIn</a>
+            <!-- (3) CV here feels natural among actions -->
+            <a class="btn btn-outline" href="/cv/">CV</a>
           </div>
           <div>
             <span class="chip">Public health &amp; education</span>
@@ -221,10 +255,7 @@
   <!-- ===== Footer ===== -->
   <footer>
     <div class="wrap">
-      © <span id="y"></span> Isaac B. Michael ·
-      <a href="mailto:isaac.b.michael@gmail.com">Email</a> ·
-      <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
+      © <span id="y"></span> Isaac B. Michael · All rights reserved.
     </div>
   </footer>
 
@@ -232,15 +263,22 @@
     // Current year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Avatar flip (click to toggle portrait <-> logo)
+    // Flip avatar (click to toggle portrait <-> logo)
     const avatar = document.querySelector('.avatar');
     const btn = document.getElementById('avatarToggle');
     btn.addEventListener('click', () => {
       const flipped = avatar.classList.toggle('is-flipped');
       btn.setAttribute('aria-pressed', String(flipped));
     });
+
+    // Optional: to auto-flip every few seconds, uncomment below (professional default is manual)
+    /*
+    const AUTO = false, SECS = 6;
+    if (AUTO) setInterval(() => {
+      const flipped = avatar.classList.toggle('is-flipped');
+      btn.setAttribute('aria-pressed', String(flipped));
+    }, SECS * 1000);
+    */
   </script>
 </body>
 </html>
-
-
