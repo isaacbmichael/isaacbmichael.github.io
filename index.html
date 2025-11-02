@@ -88,6 +88,7 @@
       grid-template-columns:minmax(280px,.8fr) 1fr;
       grid-template-areas:
         "title title"
+        "creds quote"
         "tagline quote"
         "chips chips";
       column-gap:28px;
@@ -101,14 +102,25 @@
       grid-area:title;
     }
 
-    /* Tagline (bottom-left under name) */
+    /* Degrees line directly under name — lighter/thinner than tagline */
+    .creds{
+      grid-area:creds;
+      margin:.15rem 0 0;
+      color:#e5edf3;
+      font-weight:300;             /* thin */
+      letter-spacing:.25px;
+      font-size:clamp(14px,1.3vw,18px);
+    }
+
+    /* Tagline (bottom-left under degrees) */
     .tagline{
       grid-area:tagline;
-      margin:0;
+      margin:2px 0 0;
       color:#d7dee4;
-      font-weight:700;
+      font-weight:800;
       letter-spacing:.15px;
-      max-width:50ch;
+      max-width:58ch;
+      font-size:clamp(14px,1.4vw,18px);
     }
 
     /* Floating quote (bottom-right, no card) */
@@ -211,6 +223,7 @@
         grid-template-columns:1fr;
         grid-template-areas:
           "title"
+          "creds"
           "tagline"
           "quote"
           "chips";
@@ -260,9 +273,12 @@
       <div class="hero-grid">
         <h1 class="h1">Isaac B. Michael</h1>
 
+        <!-- Degrees (thin/light) -->
+        <p class="creds">PhD, Mathematics (Spectral Theory) · MS, Mathematics (Lie Theory) · M.Ap.Stat.</p>
+
         <!-- Tagline (roles you’re targeting) -->
         <p class="tagline">
-          Program Director • Head of Research &amp; Analytics • Director of Data Science • Principal/Staff Data Scientist • Mathematical Statistician • Senior Quantitative Research Leader
+          Program Director | Head of Research &amp; Analytics | Director of Data Science | Mathematical Statistician
         </p>
 
         <!-- Free-floating quote on the right, under the name -->
