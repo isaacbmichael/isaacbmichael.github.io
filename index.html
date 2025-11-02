@@ -48,7 +48,7 @@
       background:var(--brand);color:#fff;border-bottom:1px solid rgba(255,255,255,.12);
       position:relative;
     }
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0} /* tighter */
     .brand{display:flex;align-items:center;gap:14px}
 
     /* Avatar (logo/photo flip on click; hover = 3D float) */
@@ -82,7 +82,7 @@
     nav a:hover::after{transform:scaleX(1)}
 
     /* ===== Hero ===== */
-    .hero{padding:48px 0 28px}
+    .hero{padding:28px 0 16px} /* tighter top & bottom */
     .hero-grid{
       display:grid;
       grid-template-columns:minmax(280px,.8fr) 1fr;
@@ -92,7 +92,7 @@
         "tagline quote"
         "chips chips";
       column-gap:28px;
-      row-gap:10px;
+      row-gap:6px; /* tighter */
       align-items:start;
     }
     .h1{
@@ -105,9 +105,9 @@
     /* Degrees line directly under name — lighter/thinner than tagline */
     .creds{
       grid-area:creds;
-      margin:.15rem 0 0;
+      margin:2px 0 0;                 /* tighter */
       color:#e5edf3;
-      font-weight:300;             /* thin */
+      font-weight:300;                 /* thin */
       letter-spacing:.25px;
       font-size:clamp(14px,1.3vw,18px);
     }
@@ -115,7 +115,7 @@
     /* Tagline (bottom-left under degrees) */
     .tagline{
       grid-area:tagline;
-      margin:2px 0 0;
+      margin:4px 0 0;                 /* tighter */
       color:#d7dee4;
       font-weight:800;
       letter-spacing:.15px;
@@ -137,8 +137,9 @@
       filter: drop-shadow(0 14px 22px rgba(0,0,0,.28));
       animation: floaty 6s ease-in-out infinite alternate;
     }
-    blockquote.quote small{
-      display:block;margin-top:10px;color:#cfd8e3;font-weight:700;letter-spacing:.2px;
+    .quote small{
+      display:block;margin-top:8px;color:#cfd8e3;font-weight:700;letter-spacing:.2px;
+      text-align:right;               /* right-align author */
     }
     @keyframes floaty{ from{transform:translateY(0)} to{transform:translateY(-4px)} }
     @media (prefers-reduced-motion:reduce){ blockquote.quote{animation:none} }
@@ -146,7 +147,7 @@
     /* Chips row — single line across bottom of hero */
     .chips{
       grid-area:chips;
-      display:flex;gap:10px;margin-top:6px;
+      display:flex;gap:10px;margin-top:4px;  /* tighter */
       white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
     }
     .chip{
@@ -278,15 +279,13 @@
 
         <!-- Tagline (roles you’re targeting) -->
         <p class="tagline">
-          Director, Research & Analytics | Principal Statistician | Data Modernization Leader | Program Director
+          Director, Research &amp; Analytics | Principal Statistician | Data Modernization Leader | Program Director
         </p>
 
         <!-- Free-floating quote on the right, under the name -->
         <blockquote class="quote">
-          “When you can measure what you are speaking about, and express it in numbers, you know something about it;
-          but when you cannot measure it, when you cannot express it in numbers, your knowledge is of a meagre and
-          unsatisfactory kind.”
-          <small>— Lord Kelvin</small>
+          “All models are wrong, but some are useful.”
+          <small>— George E. P. Box</small>
         </blockquote>
 
         <!-- Single-row chips at bottom of hero -->
@@ -444,4 +443,3 @@
   </script>
 </body>
 </html>
-
