@@ -116,7 +116,7 @@
     .right-col{grid-area:right}
     .lead{color:#d7dee4;margin:12px 0 24px;max-width:70ch}
     .chip{display:inline-block;background:rgba(255,255,255,.14);color:#fff;padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;margin-right:8px;margin-top:10px}
-    .whatido{margin-top:6px}
+    .quote-card{margin-top:6px}
 
     /* Card */
     .card{
@@ -128,6 +128,22 @@
     }
     .card p{margin:0;color:#e6edf3}
     .card h3{margin:0 0 10px;color:#fff;font-size:1.05rem}
+
+    /* Large quote styling */
+    .quote{
+      margin:0;
+      font-style:italic;
+      color:#f3f5f8;
+      font-size:clamp(18px,2.4vw,26px);
+      line-height:1.35;
+    }
+    .quote-footer{
+      margin-top:10px;
+      color:#cfd8e3;
+      font-weight:700;
+      letter-spacing:.2px;
+      font-size:.95rem;
+    }
 
     /* ===== Buttons (for modal actions) ===== */
     .btn{
@@ -258,7 +274,6 @@
         <h1 class="h1 hero-title">Executive Data &amp; Research Leader</h1>
 
         <div class="left-col">
-          <!-- Shortened by one word (“national”) -->
           <p class="lead">Survey methodology • analytics automation • decision analytics. I modernize data systems and build audit-ready, reproducible pipelines enabling nontechnical analysts.</p>
           <div>
             <span class="chip">Public health &amp; education</span>
@@ -268,9 +283,9 @@
         </div>
 
         <div class="right-col">
-          <aside class="card whatido" aria-label="About">
-            <p><strong>What I do</strong>: design survey-analytics workflows, automate QA &amp; parity, and ship executive-level reporting.</p>
-            <p style="margin-top:10px;opacity:.9"><em>“In God we trust; all others must bring data.” — W. Edwards Deming</em></p>
+          <aside class="card quote-card" aria-label="Quote">
+            <p class="quote">“All models are wrong, but some are useful.”</p>
+            <div class="quote-footer">— George E. P. Box</div>
           </aside>
         </div>
       </div>
@@ -371,7 +386,7 @@
     }
     btnFlip.addEventListener('click', toggleFlip);
 
-    // Make sure ARIA reflects initial state (logo visible)
+    // Set ARIA to initial state (logo visible)
     btnFlip.setAttribute('aria-pressed', avatar.classList.contains('is-flipped'));
     Promise.all(sources.map(preload)).then(()=>{ /* images ready */ });
 
@@ -410,4 +425,3 @@
   </script>
 </body>
 </html>
-
