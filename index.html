@@ -62,25 +62,18 @@
       transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
     }
     .avatar.is-flipped .avatar-inner{transform:rotateY(180deg)}
-    .avatar-face{
-      position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden;
-    }
+    .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
     /* Photo keeps white ring + shadow */
     .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
     /* Logo has NO ring and NO outer shadow (transparent background) */
     .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
     .avatar-face img{width:100%;height:100%;object-fit:cover}
-    /* Ensure the white SVG logo sits neatly inside the circle */
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
 
     .avatar-btn:focus-visible{box-shadow:0 0 0 6px var(--ring)}
     .avatar:hover .avatar-inner{filter:brightness(1.05)}
-    @media (prefers-reduced-motion:reduce){
-      .avatar-inner{transition:none}
-    }
-    @media (max-width:960px){
-      :root{ --avatar-size:72px; }
-    }
+    @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none} }
+    @media (max-width:960px){ :root{ --avatar-size:72px; } }
 
     /* Primary nav */
     nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
@@ -119,6 +112,7 @@
     .btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
     .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45)}
     .btn-outline:hover{background:rgba(255,255,255,.08)}
+    .btn-primary{background:var(--brand);color:#fff;border-color:transparent}
     .chip{display:inline-block;background:rgba(255,255,255,.14);color:#fff;padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;margin-right:8px;margin-top:10px}
 
     /* Glass card */
@@ -145,6 +139,27 @@
     footer{background:var(--brand);color:#fff;padding:18px 0;text-align:center;border-top:1px solid rgba(255,255,255,.12)}
     footer .wrap{opacity:.95}
 
+    /* ===== Contact Modal ===== */
+    dialog{width:min(680px,92vw);border:none;border-radius:16px;padding:0;background:var(--surface);box-shadow:var(--shadow-hover)}
+    dialog[open]{animation:fadeIn .16s ease}
+    dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:saturate(120%) blur(2px)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #e5e7eb}
+    .modal-title{margin:0;font-size:1.1rem;font-weight:800;color:var(--ink)}
+    .modal-close{all:unset;cursor:pointer;font-weight:900;line-height:1;padding:6px 8px;border-radius:10px}
+    .modal-close:hover{background:#f1f5f9}
+    .modal-body{padding:18px 20px;display:grid;gap:18px}
+    .contact-actions{display:flex;flex-wrap:wrap;gap:10px}
+    .form-grid{display:grid;gap:10px}
+    .form-grid label{font-weight:700;color:var(--muted);font-size:.9rem}
+    .form-grid input,.form-grid textarea{
+      width:100%;padding:.65rem .75rem;border-radius:10px;border:1px solid #e5e7eb;
+      font:inherit;outline:none;transition:box-shadow .15s ease,border-color .15s ease
+    }
+    .form-grid input:focus,.form-grid textarea:focus{border-color:#94a3b8;box-shadow:0 0 0 4px rgba(148,163,184,.25)}
+    .divider{height:1px;background:#e5e7eb;margin:4px 0}
+    small.muted{color:#6b7280}
+    .sr-only{position:absolute !important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
     /* ===== Responsive ===== */
     @media (max-width:960px){
       .hero-grid{grid-template-columns:1fr}
@@ -183,7 +198,8 @@
           <li><a href="/speaking/">Speaking</a></li>
           <li><a href="/services/">Services</a></li>
           <li><a href="/about/">About</a></li>
-          <li><a href="/contact/">Contact</a></li>
+          <!-- Keep “Contact” but make it open our modal -->
+          <li><a href="#contact" id="contactOpen">Contact</a></li>
         </ul>
       </nav>
 
@@ -194,17 +210,14 @@
             <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/>
           </svg>
         </a>
-
         <!-- Email -->
         <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
         </a>
-
         <!-- LinkedIn -->
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
         </a>
-
         <!-- GitHub -->
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2.5-1 .8-1.4.8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4.5-2.5 1.2-3.3-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c.6 1.7.2 3 .1 3.3.8.8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2.4.3.8 1 .8 2.1v3c0 .3.2.6.8.5A12 12 0 0 0 12 .5Z"/></svg>
@@ -219,7 +232,7 @@
           <h1 class="h1">Executive Data &amp; Research Leader</h1>
           <p class="lead">Survey methodology • analytics automation • decision analytics. I modernize national data systems and build audit-ready, reproducible pipelines that enable nontechnical analysts.</p>
           <div class="cta-row">
-            <a class="btn" href="/contact/">Contact</a>
+            <a class="btn" href="#contact" id="contactCta">Contact</a>
             <a class="btn btn-outline" href="/portfolio/">View Portfolio</a>
             <a class="btn btn-outline" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">Connect on LinkedIn</a>
             <a class="btn btn-outline" href="/cv/">CV</a>
@@ -273,21 +286,53 @@
     </div>
   </footer>
 
+  <!-- ===== Contact Modal ===== -->
+  <dialog id="contactDialog" aria-labelledby="contactTitle">
+    <div class="modal-header">
+      <h3 id="contactTitle" class="modal-title">Get in touch</h3>
+      <button class="modal-close" id="contactClose" aria-label="Close contact dialog">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="contact-actions">
+        <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule time on Calendly</a>
+        <a class="btn" href="mailto:isaac.b.michael@gmail.com">Email me</a>
+        <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
+      </div>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <form id="quickForm" class="form-grid">
+        <label for="qName">Name</label>
+        <input id="qName" name="name" autocomplete="name" placeholder="Your name" />
+
+        <label for="qEmail">Email</label>
+        <input id="qEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+
+        <label for="qMsg">Message</label>
+        <textarea id="qMsg" name="message" rows="4" placeholder="Tell me a little about your project or request…"></textarea>
+
+        <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:6px">
+          <button type="button" class="btn btn-outline" id="contactCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send via Email</button>
+        </div>
+        <small class="muted">Submitting opens your email client with your message pre-filled (no data is stored on this site).</small>
+      </form>
+    </div>
+  </dialog>
+
   <script>
     // Current year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Smooth, reliable flip between photo and logo
+    // ===== Smooth, reliable flip between photo and logo =====
     const avatar   = document.querySelector('.avatar');
     const inner    = avatar.querySelector('.avatar-inner');
-    const btn      = document.getElementById('avatarToggle');
+    const btnFlip  = document.getElementById('avatarToggle');
     const portrait = document.getElementById('portraitImg');
     const logo     = document.getElementById('logoImg');
 
-    // Preload to prevent image-swap flicker
-    function preload(src){
-      return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; });
-    }
+    function preload(src){ return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
     const sources = [portrait.getAttribute('src'), logo.getAttribute('src')];
 
     let animating = false, flipTimer = null;
@@ -297,7 +342,7 @@
       if (animating) return;
       animating = true;
       avatar.classList.toggle('is-flipped');
-      btn.setAttribute('aria-pressed', avatar.classList.contains('is-flipped'));
+      btnFlip.setAttribute('aria-pressed', avatar.classList.contains('is-flipped'));
       const done = () => { animating = false; inner.removeEventListener('transitionend', done); };
       inner.addEventListener('transitionend', done, { once: true });
     }
@@ -309,18 +354,53 @@
     }
     function stopAuto(){ if (flipTimer) clearInterval(flipTimer); flipTimer = null; }
 
-    // Manual interaction
-    btn.addEventListener('click', () => { stopAuto(); toggleFlip(); setTimeout(startAuto, FLIP_SECS*1000); });
+    btnFlip.addEventListener('click', () => { stopAuto(); toggleFlip(); setTimeout(startAuto, FLIP_SECS*1000); });
     avatar.addEventListener('mouseenter', stopAuto);
     avatar.addEventListener('mouseleave', startAuto);
-    btn.addEventListener('focusin', stopAuto);
-    btn.addEventListener('focusout', startAuto);
+    btnFlip.addEventListener('focusin', stopAuto);
+    btnFlip.addEventListener('focusout', startAuto);
 
-    // Init after preload for glitch-free first render
     Promise.all(sources.map(preload)).then(() => {
       avatar.classList.remove('is-flipped'); // start on photo
       startAuto();
     });
+
+    // ===== Contact modal =====
+    const dialog = document.getElementById('contactDialog');
+    const contactOpen  = document.getElementById('contactOpen');
+    const contactCta   = document.getElementById('contactCta');
+    const contactClose = document.getElementById('contactClose');
+    const contactCancel = document.getElementById('contactCancel');
+    const quickForm = document.getElementById('quickForm');
+
+    function openDialog(e){
+      if (e) e.preventDefault();
+      if (!dialog.open) dialog.showModal();
+    }
+    function closeDialog(e){
+      if (e) e.preventDefault();
+      if (dialog.open) dialog.close();
+    }
+
+    contactOpen?.addEventListener('click', openDialog);
+    contactCta?.addEventListener('click', openDialog);
+    contactClose.addEventListener('click', closeDialog);
+    contactCancel.addEventListener('click', closeDialog);
+    dialog.addEventListener('click', (e)=>{ if (e.target === dialog) closeDialog(); });
+
+    // Quick message -> mailto:
+    quickForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = (document.getElementById('qName').value || '').trim();
+      const email = (document.getElementById('qEmail').value || '').trim();
+      const msg = (document.getElementById('qMsg').value || '').trim();
+      const subject = encodeURIComponent('Website inquiry');
+      const body = encodeURIComponent(`${msg}\n\n— ${name}${email ? ' <'+email+'>' : ''}`);
+      window.location.href = `mailto:isaac.b.michael@gmail.com?subject=${subject}&body=${body}`;
+      closeDialog();
+    });
+
+    // Enable keyboard shortcut (Esc handled by <dialog>)
   </script>
 </body>
 </html>
