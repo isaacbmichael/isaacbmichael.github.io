@@ -24,20 +24,20 @@
       --ring:rgba(10,102,194,.35);
       --radius:14px;
       --w:1180px;                       /* content max-width */
-      --wrap-pad:clamp(16px,3.2vw,28px);/* (7) standard gutters */
+      --wrap-pad:clamp(16px,3.2vw,28px);
       --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
       --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
-      --avatar-size:72px;               /* (1) larger photo */
+      --avatar-size:96px;               /* (3) bigger badge */
     }
 
     /* ===== Base / Layout ===== */
     *{box-sizing:border-box}
-    html{background:var(--brand)}        /* (2) ensure bottom of page is blue */
+    html{background:var(--brand)}
     html,body{height:100%}
     body{
       margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
       color:var(--ink);background:var(--bg);
-      min-height:100svh;display:flex;flex-direction:column; /* keep footer at bottom */
+      min-height:100svh;display:flex;flex-direction:column;
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
@@ -54,27 +54,32 @@
     .brand-name a{color:#fff;text-decoration:none}
     .brand-name a:hover{opacity:.9}
 
-    /* (1) Flip badge (photo <-> white logo), larger and more premium */
-    .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1000px}
+    /* Flip badge (photo <-> white logo) */
+    .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
     .avatar-btn{all:unset;display:block;cursor:pointer;width:100%;height:100%;border-radius:50%;outline:none}
     .avatar-inner{
-      position:relative;width:100%;height:100%;transform-style:preserve-3d;
-      transition:transform .7s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+      position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform;
+      transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
     }
     .avatar.is-flipped .avatar-inner{transform:rotateY(180deg)}
     .avatar-face{
       position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden;
-      border:3px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(0,0,0,.28);
     }
+    /* (1) Photo keeps white ring + shadow */
+    .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
+    /* (1) Logo has NO ring and NO outer shadow (transparent background) */
+    .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
     .avatar-face img{width:100%;height:100%;object-fit:cover}
-    .avatar-face.back{transform:rotateY(180deg);background:transparent}
+    /* Ensure the white SVG logo sits neatly inside the circle */
+    .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
+
     .avatar-btn:focus-visible{box-shadow:0 0 0 6px var(--ring)}
     .avatar:hover .avatar-inner{filter:brightness(1.05)}
     @media (prefers-reduced-motion:reduce){
       .avatar-inner{transition:none}
     }
     @media (max-width:960px){
-      :root{ --avatar-size:56px; }
+      :root{ --avatar-size:72px; }
     }
 
     /* Primary nav */
@@ -87,7 +92,7 @@
     nav a:hover{color:#fff;text-decoration:none}
     nav a:hover::after{transform:scaleX(1)}
 
-    /* Social buttons (Email/LinkedIn/GitHub) — single contact location kept */
+    /* Social buttons (Email/LinkedIn/GitHub) */
     .social{display:flex;align-items:center;gap:10px}
     .icon-btn{
       display:inline-flex;align-items:center;justify-content:center;
@@ -136,14 +141,14 @@
     .tile h3{margin:0 0 8px}
     .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
-    /* ===== Footer (2) full blue; simplified content to avoid duplication per item 4) ===== */
+    /* ===== Footer ===== */
     footer{background:var(--brand);color:#fff;padding:18px 0;text-align:center;border-top:1px solid rgba(255,255,255,.12)}
     footer .wrap{opacity:.95}
 
     /* ===== Responsive ===== */
     @media (max-width:960px){
       .hero-grid{grid-template-columns:1fr}
-      nav ul{display:none} /* simple collapse on mobile; links remain in tiles/footer */
+      nav ul{display:none}
     }
   </style>
 </head>
@@ -153,15 +158,15 @@
   <header>
     <div class="wrap topbar">
       <div class="brand">
-        <!-- (1)+(5) Flip avatar (click to toggle between photo and WHITE SVG logo) -->
+        <!-- Flip avatar (photo <-> WHITE SVG logo) -->
         <div class="avatar" aria-hidden="true">
           <button id="avatarToggle" class="avatar-btn" aria-label="Toggle portrait/logo" aria-pressed="false" title="Click to flip">
             <div class="avatar-inner">
               <div class="avatar-face front">
-                <img src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael">
+                <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
               </div>
               <div class="avatar-face back">
-                <img src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo">
+                <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" />
               </div>
             </div>
           </button>
@@ -179,11 +184,9 @@
           <li><a href="/services/">Services</a></li>
           <li><a href="/about/">About</a></li>
           <li><a href="/contact/">Contact</a></li>
-          <!-- (3) CV moved out of nav into hero CTAs for balance -->
         </ul>
       </nav>
 
-      <!-- (4) Single contact location kept here; footer links removed to avoid duplication -->
       <div class="social" aria-label="External profiles">
         <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
@@ -207,7 +210,6 @@
             <a class="btn" href="/contact/">Contact</a>
             <a class="btn btn-outline" href="/portfolio/">View Portfolio</a>
             <a class="btn btn-outline" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">Connect on LinkedIn</a>
-            <!-- (3) CV here feels natural among actions -->
             <a class="btn btn-outline" href="/cv/">CV</a>
           </div>
           <div>
@@ -263,22 +265,51 @@
     // Current year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Flip avatar (click to toggle portrait <-> logo)
-    const avatar = document.querySelector('.avatar');
-    const btn = document.getElementById('avatarToggle');
-    btn.addEventListener('click', () => {
-      const flipped = avatar.classList.toggle('is-flipped');
-      btn.setAttribute('aria-pressed', String(flipped));
-    });
+    // Smooth, reliable flip between photo and logo
+    const avatar   = document.querySelector('.avatar');
+    const inner    = avatar.querySelector('.avatar-inner');
+    const btn      = document.getElementById('avatarToggle');
+    const portrait = document.getElementById('portraitImg');
+    const logo     = document.getElementById('logoImg');
 
-    // Optional: to auto-flip every few seconds, uncomment below (professional default is manual)
-    /*
-    const AUTO = false, SECS = 6;
-    if (AUTO) setInterval(() => {
-      const flipped = avatar.classList.toggle('is-flipped');
-      btn.setAttribute('aria-pressed', String(flipped));
-    }, SECS * 1000);
-    */
+    // Preload to prevent image-swap flicker
+    function preload(src){
+      return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; });
+    }
+    const sources = [portrait.getAttribute('src'), logo.getAttribute('src')];
+
+    let animating = false, flipTimer = null;
+    const FLIP_SECS = 6;
+
+    function toggleFlip(){
+      if (animating) return;
+      animating = true;
+      avatar.classList.toggle('is-flipped');
+      btn.setAttribute('aria-pressed', avatar.classList.contains('is-flipped'));
+      const done = () => { animating = false; inner.removeEventListener('transitionend', done); };
+      inner.addEventListener('transitionend', done, { once: true });
+    }
+
+    function startAuto(){
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      stopAuto();
+      flipTimer = setInterval(toggleFlip, FLIP_SECS * 1000);
+    }
+    function stopAuto(){ if (flipTimer) clearInterval(flipTimer); flipTimer = null; }
+
+    // Manual interaction
+    btn.addEventListener('click', () => { stopAuto(); toggleFlip(); setTimeout(startAuto, FLIP_SECS*1000); });
+    avatar.addEventListener('mouseenter', stopAuto);
+    avatar.addEventListener('mouseleave', startAuto);
+    btn.addEventListener('focusin', stopAuto);
+    btn.addEventListener('focusout', startAuto);
+
+    // Init after preload for glitch-free first render
+    Promise.all(sources.map(preload)).then(() => {
+      // start in photo state for familiarity
+      avatar.classList.remove('is-flipped');
+      startAuto();
+    });
   </script>
 </body>
 </html>
