@@ -110,29 +110,48 @@
     .hero-title{grid-area:title}
     .left-col{grid-area:left}
 
-    /* Long, floating quote */
-    .quote-card{
-      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-      border:1px solid rgba(255,255,255,.18);
-      border-radius:16px;
-      padding:18px 20px;
-      backdrop-filter:blur(6px);
+    /* Floating quote (no card) */
+    blockquote.quote{
+      margin:0 0 8px;
       color:#eef3f8;
-      box-shadow:var(--shadow-hover);
-      animation:floaty 6s ease-in-out infinite alternate;
+      font-style:italic;
+      font-size:clamp(16px,2.1vw,22px);
+      line-height:1.45;
+      /* subtle 3D feel */
+      text-shadow:
+        0 1px 0 rgba(0,0,0,.25),
+        0 8px 18px rgba(0,0,0,.35);
+      filter: drop-shadow(0 14px 22px rgba(0,0,0,.28));
+      animation: floaty 6s ease-in-out infinite alternate;
     }
-    .quote{margin:0;font-style:italic;font-size:clamp(16px,2.1vw,22px);line-height:1.45}
-    .quote small{display:block;margin-top:10px;color:#cfd8e3;font-weight:700;letter-spacing:.2px}
-
+    blockquote.quote small{
+      display:block;margin-top:10px;color:#cfd8e3;font-weight:700;letter-spacing:.2px;
+    }
     @keyframes floaty{
       from{transform:translateY(0)}
       to{transform:translateY(-4px)}
     }
-    @media (prefers-reduced-motion:reduce){ .quote-card{animation:none} }
+    @media (prefers-reduced-motion:reduce){ blockquote.quote{animation:none} }
 
-    /* Chips row */
-    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-    .chip{display:inline-block;background:rgba(255,255,255,.14);color:#fff;padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem}
+    /* Chips row — single line */
+    .chips{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      white-space:nowrap;
+      overflow-x:auto;          /* stays one row on small screens */
+      -webkit-overflow-scrolling: touch;
+    }
+    .chip{
+      display:inline-block;
+      flex:0 0 auto;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      padding:5px 12px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:.82rem;
+    }
 
     /* ===== Sections ===== */
     main{padding:10px 0 40px;flex:1 0 auto}
@@ -234,27 +253,23 @@
         <h1 class="h1 hero-title">Isaac B. Michael</h1>
 
         <div class="left-col">
-          <!-- Long floating quote -->
-          <blockquote class="quote-card">
-            <p class="quote">
-              “When you can measure what you are speaking about, and express it in numbers, you know something about it;
-              but when you cannot measure it, when you cannot express it in numbers, your knowledge is of a meagre and
-              unsatisfactory kind.”
-              <small>— Lord Kelvin</small>
-            </p>
+          <!-- Free-floating quote (no card) -->
+          <blockquote class="quote">
+            “When you can measure what you are speaking about, and express it in numbers, you know something about it;
+            but when you cannot measure it, when you cannot express it in numbers, your knowledge is of a meagre and
+            unsatisfactory kind.”
+            <small>— Lord Kelvin</small>
           </blockquote>
 
-          <!-- Chips across the bottom of the hero -->
+          <!-- Single-row chips -->
           <div class="chips">
             <span class="chip">Public health &amp; education</span>
             <span class="chip">Reproducible pipelines</span>
-            <span class="chip">Mentorship &amp; programs</span>
             <span class="chip">Survey methodology</span>
             <span class="chip">Analytics automation</span>
             <span class="chip">Decision analytics</span>
             <span class="chip">Data modernization</span>
             <span class="chip">Audit-ready reporting</span>
-            <span class="chip">For nontechnical analysts</span>
           </div>
         </div>
       </div>
