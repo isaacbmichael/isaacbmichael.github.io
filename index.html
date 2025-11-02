@@ -54,14 +54,17 @@
     .brand-name a{color:#fff;text-decoration:none}
     .brand-name a:hover{opacity:.9}
 
-    /* Flip badge (photo <-> white logo) */
+    /* Avatar (logo/photo flip on click; hover = 3D float) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
     .avatar-btn{all:unset;display:block;cursor:pointer;width:100%;height:100%;border-radius:50%;outline:none}
     .avatar-inner{
       position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform;
+      --ry:0deg; /* flipped via class */
+      transform:rotateY(var(--ry));
       transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
     }
-    .avatar.is-flipped .avatar-inner{transform:rotateY(180deg)}
+    .avatar.is-flipped .avatar-inner{--ry:180deg}
+    .avatar:hover .avatar-inner{transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px)}
     .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
     /* Photo keeps white ring + shadow */
     .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
@@ -71,7 +74,6 @@
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
 
     .avatar-btn:focus-visible{box-shadow:0 0 0 6px var(--ring)}
-    .avatar:hover .avatar-inner{filter:brightness(1.05)}
     @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none} }
     @media (max-width:960px){ :root{ --avatar-size:72px; } }
 
@@ -114,7 +116,6 @@
     .right-col{grid-area:right}
     .lead{color:#d7dee4;margin:12px 0 24px;max-width:70ch}
     .chip{display:inline-block;background:rgba(255,255,255,.14);color:#fff;padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;margin-right:8px;margin-top:10px}
-    /* nudge the What I do card a bit below the title */
     .whatido{margin-top:6px}
 
     /* Card */
@@ -127,6 +128,19 @@
     }
     .card p{margin:0;color:#e6edf3}
     .card h3{margin:0 0 10px;color:#fff;font-size:1.05rem}
+
+    /* ===== Buttons (for modal actions) ===== */
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;padding:.65rem 1rem;border-radius:999px;
+      font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--brand);
+      box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
+      text-decoration:none;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
+    .btn:active{transform:translateY(-1px)}
+    .btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
+    .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
+    .btn-primary{background:var(--brand);color:#fff;border-color:transparent}
 
     /* ===== Sections ===== */
     main{padding:10px 0 40px;flex:1 0 auto}
@@ -186,9 +200,9 @@
   <header>
     <div class="wrap topbar">
       <div class="brand">
-        <!-- Flip avatar (photo <-> WHITE SVG logo) -->
-        <div class="avatar" aria-hidden="true">
-          <button id="avatarToggle" class="avatar-btn" aria-label="Toggle portrait/logo" aria-pressed="false" title="Click to flip">
+        <!-- Start on LOGO; click to flip to photo -->
+        <div class="avatar is-flipped" aria-hidden="true">
+          <button id="avatarToggle" class="avatar-btn" aria-label="Toggle portrait/logo" aria-pressed="true" title="Click to flip">
             <div class="avatar-inner">
               <div class="avatar-face front">
                 <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
@@ -206,11 +220,11 @@
 
       <nav aria-label="Primary">
         <ul>
+          <li><a href="/about/">About</a></li>
           <li><a href="/portfolio/">Portfolio</a></li>
           <li><a href="/writing/">Writing</a></li>
           <li><a href="/speaking/">Speaking</a></li>
           <li><a href="/services/">Services</a></li>
-          <li><a href="/about/">About</a></li>
           <li><a href="/cv/">Resume/CV</a></li>
           <li><a href="#contact" id="contactOpen">Contact</a></li>
         </ul>
@@ -244,7 +258,8 @@
         <h1 class="h1 hero-title">Executive Data &amp; Research Leader</h1>
 
         <div class="left-col">
-          <p class="lead">Survey methodology • analytics automation • decision analytics. I modernize national data systems and build audit-ready, reproducible pipelines that enable nontechnical analysts.</p>
+          <!-- Shortened by one word (“national”) -->
+          <p class="lead">Survey methodology • analytics automation • decision analytics. I modernize data systems and build audit-ready, reproducible pipelines that enable nontechnical analysts.</p>
           <div>
             <span class="chip">Public health &amp; education</span>
             <span class="chip">Reproducible pipelines</span>
@@ -335,7 +350,7 @@
     // Current year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // ===== Smooth, reliable flip between photo and logo =====
+    // ===== Logo/Photo flip: show LOGO by default; click toggles; no auto-flip =====
     const avatar   = document.querySelector('.avatar');
     const inner    = avatar.querySelector('.avatar-inner');
     const btnFlip  = document.getElementById('avatarToggle');
@@ -345,9 +360,7 @@
     function preload(src){ return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
     const sources = [portrait.getAttribute('src'), logo.getAttribute('src')];
 
-    let animating = false, flipTimer = null;
-    const FLIP_SECS = 6;
-
+    let animating = false;
     function toggleFlip(){
       if (animating) return;
       animating = true;
@@ -356,24 +369,11 @@
       const done = () => { animating = false; inner.removeEventListener('transitionend', done); };
       inner.addEventListener('transitionend', done, { once: true });
     }
+    btnFlip.addEventListener('click', toggleFlip);
 
-    function startAuto(){
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      stopAuto();
-      flipTimer = setInterval(toggleFlip, FLIP_SECS * 1000);
-    }
-    function stopAuto(){ if (flipTimer) clearInterval(flipTimer); flipTimer = null; }
-
-    btnFlip.addEventListener('click', () => { stopAuto(); toggleFlip(); setTimeout(startAuto, FLIP_SECS*1000); });
-    avatar.addEventListener('mouseenter', stopAuto);
-    avatar.addEventListener('mouseleave', startAuto);
-    btnFlip.addEventListener('focusin', stopAuto);
-    btnFlip.addEventListener('focusout', startAuto);
-
-    Promise.all(sources.map(preload)).then(() => {
-      avatar.classList.remove('is-flipped'); // start on photo
-      startAuto();
-    });
+    // Make sure ARIA reflects initial state (logo visible)
+    btnFlip.setAttribute('aria-pressed', avatar.classList.contains('is-flipped'));
+    Promise.all(sources.map(preload)).then(()=>{ /* images ready */ });
 
     // ===== Contact modal =====
     const dialog = document.getElementById('contactDialog');
