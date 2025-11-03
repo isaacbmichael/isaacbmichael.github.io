@@ -26,11 +26,17 @@
       --ring:rgba(10,102,194,.35);
 
       --radius:14px;
-      --w:1180px;                       /* content max-width */
-      --wrap-pad:clamp(16px,3.2vw,28px);
+
+      /* ↓ Tighter gutters + slightly wider content area */
+      --w:1360px;                       /* was 1180px */
+      --wrap-pad:clamp(8px,1.5vw,16px); /* was clamp(16px,3.2vw,28px) */
+
       --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
       --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
       --avatar-size:96px;
+    }
+    @media (min-width:1600px){
+      :root{ --w:1440px; }              /* optional bump on very wide screens */
     }
 
     /* ===== Base / Layout ===== */
@@ -84,8 +90,8 @@
     .avatar-face img{width:100%;height:100%;object-fit:cover}
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
     .avatar-btn:focus-visible{box-shadow:0 0 0 6px var(--ring)}
-    @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none} }
-    @media (max-width:960px){ :root{ --avatar-size:72px; } }
+    @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
+    @media (max-width:960px){ :root{ --avatar-size:72px } }
 
     /* Primary nav */
     nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
@@ -223,7 +229,7 @@
                 <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
               </div>
               <div class="avatar-face back">
-                <img id="logoImg" src="/assets/brands/logo-color.svg" alt="Isaac B. Michael personal logo" decoding="async" />
+                <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" />
               </div>
             </div>
           </button>
@@ -410,4 +416,3 @@
   </script>
 </body>
 </html>
-
