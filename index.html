@@ -16,7 +16,7 @@
     :root{
       /* Brand blues (calm teal-navy) */
       --brand-blue-900:#143C52;  /* dark bar bg */
-      --brand-blue-700:#1B4965;  /* primary */
+      --brand-blue-700:#1B4965;  /* primary accents */
       --accent:var(--brand-blue-700);
 
       /* Canvas & text */
@@ -38,10 +38,14 @@
       --surface:#ffffff;
       --radius:14px;
       --w:1360px;
-      --wrap-pad:clamp(8px,1.5vw,16px);
+      --wrap-pad:clamp(12px,2vw,20px);
       --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
       --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
       --avatar-size:96px;
+
+      /* Drawer */
+      --drawer-bg:#ffffff;
+      --drawer-fg:#111827;
     }
     @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -50,6 +54,8 @@
       --bar-bg:var(--brand-blue-900);
       --bar-fg:#ffffff;
       --bar-border:rgba(255,255,255,.16);
+      --drawer-bg:#0e2a39;           /* dark-themed drawer when bars are dark */
+      --drawer-fg:#eaf2f6;
     }
 
     /* ===== Base / Layout ===== */
@@ -62,7 +68,12 @@
       color:var(--ink);
       background:var(--page-gradient);
       min-height:100svh;display:flex;flex-direction:column;
+      scroll-behavior:smooth;
+      /* iOS safe areas */
+      padding-top: env(safe-area-inset-top);
     }
+    :focus-visible{ outline:none; box-shadow:0 0 0 6px var(--ring) }
+
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
@@ -75,17 +86,16 @@
       backdrop-filter:saturate(120%) blur(2px);
       transition:background-color .2s ease, color .2s ease, border-color .2s ease;
     }
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;perspective:1100px}
-    .brand{display:flex;align-items:center;gap:14px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;perspective:1100px}
+    .brand{display:flex;align-items:center;gap:12px}
 
     /* ===== Brand link (no floating card) ===== */
     .brand-link--wide{
-      display:flex;align-items:center;gap:14px;
+      display:flex;align-items:center;gap:12px;
       color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
       transform-style:preserve-3d;
     }
     .brand-link--wide:hover{ text-decoration:none }
-    .brand-link--wide:focus-visible{ box-shadow:0 0 0 6px var(--ring); border-radius:12px; padding:2px 4px }
 
     .brand-text{display:flex;flex-direction:column;line-height:1.1}
     .brand-name{
@@ -103,14 +113,8 @@
 
     /* Gentle lift on hover (text + badge only) */
     @media (hover:hover) and (pointer:fine){
-      .brand-link--wide:hover .brand-name{
-        transform: translateY(-2px) rotateX(8deg) translateZ(10px);
-        text-shadow:0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
-      }
-      .brand-link--wide:hover .brand-creds{
-        transform:translateY(-1px) rotateX(6deg) translateZ(6px);
-        text-shadow:0 8px 18px rgba(0,0,0,.08), 0 2px 5px rgba(0,0,0,.05);
-      }
+      .brand-link--wide:hover .brand-name{ transform: translateY(-2px) rotateX(8deg) translateZ(10px); text-shadow:0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06) }
+      .brand-link--wide:hover .brand-creds{ transform:translateY(-1px) rotateX(6deg) translateZ(6px); text-shadow:0 8px 18px rgba(0,0,0,.08), 0 2px 5px rgba(0,0,0,.05) }
     }
     @media (prefers-reduced-motion:reduce){
       .brand-name,.brand-creds{ transition:none }
@@ -127,33 +131,79 @@
     .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
     .avatar-face img{width:100%;height:100%;object-fit:cover}
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
-    @media (hover:hover) and (pointer:fine){
-      .brand-link--wide:hover .avatar-inner{ --ry:0deg; transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px) }
-    }
+    @media (hover:hover) and (pointer:fine){ .brand-link--wide:hover .avatar-inner{ --ry:0deg; transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px) } }
     .brand-link--wide.reflip .avatar-inner{ --ry:180deg; transform:rotateY(var(--ry)) }
     @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
     @media (max-width:960px){ :root{ --avatar-size:72px } }
 
-    /* Primary nav */
-    nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
-    nav a{color:var(--bar-fg);font-weight:600;position:relative}
-    nav a::after{
+    /* ===== Desktop nav ===== */
+    nav.primary-nav{ display:flex }
+    nav.primary-nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
+    nav.primary-nav a{color:var(--bar-fg);font-weight:700;position:relative}
+    nav.primary-nav a::after{
       content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:color-mix(in srgb, var(--bar-fg) 25%, transparent);transform:scaleX(0);
       transform-origin:left;transition:transform .22s ease;
     }
-    nav a:hover{color:var(--bar-fg);text-decoration:none}
-    nav a:hover::after{transform:scaleX(1)}
-    nav a:focus-visible{color:var(--bar-fg);text-decoration:none}
-    nav a:focus-visible::after{transform:scaleX(1)}
+    nav.primary-nav a:hover{color:var(--bar-fg);text-decoration:none}
+    nav.primary-nav a:hover::after{transform:scaleX(1)}
+
+    /* ===== Mobile hamburger (hidden on desktop) ===== */
+    .menu-toggle{
+      display:none; /* shown on <= 960px */
+      background:transparent;border:none;color:var(--bar-fg);
+      width:44px;height:44px;border-radius:10px;cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .menu-toggle .bars,
+    .menu-toggle .bars::before,
+    .menu-toggle .bars::after{
+      display:block;width:22px;height:2px;background:currentColor;border-radius:2px;position:relative;margin:0 auto;
+      transition:transform .2s ease, opacity .2s ease;
+    }
+    .menu-toggle .bars{ top:0 }
+    .menu-toggle .bars::before,
+    .menu-toggle .bars::after{ content:""; position:absolute; left:0 }
+    .menu-toggle .bars::before{ transform:translateY(-7px) }
+    .menu-toggle .bars::after{ transform:translateY(7px) }
+    .menu-toggle[aria-expanded="true"] .bars{ opacity:0 }
+    .menu-toggle[aria-expanded="true"] .bars::before{ transform:rotate(45deg) }
+    .menu-toggle[aria-expanded="true"] .bars::after{ transform:rotate(-45deg) }
+
+    /* ===== Mobile drawer ===== */
+    .drawer-backdrop{
+      position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:saturate(120%) blur(2px);
+      opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:999;
+    }
+    .mobile-drawer{
+      position:fixed; inset:0 0 0 auto; width:min(420px, 92vw);
+      background:var(--drawer-bg); color:var(--drawer-fg);
+      transform:translateX(100%); transition:transform .22s cubic-bezier(.2,.8,.2,1);
+      box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1000;
+      display:flex; flex-direction:column; gap:10px; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+    }
+    .mobile-drawer header{ display:flex; align-items:center; justify-content:space-between; }
+    .mobile-drawer h3{ margin:0; font-size:1.05rem; font-weight:900 }
+    .mobile-drawer nav ul{ list-style:none; margin:10px 0; padding:0; display:grid; gap:8px }
+    .mobile-drawer nav a{
+      display:block; padding:12px 10px; border-radius:12px; color:inherit; background:rgba(255,255,255,.06);
+      font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06)
+    }
+    .mobile-drawer nav a:hover{ background:rgba(255,255,255,.12) }
+    .mobile-drawer .quick{ display:grid; gap:10px; margin-top:4px }
+    .mobile-drawer .quick .btn{ width:100%; justify-content:center }
+
+    body.drawer-open .drawer-backdrop{ opacity:1; pointer-events:auto }
+    body.drawer-open .mobile-drawer{ transform:none }
+    body.drawer-open{ overflow:hidden }
 
     /* ===== HERO ===== */
     .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
-    .hero{padding:12px 0 10px}
+    .hero{padding:14px 0 10px}
     .hero-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";row-gap:6px;align-items:start}
-    .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(34px,4vw,56px);line-height:1.08;color:var(--ink);grid-area:title}
-    .tagline{grid-area:tagline;margin:4px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;font-size:clamp(14px,1.4vw,18px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .chips{grid-area:chips;display:flex;gap:10px;margin-top:4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
-    .chip{display:inline-block;flex:0 0 auto;background:rgba(17,24,39,.08);color:var(--ink);padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;border:1px solid rgba(17,24,39,.08)}
+    .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word}
+    .tagline{grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;font-size:clamp(14px,1.6vw,18px)}
+    .chips{grid-area:chips;display:flex;gap:10px;margin-top:4px;flex-wrap:wrap}
+    .chip{display:inline-block;flex:0 0 auto;background:rgba(17,24,39,.08);color:var(--ink);padding:7px 12px;border-radius:999px;font-weight:700;font-size:.9rem;border:1px solid rgba(17,24,39,.08)}
 
     /* Gradient divider between chips and Featured (tinted to brand) */
     .section-divider{
@@ -201,48 +251,68 @@
     .icon{width:18px;height:18px;fill:currentColor}
 
     /* ===== Buttons ===== */
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:.65rem 1rem;border-radius:999px;font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--brand-blue-900);box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;text-decoration:none}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:.7rem 1rem;border-radius:999px;font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--brand-blue-900);box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;text-decoration:none}
     .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
     .btn:active{transform:translateY(-1px)}
-    .btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
     .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
     .btn-primary{background:var(--brand-blue-700);color:#fff;border-color:transparent}
 
-    /* ===== Contact Modal ===== */
-    dialog{width:min(680px,92vw);border:none;border-radius:16px;padding:0;background:var(--surface);box-shadow:var(--shadow-hover)}
-    dialog[open]{animation:fadeIn .16s ease}
-    dialog::backdrop{background:rgba(0,0,0,.55);backdrop-filter:saturate(120%) blur(2px)}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #e5e7eb}
-    .modal-title{margin:0;font-size:1.1rem;font-weight:800;color:var(--ink)}
-    .modal-close{all:unset;cursor:pointer;font-weight:900;line-height:1;padding:6px 8px;border-radius:10px}
-    .modal-close:hover{background:#f1f5f9}
-    .modal-body{padding:18px 20px;display:grid;gap:18px}
-    .contact-actions{display:flex;flex-wrap:wrap;gap:10px}
-    .form-grid{display:grid;gap:10px}
-    .form-grid label{font-weight:700;color:var(--muted);font-size:.9rem}
-    .form-grid input,.form-grid textarea{width:100%;padding:.65rem .75rem;border-radius:10px;border:1px solid #e5e7eb;font:inherit;outline:none;transition:box-shadow .15s ease,border-color .15s ease}
-    .form-grid input:focus,.form-grid textarea:focus{border-color:#94a3b8;box-shadow:0 0 0 4px rgba(148,163,184,.25)}
-    .divider{height:1px;background:#e5e7eb;margin:4px 0}
-    small.muted{color:#6b7280}
-    .sr-only{position:absolute !important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+    /* ===== Mobile dock (quick contact) ===== */
+    .mobile-dock{
+      position:fixed; left:0; right:0; bottom:0; z-index:980;
+      background:var(--bar-bg); color:var(--bar-fg);
+      border-top:1px solid var(--bar-border);
+      padding:6px 10px calc(6px + env(safe-area-inset-bottom));
+      display:none; /* shown on <= 960px */
+    }
+    .mobile-dock .dock{
+      max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px;
+    }
+    .mobile-dock .icon-btn{ width:46px; height:46px }
 
     /* ===== Responsive ===== */
-    @media (max-width:960px){
-      nav ul{
-        display:flex; gap:14px; margin:0; padding:6px 0 2px;
-        overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch;
-      }
-      nav li{ flex:0 0 auto }
-      .brand-name{font-size:18px}
-      .brand-creds{font-size:12px}
-      .tiles{ grid-template-columns:1fr } /* phones */
+    @media (max-width:1120px){
+      .tiles{ grid-template-columns:repeat(2,1fr) }
     }
-    @media (min-width:640px) and (max-width:960px){ .tiles{ grid-template-columns:repeat(2,1fr) } } /* tablets */
-    @media (max-width:520px){ .tagline{ white-space:normal; overflow:visible; text-overflow:clip } }
+    @media (max-width:960px){
+      nav.primary-nav{ display:none } /* hide desktop menu */
+      .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
+      .tiles{ grid-template-columns:1fr } /* phones */
+      main{ padding-bottom:90px } /* space for mobile dock */
+      .mobile-dock{ display:block }
+    }
+    @media (max-width:520px){
+      .h1{ font-size:clamp(26px,8vw,40px) }
+    }
   </style>
 </head>
 <body class="bars-dark"><!-- Start with dark (blue) bars -->
+
+  <!-- ===== Mobile drawer & backdrop (mounted early for z-order) ===== -->
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <header>
+      <h3>Menu</h3>
+      <button class="menu-toggle" id="menuClose" aria-label="Close menu" aria-expanded="true">
+        <span class="bars"></span>
+      </button>
+    </header>
+    <nav aria-label="Mobile">
+      <ul>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/portfolio/">Portfolio</a></li>
+        <li><a href="/writing/">Writing</a></li>
+        <li><a href="/speaking/">Speaking</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/cv/">Résumé/CV</a></li>
+      </ul>
+    </nav>
+    <div class="quick" aria-label="Quick actions">
+      <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email me</a>
+      <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule on Calendly</a>
+      <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </aside>
 
   <!-- ===== Sticky Header ===== -->
   <header class="site-header">
@@ -275,7 +345,8 @@
         </a>
       </div>
 
-      <nav aria-label="Primary">
+      <!-- Desktop nav -->
+      <nav class="primary-nav" aria-label="Primary">
         <ul>
           <li><a href="/about/">About</a></li>
           <li><a href="/portfolio/">Portfolio</a></li>
@@ -286,6 +357,11 @@
           <li><a href="#contact" id="contactOpen" aria-label="Open contact dialog">Contact</a></li>
         </ul>
       </nav>
+
+      <!-- Mobile hamburger -->
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-controls="mobileDrawer" aria-expanded="false">
+        <span class="bars"></span>
+      </button>
     </div>
   </header>
 
@@ -352,9 +428,7 @@
           <span class="sr-only">Email</span>
         </a>
         <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Schedule with Calendly">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/>
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
           <span class="sr-only">Calendly</span>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
@@ -362,7 +436,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
@@ -370,11 +444,29 @@
     </div>
   </footer>
 
+  <!-- ===== Bottom quick-contact dock (mobile) ===== -->
+  <div class="mobile-dock" aria-hidden="false">
+    <div class="dock">
+      <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+      </a>
+      <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Calendly">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+      </a>
+      <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+      </a>
+      <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+      </a>
+    </div>
+  </div>
+
   <!-- ===== Contact Modal ===== -->
   <dialog id="contactDialog" aria-labelledby="contactTitle">
     <div class="modal-header">
       <h3 id="contactTitle" class="modal-title">Contact</h3>
-      <button class="modal-close" id="contactClose" aria-label="Close contact dialog">✕</button>
+      <button class="menu-toggle" id="contactClose" aria-label="Close contact dialog"><span class="bars"></span></button>
     </div>
     <div class="modal-body">
       <div class="contact-actions">
@@ -383,7 +475,7 @@
         <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
       </div>
 
-      <div class="divider" aria-hidden="true"></div>
+      <div class="divider" aria-hidden="true" style="height:1px;background:#e5e7eb;margin:4px 0"></div>
 
       <form id="quickForm" class="form-grid">
         <label for="qName">Name</label>
@@ -409,11 +501,7 @@
     const portrait = document.getElementById('portraitImg');
     const logo     = document.getElementById('logoImg');
     function preload(src){ return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
-    Promise.all([
-      portrait.getAttribute('src'),
-      logo.dataset.logoLight,
-      logo.dataset.logoDark
-    ].map(preload));
+    Promise.all([ portrait.getAttribute('src'), logo.dataset.logoLight, logo.dataset.logoDark ].map(preload));
 
     // Contact modal
     const dialog = document.getElementById('contactDialog');
@@ -426,8 +514,8 @@
     function closeDialog(e){ if (e) e.preventDefault(); if (dialog.open) dialog.close(); }
 
     contactOpen?.addEventListener('click', openDialog);
-    contactClose.addEventListener('click', closeDialog);
-    contactCancel.addEventListener('click', closeDialog);
+    contactClose?.addEventListener('click', closeDialog);
+    contactCancel?.addEventListener('click', closeDialog);
     dialog.addEventListener('click', (e)=>{ if (e.target === dialog) closeDialog(); });
 
     quickForm.addEventListener('submit', (e)=>{
@@ -455,28 +543,53 @@
 
     function setBarsDark(isDark){
       document.body.classList.toggle('bars-dark', isDark);
-      // Swap logo color
       logoEl.src = isDark ? logoEl.dataset.logoDark : logoEl.dataset.logoLight;
     }
-
-    // Start dark at top:
     setBarsDark(true);
 
     if ('IntersectionObserver' in window){
       const io = new IntersectionObserver(entries=>{
-        entries.forEach(entry=>{
-          // If the hero IS intersecting (at top), keep dark; else switch to light
-          setBarsDark(entry.isIntersecting);
-        });
+        entries.forEach(entry=> setBarsDark(entry.isIntersecting));
       }, {threshold: 0});
       io.observe(hero);
     } else {
-      // Fallback: switch after scrolling 60px
       window.addEventListener('scroll', ()=>{
         const isDark = window.scrollY < 60;
         setBarsDark(isDark);
       });
     }
+
+    // ===== Mobile drawer logic =====
+    const drawerBackdrop = document.getElementById('drawerBackdrop');
+    const mobileDrawer   = document.getElementById('mobileDrawer');
+    const menuToggle     = document.getElementById('menuToggle');
+    const menuClose      = document.getElementById('menuClose');
+
+    function openDrawer(){
+      document.body.classList.add('drawer-open');
+      drawerBackdrop.hidden = false;
+      mobileDrawer.setAttribute('aria-hidden','false');
+      menuToggle.setAttribute('aria-expanded','true');
+      // focus first link
+      const firstLink = mobileDrawer.querySelector('a,button');
+      firstLink && firstLink.focus();
+    }
+    function closeDrawer(){
+      document.body.classList.remove('drawer-open');
+      drawerBackdrop.hidden = true;
+      mobileDrawer.setAttribute('aria-hidden','true');
+      menuToggle.setAttribute('aria-expanded','false');
+      menuToggle.focus();
+    }
+
+    menuToggle?.addEventListener('click', ()=>{
+      if (document.body.classList.contains('drawer-open')) closeDrawer();
+      else openDrawer();
+    });
+    menuClose?.addEventListener('click', closeDrawer);
+    drawerBackdrop?.addEventListener('click', closeDrawer);
+    window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeDrawer(); });
+
   </script>
 </body>
 </html>
