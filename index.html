@@ -69,53 +69,57 @@
     }
     .brand{display:flex;align-items:center;gap:14px}
 
-    /* Brand text (name + degrees) next to logo */
-    .brand-text{display:flex;flex-direction:column;line-height:1.1}
-    .brand-name{font-weight:900;color:#fff;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px)}
-    .brand-creds{color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px)}
-
-    /* Home link on the name only (no underline; tasteful 3D float) */
-    .brand-link{
-      color:#fff;
-      text-decoration:none;
-      display:inline-block;
-      border-radius:8px;
-      outline:none;
-      transform-style:preserve-3d;
+    /* ===== Brand (wide home link: avatar + name + creds) ===== */
+    .brand-link--wide{
+      display:flex;align-items:center;gap:14px;
+      color:#fff;text-decoration:none;border-radius:12px;padding:6px 8px;
+      outline:none;transform-style:preserve-3d;
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease;
     }
-    .brand-link:hover{ text-decoration:none; }
-    .brand-link:focus-visible{ box-shadow:0 0 0 6px var(--ring); }
-    .brand-link .brand-name{
+    .brand-link--wide:hover{ text-decoration:none; }
+    .brand-link--wide:focus-visible{ box-shadow:0 0 0 6px var(--ring); }
+    .brand-text{display:flex;flex-direction:column;line-height:1.1}
+    .brand-name{font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:#fff;
       transition: transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
       will-change: transform;
     }
+    .brand-creds{color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
+      transition: transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+      will-change: transform;
+    }
+
+    /* Hover/focus effects: float & 3D for text and badge */
     @media (hover:hover) and (pointer:fine){
-      .brand-link:hover .brand-name{
+      .brand-link--wide:hover{
+        transform:translateY(-2px);
+        box-shadow:0 14px 26px rgba(0,0,0,.28);
+      }
+      .brand-link--wide:hover .brand-name{
         transform: translateY(-2px) rotateX(8deg) translateZ(10px);
         text-shadow: 0 10px 22px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.2);
       }
+      .brand-link--wide:hover .brand-creds{
+        transform: translateY(-1px) rotateX(6deg) translateZ(6px);
+        text-shadow: 0 8px 18px rgba(0,0,0,.25), 0 2px 5px rgba(0,0,0,.18);
+      }
     }
     @media (prefers-reduced-motion:reduce){
-      .brand-link .brand-name{ transition:none; }
+      .brand-name,.brand-creds,.brand-link--wide{ transition:none; }
     }
 
-    /* Avatar (logo/photo flip on hover only; clicks do nothing) */
+    /* Avatar (now clickable via the wide link) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
     .avatar-badge{
       display:block;width:100%;height:100%;border-radius:50%;outline:none;
-      user-select:none;-webkit-tap-highlight-color:transparent;cursor:default;
+      user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer;
     }
     .avatar-inner{
       position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform;
       --ry:0deg; transform:rotateY(var(--ry));
       transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
     }
-    /* Default shows LOGO by starting flipped; hover flips to portrait */
+    /* Default shows LOGO by starting flipped; hover/focus flips to portrait */
     .avatar.is-flipped .avatar-inner{--ry:180deg}
-    .avatar:hover .avatar-inner{
-      --ry:0deg;
-      transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
-    }
     .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
     .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
     .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
@@ -123,6 +127,19 @@
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
     @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
     @media (max-width:960px){ :root{ --avatar-size:72px } }
+
+    /* Flip & float the badge when hovering the whole brand link */
+    @media (hover:hover) and (pointer:fine){
+      .brand-link--wide:hover .avatar-inner{
+        --ry:0deg;
+        transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
+      }
+    }
+    /* On click (JS adds .reflip), force it back to logo state before nav */
+    .brand-link--wide.reflip .avatar-inner{
+      --ry:180deg;
+      transform:rotateY(var(--ry));
+    }
 
     /* Primary nav */
     nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
@@ -133,14 +150,15 @@
     }
     nav a:hover{color:#fff;text-decoration:none}
     nav a:hover::after{transform:scaleX(1)}
+    nav a:focus-visible{color:#fff;text-decoration:none}
+    nav a:focus-visible::after{transform:scaleX(1)}
 
     /* ===== HERO (separate band under header) ===== */
     .hero-section{
       background:var(--hero);
-      color:var(--ink);                  /* all text in hero is dark */
-      border-bottom:0;                   /* remove dividing line */
+      color:var(--ink);
+      border-bottom:0;
     }
-    /* tighter gap between nav and hero title */
     .hero{padding:12px 0 10px}
     .hero-grid{
       display:grid;
@@ -253,27 +271,27 @@
   <header class="site-header">
     <div class="wrap topbar">
       <div class="brand">
-        <!-- Start on LOGO; hover flips to photo; clicks have NO effect -->
-        <div class="avatar is-flipped" aria-hidden="true">
+        <!-- Entire brand is a Home link (bigger hit-target).
+             Hover: flip to photo + float; Click: navigate home and flip back to logo. -->
+        <a href="/" rel="home" aria-label="Home" class="brand-link--wide" id="brandLink">
+          <div class="avatar is-flipped" aria-hidden="true">
             <div class="avatar-badge" title="Hover to flip">
               <div class="avatar-inner">
                 <div class="avatar-face front">
-                  <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
+                  <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" width="96" height="96" />
                 </div>
                 <div class="avatar-face back">
-                  <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" />
+                  <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" width="96" height="96" />
                 </div>
               </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Name (links Home) + degrees -->
-        <div class="brand-text" aria-label="Site owner">
-          <a href="/" class="brand-link" aria-label="Home">
+          <div class="brand-text" aria-label="Site owner">
             <span class="brand-name">Isaac B. Michael</span>
-          </a>
-          <div class="brand-creds">PhD · MS · MApSt</div>
-        </div>
+            <div class="brand-creds">PhD · MS · MApSt</div>
+          </div>
+        </a>
       </div>
 
       <nav aria-label="Primary">
@@ -346,17 +364,21 @@
       <div class="social" aria-label="External profiles">
         <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+          <span class="sr-only">Email</span>
         </a>
         <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Schedule with Calendly">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0  0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/>
+            <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/>
           </svg>
+          <span class="sr-only">Calendly</span>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+          <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <span class="sr-only">GitHub</span>
         </a>
       </div>
       <div>© <span id="y"></span> Isaac B. Michael · All rights reserved.</div>
@@ -434,6 +456,16 @@
       const body    = encodeURIComponent(`${msg}\n\n— ${name}${email ? ' <'+email+'>' : ''}`);
       window.location.href = `mailto:isaac.b.michael@gmail.com?subject=${subject}&body=${body}`;
       closeDialog();
+    });
+
+    // Brand link click: ensure badge flips back to logo just before navigation.
+    const brandLink = document.getElementById('brandLink');
+    const avatarWrap = brandLink?.querySelector('.avatar');
+    brandLink?.addEventListener('click', ()=>{
+      // force logo view (is-flipped means logo visible)
+      avatarWrap?.classList.add('is-flipped');
+      brandLink.classList.add('reflip');
+      // allow default navigation to "/"
     });
   </script>
 </body>
