@@ -20,14 +20,19 @@
       --ink:#111827;
       --muted:#5b6470;
 
-      --nav:#1f2d3a;                    /* sticky top bar + footer */
-      --hero:var(--bg);                 /* hero same as page bg */
+      /* Header/Footer (LIGHT default) */
+      --bar-bg:#ffffff;
+      --bar-fg:#0f172a;
+      --bar-border:#e5e7eb;
+
+      /* Accent + focus */
       --accent:#0a66c2;                 /* LinkedIn blue */
       --ring:rgba(10,102,194,.35);
 
-      --radius:14px;
+      /* Legacy dark brand tone (for buttons, etc.) */
+      --nav:#1f2d3a;
 
-      /* Tighter gutters + wider content area */
+      --radius:14px;
       --w:1360px;
       --wrap-pad:clamp(8px,1.5vw,16px);
 
@@ -35,13 +40,18 @@
       --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
       --avatar-size:96px;
     }
-    @media (min-width:1600px){
-      :root{ --w:1440px; }
+    @media (min-width:1600px){ :root{ --w:1440px } }
+
+    /* Optional: DARK bars theme (applied by body.nav-dark) */
+    body.nav-dark{
+      --bar-bg:#1f2d3a;
+      --bar-fg:#ffffff;
+      --bar-border:rgba(255,255,255,.12);
     }
 
     /* ===== Base / Layout ===== */
     *{box-sizing:border-box}
-    html{background:var(--nav)}
+    html{background:var(--bg)}                   /* lighter page edges on wide screens */
     html,body{height:100%}
     body{
       margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
@@ -50,78 +60,66 @@
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    .wrap{
-      max-width:var(--w);
-      margin:0 auto;
-      padding:0 var(--wrap-pad);
-    }
+    .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
 
-    /* ===== Sticky Site Header (separate from hero) ===== */
+    /* ===== Sticky Site Header ===== */
     header.site-header{
       position:sticky; top:0; z-index:1000;
-      background:var(--nav); color:#fff;
-      border-bottom:1px solid rgba(255,255,255,.12);
+      background:var(--bar-bg); color:var(--bar-fg);
+      border-bottom:1px solid var(--bar-border);
       backdrop-filter:saturate(120%) blur(2px);
     }
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;
-      perspective:1100px; /* for subtle 3D on name hover */
-    }
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;perspective:1100px}
     .brand{display:flex;align-items:center;gap:14px}
 
     /* ===== Brand (wide home link: avatar + name + creds) ===== */
     .brand-link--wide{
       display:flex;align-items:center;gap:14px;
-      color:#fff;text-decoration:none;border-radius:12px;padding:6px 8px;
+      color:var(--bar-fg);text-decoration:none;border-radius:12px;padding:6px 8px;
       outline:none;transform-style:preserve-3d;
       transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease;
     }
-    .brand-link--wide:hover{ text-decoration:none; }
-    .brand-link--wide:focus-visible{ box-shadow:0 0 0 6px var(--ring); }
+    .brand-link--wide:hover{ text-decoration:none }
+    .brand-link--wide:focus-visible{ box-shadow:0 0 0 6px var(--ring) }
     .brand-text{display:flex;flex-direction:column;line-height:1.1}
-    .brand-name{font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:#fff;
-      transition: transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
-      will-change: transform;
+    .brand-name{
+      font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:var(--bar-fg);
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease; will-change:transform;
     }
-    .brand-creds{color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
-      transition: transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
-      will-change: transform;
+    .brand-creds{
+      color:color-mix(in srgb, var(--bar-fg) 55%, #cfd8e3);
+      font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease; will-change:transform;
+    }
+    @supports not (color-mix: in srgb, white 50%, black 50%){
+      .brand-creds{ color:#5b6470 }
     }
 
-    /* Hover/focus effects: float & 3D for text and badge */
+    /* Hover/focus: float & 3D for text and badge */
     @media (hover:hover) and (pointer:fine){
-      .brand-link--wide:hover{
-        transform:translateY(-2px);
-        box-shadow:0 14px 26px rgba(0,0,0,.28);
-      }
+      .brand-link--wide:hover{ transform:translateY(-2px); box-shadow:0 14px 26px rgba(0,0,0,.16) }
       .brand-link--wide:hover .brand-name{
         transform: translateY(-2px) rotateX(8deg) translateZ(10px);
-        text-shadow: 0 10px 22px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.2);
+        text-shadow:0 10px 22px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.08);
       }
       .brand-link--wide:hover .brand-creds{
         transform: translateY(-1px) rotateX(6deg) translateZ(6px);
-        text-shadow: 0 8px 18px rgba(0,0,0,.25), 0 2px 5px rgba(0,0,0,.18);
+        text-shadow:0 8px 18px rgba(0,0,0,.10), 0 2px 5px rgba(0,0,0,.06);
       }
     }
     @media (prefers-reduced-motion:reduce){
-      .brand-name,.brand-creds,.brand-link--wide{ transition:none; }
+      .brand-name,.brand-creds,.brand-link--wide{ transition:none }
     }
 
-    /* Avatar (now clickable via the wide link) */
+    /* Avatar (clickable via the wide link) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
-    .avatar-badge{
-      display:block;width:100%;height:100%;border-radius:50%;outline:none;
-      user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer;
-    }
-    .avatar-inner{
-      position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform;
-      --ry:0deg; transform:rotateY(var(--ry));
-      transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
-    }
+    .avatar-badge{display:block;width:100%;height:100%;border-radius:50%;outline:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+    .avatar-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform;--ry:0deg;transform:rotateY(var(--ry));transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease}
     /* Default shows LOGO by starting flipped; hover/focus flips to portrait */
     .avatar.is-flipped .avatar-inner{--ry:180deg}
     .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
-    .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
+    .avatar-face.front{border:3px solid rgba(17,24,39,.08);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+    body.nav-dark .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
     .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
     .avatar-face img{width:100%;height:100%;object-fit:cover}
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
@@ -131,104 +129,65 @@
     /* Flip & float the badge when hovering the whole brand link */
     @media (hover:hover) and (pointer:fine){
       .brand-link--wide:hover .avatar-inner{
-        --ry:0deg;
-        transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
+        --ry:0deg; transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
       }
     }
-    /* On click (JS adds .reflip), force it back to logo state before nav */
-    .brand-link--wide.reflip .avatar-inner{
-      --ry:180deg;
-      transform:rotateY(var(--ry));
-    }
+    .brand-link--wide.reflip .avatar-inner{ --ry:180deg; transform:rotateY(var(--ry)) }
 
     /* Primary nav */
     nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
-    nav a{color:#e6edf3;font-weight:600;position:relative}
+    nav a{color:var(--bar-fg);font-weight:600;position:relative}
     nav a::after{
-      content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:#e6edf355;transform:scaleX(0);
+      content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:color-mix(in srgb, var(--bar-fg) 25%, transparent);transform:scaleX(0);
       transform-origin:left;transition:transform .22s ease;
     }
-    nav a:hover{color:#fff;text-decoration:none}
+    nav a:hover{color:var(--bar-fg);text-decoration:none}
     nav a:hover::after{transform:scaleX(1)}
-    nav a:focus-visible{color:#fff;text-decoration:none}
+    nav a:focus-visible{color:var(--bar-fg);text-decoration:none}
     nav a:focus-visible::after{transform:scaleX(1)}
 
-    /* ===== HERO (separate band under header) ===== */
-    .hero-section{
-      background:var(--hero);
-      color:var(--ink);
-      border-bottom:0;
-    }
+    /* ===== HERO ===== */
+    .hero-section{ background:var(--bg); color:var(--ink); border-bottom:0 }
     .hero{padding:12px 0 10px}
-    .hero-grid{
-      display:grid;
-      grid-template-columns:1fr;
-      grid-template-areas:"title" "tagline" "chips";
-      row-gap:6px; align-items:start;
-    }
-    .h1{
-      margin:0;
-      font-weight:900;letter-spacing:.2px;
-      font-size:clamp(34px,4vw,56px);line-height:1.08;color:var(--ink);
-      grid-area:title;
-    }
-    .tagline{
-      grid-area:tagline; margin:4px 0 0; color:var(--ink);
-      font-weight:800; letter-spacing:.15px; font-size:clamp(14px,1.4vw,18px);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .chips{
-      grid-area:chips; display:flex; gap:10px; margin-top:4px;
-      white-space:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
-    }
-    .chip{
-      display:inline-block; flex:0 0 auto;
-      background:rgba(17,24,39,.08); color:var(--ink);
-      padding:5px 12px; border-radius:999px; font-weight:700; font-size:.82rem;
-      border:1px solid rgba(17,24,39,.08);
-    }
+    .hero-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";row-gap:6px;align-items:start}
+    .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(34px,4vw,56px);line-height:1.08;color:var(--ink);grid-area:title}
+    .tagline{grid-area:tagline;margin:4px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;font-size:clamp(14px,1.4vw,18px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .chips{grid-area:chips;display:flex;gap:10px;margin-top:4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .chip{display:inline-block;flex:0 0 auto;background:rgba(17,24,39,.08);color:var(--ink);padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;border:1px solid rgba(17,24,39,.08)}
 
     /* ===== Sections ===== */
     main{padding:10px 0 40px;flex:1 0 auto}
     section{padding:24px 0}
     h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
-
-    /* Ensure hero and subsequent sections share the exact left edge */
-    .hero-section .wrap,
-    main.wrap { padding-left: var(--wrap-pad); padding-right: var(--wrap-pad); }
+    .hero-section .wrap, main.wrap{padding-left:var(--wrap-pad);padding-right:var(--wrap-pad)}
 
     .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .tile{
-      position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;
-      box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease;
-    }
+    .tile{position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
     .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
     .tile h3{margin:0 0 8px}
     .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
-    /* ===== Footer (matches header color) ===== */
+    /* ===== Footer (LIGHT by default) ===== */
     footer{
-      background:var(--nav);color:#fff;padding:18px 0;text-align:center;
-      border-top:1px solid rgba(255,255,255,.12)
+      background:var(--bar-bg); color:var(--bar-fg); padding:18px 0; text-align:center;
+      border-top:1px solid var(--bar-border);
     }
     footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
     .social{display:flex;align-items:center;gap:10px}
     .icon-btn{
       display:inline-flex;align-items:center;justify-content:center;
-      width:38px;height:38px;border-radius:999px;background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.25);color:#fff;transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+      width:38px;height:38px;border-radius:999px;
+      background:rgba(15,23,42,.06); border:1px solid rgba(15,23,42,.14); color:var(--bar-fg);
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
     }
-    .icon-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.25);background:rgba(255,255,255,.18)}
+    .icon-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.12);background:rgba(15,23,42,.10)}
     .icon-btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
+    body.nav-dark .icon-btn{ background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.25); color:#fff }
+
     .icon{width:18px;height:18px;fill:currentColor}
 
     /* ===== Buttons (modal) ===== */
-    .btn{
-      display:inline-flex;align-items:center;gap:8px;padding:.65rem 1rem;border-radius:999px;
-      font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--nav);
-      box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
-      text-decoration:none;
-    }
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:.65rem 1rem;border-radius:999px;font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--nav);box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;text-decoration:none}
     .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
     .btn:active{transform:translateY(-1px)}
     .btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
@@ -248,17 +207,13 @@
     .contact-actions{display:flex;flex-wrap:wrap;gap:10px}
     .form-grid{display:grid;gap:10px}
     .form-grid label{font-weight:700;color:var(--muted);font-size:.9rem}
-    .form-grid input,.form-grid textarea{
-      width:100%;padding:.65rem .75rem;border-radius:10px;border:1px solid #e5e7eb;
-      font:inherit;outline:none;transition:box-shadow .15s ease,border-color .15s ease
-    }
+    .form-grid input,.form-grid textarea{width:100%;padding:.65rem .75rem;border-radius:10px;border:1px solid #e5e7eb;font:inherit;outline:none;transition:box-shadow .15s ease,border-color .15s ease}
     .form-grid input:focus,.form-grid textarea:focus{border-color:#94a3b8;box-shadow:0 0 0 4px rgba(148,163,184,.25)}
     .divider{height:1px;background:#e5e7eb;margin:4px 0}
     small.muted{color:#6b7280}
     .sr-only{position:absolute !important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 
     /* ===== Responsive ===== */
-    /* Show nav on mobile as a scrollable row (don't hide it) */
     @media (max-width:960px){
       nav ul{
         display:flex; gap:14px; margin:0; padding:6px 0 2px;
@@ -267,25 +222,19 @@
       nav li{ flex:0 0 auto }
       .brand-name{font-size:18px}
       .brand-creds{font-size:12px}
-      .tiles{ grid-template-columns:1fr } /* 1-col phones */
+      .tiles{ grid-template-columns:1fr } /* phones */
     }
-    @media (min-width:640px) and (max-width:960px){
-      .tiles{ grid-template-columns:repeat(2,1fr) } /* 2-col tablets */
-    }
-    /* Let tagline wrap on narrow screens */
-    @media (max-width:520px){
-      .tagline{ white-space:normal; overflow:visible; text-overflow:clip }
-    }
+    @media (min-width:640px) and (max-width:960px){ .tiles{ grid-template-columns:repeat(2,1fr) } } /* tablets */
+    @media (max-width:520px){ .tagline{ white-space:normal; overflow:visible; text-overflow:clip } }
   </style>
 </head>
 <body>
 
-  <!-- ===== Sticky Header (include this on every page) ===== -->
+  <!-- ===== Sticky Header ===== -->
   <header class="site-header">
     <div class="wrap topbar">
       <div class="brand">
-        <!-- Entire brand is a Home link (bigger hit-target).
-             Hover: flip to photo + float; Click: navigate home and flip back to logo. -->
+        <!-- Wide Home link -->
         <a href="/" rel="home" aria-label="Home" class="brand-link--wide" id="brandLink">
           <div class="avatar is-flipped" aria-hidden="true">
             <div class="avatar-badge" title="Hover to flip">
@@ -294,7 +243,13 @@
                   <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" width="96" height="96" />
                 </div>
                 <div class="avatar-face back">
-                  <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" width="96" height="96" />
+                  <!-- Auto-switching logo (light/dark) -->
+                  <img id="logoImg"
+                       src="/assets/brands/logo-graphite.svg"
+                       data-logo-light="/assets/brands/logo-graphite.svg"
+                       data-logo-dark="/assets/brands/logo-white.svg"
+                       alt="Isaac B. Michael logo"
+                       decoding="async" width="96" height="96" />
                 </div>
               </div>
             </div>
@@ -315,13 +270,13 @@
           <li><a href="/speaking/">Speaking</a></li>
           <li><a href="/services/">Services</a></li>
           <li><a href="/cv/">Résumé/CV</a></li>
-          <li><a href="#contact" id="contactOpen">Contact</a></li>
+          <li><a href="#contact" id="contactOpen" aria-label="Open contact dialog">Contact</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- ===== HERO (separate band) ===== -->
+  <!-- ===== HERO ===== -->
   <section class="hero-section">
     <div class="wrap hero">
       <div class="hero-grid">
@@ -372,7 +327,7 @@
     </section>
   </main>
 
-  <!-- ===== Footer (matches header color) ===== -->
+  <!-- ===== Footer ===== -->
   <footer>
     <div class="wrap">
       <div class="social" aria-label="External profiles">
@@ -408,7 +363,6 @@
     <div class="modal-body">
       <div class="contact-actions">
         <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule time on Calendly</a>
-        <!-- Removed redundant 'Email me' chip to keep the flow focused -->
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a>
         <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
       </div>
@@ -435,16 +389,15 @@
     // Current year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Preload images for the badge flip
+    // Preload images (portrait + both logo variants)
     const portrait = document.getElementById('portraitImg');
     const logo     = document.getElementById('logoImg');
-    function preload(src){
-      return new Promise(res => {
-        const i = new Image();
-        i.onload = res; i.onerror = res; i.src = src;
-      });
-    }
-    Promise.all([portrait.getAttribute('src'), logo.getAttribute('src')].map(preload));
+    function preload(src){ return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
+    Promise.all([
+      portrait.getAttribute('src'),
+      logo.dataset.logoLight,
+      logo.dataset.logoDark
+    ].map(preload));
 
     // Contact modal
     const dialog = document.getElementById('contactDialog');
@@ -476,12 +429,26 @@
     const brandLink = document.getElementById('brandLink');
     const avatarWrap = brandLink?.querySelector('.avatar');
     brandLink?.addEventListener('click', ()=>{
-      // force logo view (is-flipped means logo visible)
-      avatarWrap?.classList.add('is-flipped');
+      avatarWrap?.classList.add('is-flipped'); // logo visible
       brandLink.classList.add('reflip');
       // allow default navigation to "/"
     });
+
+    // OPTIONAL: Adaptive bars (light at top, dark after hero)
+    const enableAdaptiveBars = false; // set to true to activate
+    if (enableAdaptiveBars && 'IntersectionObserver' in window){
+      const logoEl = document.getElementById('logoImg');
+      const setDark = (isDark) => {
+        document.body.classList.toggle('nav-dark', isDark);
+        logoEl.src = isDark ? logoEl.dataset.logoDark : logoEl.dataset.logoLight;
+      };
+      const hero = document.querySelector('.hero-section');
+      const io = new IntersectionObserver(
+        (entries)=> entries.forEach(e=> setDark(!e.isIntersecting)),
+        { threshold: 0 }
+      );
+      io.observe(hero);
+    }
   </script>
 </body>
 </html>
-
