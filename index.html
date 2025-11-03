@@ -64,14 +64,20 @@
       backdrop-filter:saturate(120%) blur(2px);
     }
     .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0}
-    .brand{display:flex;align-items:center;gap:14px}
+
+    /* Make entire brand (badge + name) a Home link */
+    .brand{
+      display:flex;align-items:center;gap:14px;
+      text-decoration:none;color:inherit;border-radius:12px;
+    }
+    .brand:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
 
     /* Brand text (name + degrees) next to logo */
     .brand-text{display:flex;flex-direction:column;line-height:1.1}
     .brand-name{font-weight:900;color:#fff;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px)}
     .brand-creds{color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px)}
 
-    /* Avatar (logo/photo flip on hover only; clicks do nothing) */
+    /* Avatar (logo/photo flip on hover; click navigates Home via .brand) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
     .avatar-badge{
       display:block;width:100%;height:100%;border-radius:50%;outline:none;
@@ -84,9 +90,11 @@
     }
     /* Default shows LOGO by starting flipped; hover flips to portrait */
     .avatar.is-flipped .avatar-inner{--ry:180deg}
-    .avatar:hover .avatar-inner{
-      --ry:0deg;
-      transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
+    @media (hover:hover) and (pointer:fine){
+      .avatar:hover .avatar-inner{
+        --ry:0deg;
+        transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
+      }
     }
     .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
     .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
@@ -224,27 +232,26 @@
   <!-- ===== Sticky Header (include this on every page) ===== -->
   <header class="site-header">
     <div class="wrap topbar">
-      <div class="brand">
-        <!-- Start on LOGO; hover flips to photo; clicks have NO effect -->
+      <!-- Entire brand links to Home; hover still flips badge -->
+      <a class="brand" href="/" aria-label="Isaac B. Michael — Home">
         <div class="avatar is-flipped" aria-hidden="true">
-          <div class="avatar-badge" title="Hover to flip">
-            <div class="avatar-inner">
-              <div class="avatar-face front">
-                <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
-              </div>
-              <div class="avatar-face back">
-                <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" />
-              </div>
-            </div>
-          </div>
+          <span class="avatar-badge">
+            <span class="avatar-inner">
+              <span class="avatar-face front">
+                <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="" decoding="async" />
+              </span>
+              <span class="avatar-face back">
+                <img id="logoImg" src="/assets/brands/logo-white.svg" alt="" decoding="async" />
+              </span>
+            </span>
+          </span>
         </div>
 
-        <!-- Name + degrees -->
-        <div class="brand-text" aria-label="Site owner">
-          <div class="brand-name">Isaac B. Michael</div>
-          <div class="brand-creds">PhD · MS · MApSt</div>
-        </div>
-      </div>
+        <span class="brand-text">
+          <span class="brand-name">Isaac B. Michael</span>
+          <span class="brand-creds">PhD · MS · MApSt</span>
+        </span>
+      </a>
 
       <nav aria-label="Primary">
         <ul>
