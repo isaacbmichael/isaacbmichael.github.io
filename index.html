@@ -63,19 +63,49 @@
       border-bottom:1px solid rgba(255,255,255,.12);
       backdrop-filter:saturate(120%) blur(2px);
     }
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:16px;padding:10px 0;
+      /* give a scene for 3D transforms */
+      perspective:1100px;
+    }
 
-    /* Make entire brand (badge + name) a Home link */
+    /* Entire brand (badge + name) links Home */
     .brand{
       display:flex;align-items:center;gap:14px;
       text-decoration:none;color:inherit;border-radius:12px;
+      transform-style:preserve-3d;will-change:transform, filter;
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), filter .25s ease;
     }
+    /* Prevent the underline just for the brand link */
+    a.brand:hover{ text-decoration:none; }
     .brand:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
+    /* Tasteful 3D float/tilt */
+    @media (hover:hover) and (pointer:fine){
+      .brand:hover{ transform:translateY(-2px) rotateX(8deg) rotateY(-3deg) translateZ(8px); }
+    }
+    @media (prefers-reduced-motion:reduce){
+      .brand{ transition:none }
+      .brand:hover{ transform:none }
+    }
 
     /* Brand text (name + degrees) next to logo */
-    .brand-text{display:flex;flex-direction:column;line-height:1.1}
-    .brand-name{font-weight:900;color:#fff;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px)}
-    .brand-creds{color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px)}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;transform:translateZ(1px)}
+    .brand-name{
+      font-weight:900;color:#fff;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);
+      transition:text-shadow .25s ease, transform .25s ease;
+    }
+    .brand-creds{
+      color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
+      transition:opacity .25s ease, transform .25s ease;
+    }
+    @media (hover:hover) and (pointer:fine){
+      .brand:hover .brand-name{
+        text-shadow:0 10px 24px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.2);
+        transform:translateZ(12px);
+      }
+      .brand:hover .brand-creds{ opacity:.95; transform:translateZ(6px) }
+    }
 
     /* Avatar (logo/photo flip on hover; click navigates Home via .brand) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
@@ -96,9 +126,18 @@
         transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
       }
     }
-    .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
-    .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
-    .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
+    .avatar-face{
+      position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden;
+      /* subtle base to keep the circle visible on dark bg */
+      background:rgba(255,255,255,.04);
+    }
+    /* Add ring on BOTH faces so the logo state has a visible edge */
+    .avatar-face.front,
+    .avatar-face.back{
+      border:3px solid rgba(255,255,255,.95);
+      box-shadow:0 6px 16px rgba(0,0,0,.28);
+    }
+    .avatar-face.back{ transform:rotateY(180deg) }
     .avatar-face img{width:100%;height:100%;object-fit:cover}
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
     @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
@@ -117,10 +156,9 @@
     /* ===== HERO (separate band under header) ===== */
     .hero-section{
       background:var(--hero);
-      color:var(--ink);                  /* all text in hero is dark */
-      border-bottom:0;                   /* remove dividing line */
+      color:var(--ink);
+      border-bottom:0;
     }
-    /* tighter gap between nav and hero title */
     .hero{padding:12px 0 10px}
     .hero-grid{
       display:grid;
@@ -129,8 +167,7 @@
       row-gap:6px; align-items:start;
     }
     .h1{
-      margin:0;
-      font-weight:900;letter-spacing:.2px;
+      margin:0;font-weight:900;letter-spacing:.2px;
       font-size:clamp(34px,4vw,56px);line-height:1.08;color:var(--ink);
       grid-area:title;
     }
