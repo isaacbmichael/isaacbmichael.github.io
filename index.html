@@ -258,10 +258,23 @@
     .sr-only{position:absolute !important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 
     /* ===== Responsive ===== */
+    /* Show nav on mobile as a scrollable row (don't hide it) */
     @media (max-width:960px){
-      nav ul{display:none}
+      nav ul{
+        display:flex; gap:14px; margin:0; padding:6px 0 2px;
+        overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch;
+      }
+      nav li{ flex:0 0 auto }
       .brand-name{font-size:18px}
       .brand-creds{font-size:12px}
+      .tiles{ grid-template-columns:1fr } /* 1-col phones */
+    }
+    @media (min-width:640px) and (max-width:960px){
+      .tiles{ grid-template-columns:repeat(2,1fr) } /* 2-col tablets */
+    }
+    /* Let tagline wrap on narrow screens */
+    @media (max-width:520px){
+      .tagline{ white-space:normal; overflow:visible; text-overflow:clip }
     }
   </style>
 </head>
@@ -395,7 +408,7 @@
     <div class="modal-body">
       <div class="contact-actions">
         <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule time on Calendly</a>
-        <a class="btn" href="mailto:isaac.b.michael@gmail.com">Email me</a>
+        <!-- Removed redundant 'Email me' chip to keep the flow focused -->
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a>
         <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
       </div>
@@ -471,5 +484,3 @@
   </script>
 </body>
 </html>
-
-
