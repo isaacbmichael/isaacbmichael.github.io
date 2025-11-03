@@ -12,13 +12,11 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <style>
-    /* ===== Design Tokens ===== */
+    /* ===== Design Tokens (Aegean Slate) ===== */
     :root{
-      /* Brand blues */
-      --brand-blue-900:#1E40AF;  /* dark bar bg */
-      --brand-blue-700:#1D4ED8;  /* primary blue (professional) */
-      --brand-blue-600:#2563EB;
-      /* Accent for links (kept consistent) */
+      /* Brand blues (calm teal-navy) */
+      --brand-blue-900:#143C52;  /* dark bar bg */
+      --brand-blue-700:#1B4965;  /* primary */
       --accent:var(--brand-blue-700);
 
       /* Canvas & text */
@@ -26,15 +24,15 @@
       --muted:#5b6470;
 
       /* Bars (LIGHT baseline) */
-      --bar-bg:#ffffff;             /* light bars bg */
-      --bar-fg:var(--brand-blue-900); /* light bars text/link color */
+      --bar-bg:#ffffff;
+      --bar-fg:var(--brand-blue-900);
       --bar-border:#e5e7eb;
 
-      /* Page background (subtle light gradient) */
-      --page-gradient:linear-gradient(180deg,#F8FBFF 0%, #F4F8FF 40%, #F8FBFF 100%);
+      /* Page background (soft light gradient) */
+      --page-gradient:linear-gradient(180deg,#F3F7FA 0%, #EDF3F7 40%, #F7FAFC 100%);
 
       /* Focus ring */
-      --ring:rgba(37, 99, 235, .35);
+      --ring:rgba(27,73,101,.35);
 
       /* Misc */
       --surface:#ffffff;
@@ -80,7 +78,7 @@
     .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;perspective:1100px}
     .brand{display:flex;align-items:center;gap:14px}
 
-    /* ===== Brand link (no “floating card”, but still lift on hover) ===== */
+    /* ===== Brand link (no floating card) ===== */
     .brand-link--wide{
       display:flex;align-items:center;gap:14px;
       color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
@@ -157,11 +155,15 @@
     .chips{grid-area:chips;display:flex;gap:10px;margin-top:4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
     .chip{display:inline-block;flex:0 0 auto;background:rgba(17,24,39,.08);color:var(--ink);padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;border:1px solid rgba(17,24,39,.08)}
 
-    /* Gradient divider between chips and Featured */
+    /* Gradient divider between chips and Featured (tinted to brand) */
     .section-divider{
       height:12px; margin:10px 0 2px; border:0;
       background:
-        linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(29,78,216,.25) 10%, rgba(29,78,216,.35) 50%, rgba(29,78,216,.25) 90%, rgba(0,0,0,0) 100%);
+        linear-gradient(90deg, rgba(0,0,0,0) 0%,
+                              rgba(27,73,101,.22) 10%,
+                              rgba(27,73,101,.35) 50%,
+                              rgba(27,73,101,.22) 90%,
+                              rgba(0,0,0,0) 100%);
       mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
       opacity:.9; border-radius:999px;
     }
@@ -240,7 +242,7 @@
     @media (max-width:520px){ .tagline{ white-space:normal; overflow:visible; text-overflow:clip } }
   </style>
 </head>
-<body class="bars-dark"><!-- Start with blue bars -->
+<body class="bars-dark"><!-- Start with dark (blue) bars -->
 
   <!-- ===== Sticky Header ===== -->
   <header class="site-header">
@@ -254,10 +256,10 @@
                   <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" width="96" height="96" />
                 </div>
                 <div class="avatar-face back">
-                  <!-- Auto-switching logo (blue for light bars, white for dark bars) -->
+                  <!-- Auto-switching logo (teal-navy for light bars, white for dark bars) -->
                   <img id="logoImg"
                        src="/assets/brands/logo-white.svg"
-                       data-logo-light="/assets/brands/logo-blue-500.svg"
+                       data-logo-light="/assets/brands/logo-tealnavy.svg"
                        data-logo-dark="/assets/brands/logo-white.svg"
                        alt="Isaac B. Michael logo"
                        decoding="async" width="96" height="96" />
@@ -447,7 +449,7 @@
       brandLink.classList.add('reflip');
     });
 
-    // Adaptive bars: blue at top (bars-dark), switch to light after hero exits viewport
+    // Adaptive bars: dark at top, switch to light after hero exits viewport
     const hero = document.querySelector('.hero-section');
     const logoEl = document.getElementById('logoImg');
 
@@ -463,7 +465,7 @@
     if ('IntersectionObserver' in window){
       const io = new IntersectionObserver(entries=>{
         entries.forEach(entry=>{
-          // If the hero is NOT visible, switch to light bars
+          // If the hero IS intersecting (at top), keep dark; else switch to light
           setBarsDark(entry.isIntersecting);
         });
       }, {threshold: 0});
