@@ -307,6 +307,7 @@
       .tiles{ grid-template-columns:1fr }
       main{ padding-bottom:90px } /* space for mobile dock */
       .mobile-dock{ display:block }
+      footer .social{ display:none !important; } /* hide footer icons on phones; floating dock is the single source of truth */
     }
     @media (max-width:520px){
       .h1{ font-size:clamp(26px,8vw,40px) }
@@ -588,28 +589,7 @@
       });
     }
 
-    // --- Hide the mobile dock when the footer is visible (avoid duplicate icons) ---
-    const footerEl = document.querySelector('footer');
-    const mobileDockEl = document.querySelector('.mobile-dock');
-    function setDockHidden(hidden) {
-      if (!mobileDockEl) return;
-      mobileDockEl.hidden = hidden;
-      mobileDockEl.setAttribute('aria-hidden', hidden ? 'true' : 'false');
-    }
-    if (footerEl && mobileDockEl && 'IntersectionObserver' in window) {
-      const ioDock = new IntersectionObserver(([entry]) => {
-        setDockHidden(entry.isIntersecting);
-      }, { threshold: 0.01 });
-      ioDock.observe(footerEl);
-    } else {
-      // Fallback: if very small screens, prefer sticky dock and hide footer icons
-      if (window.matchMedia('(max-width: 960px)').matches) {
-        const footerSocial = document.querySelector('footer .social');
-        if (footerSocial) footerSocial.style.display = 'none';
-      }
-    }
-
-    // (Removed: all horizontal scroll/drag/keyboard code for the chip rail)
+    // (No JS needed for hiding duplicate icons; handled via CSS @media rule)
   </script>
 </body>
 </html>
