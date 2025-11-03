@@ -15,14 +15,15 @@
   <style>
     /* ===== Design Tokens ===== */
     :root{
-      --bg:#f7f9fb;
+      /* Softer blue page canvas */
+      --bg:#F4F8FF;
       --surface:#ffffff;
       --ink:#111827;
       --muted:#5b6470;
 
-      /* Header/Footer (LIGHT default) */
+      /* Header/Footer (LIGHT default) — graphite text to match logo-graphite.svg */
       --bar-bg:#ffffff;
-      --bar-fg:#0f172a;
+      --bar-fg:#2B313B;                 /* <-- matches graphite logo */
       --bar-border:#e5e7eb;
 
       /* Accent + focus */
@@ -39,6 +40,10 @@
       --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
       --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
       --avatar-size:96px;
+
+      /* Optional background image (enable by adding class bg-photo to <body>) */
+      --bg-image:none;
+      --bg-overlay:linear-gradient(180deg, rgba(244,248,255,.9), rgba(244,248,255,.95));
     }
     @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -51,13 +56,26 @@
 
     /* ===== Base / Layout ===== */
     *{box-sizing:border-box}
-    html{background:var(--bg)}                   /* lighter page edges on wide screens */
+    html{background:var(--bg)}
     html,body{height:100%}
     body{
       margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
       color:var(--ink);background:var(--bg);
       min-height:100svh;display:flex;flex-direction:column;
+      transition:background-color .25s ease;
     }
+    /* Optional: photo background */
+    body.bg-photo{
+      background:
+        var(--bg-overlay),
+        var(--bg-image);
+      background-size:cover;
+      background-position:center top;
+      background-repeat:no-repeat;
+      /* Avoid parallax jank on mobile */
+      background-attachment:scroll;
+    }
+
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
@@ -75,19 +93,21 @@
     /* ===== Brand (wide home link: avatar + name + creds) ===== */
     .brand-link--wide{
       display:flex;align-items:center;gap:14px;
-      color:var(--bar-fg);text-decoration:none;border-radius:12px;padding:6px 8px;
-      outline:none;transform-style:preserve-3d;
-      transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease;
+      color:var(--bar-fg);text-decoration:none;
+      /* Remove “floating card” look: no bg, no shadow on container */
+      border-radius:0;padding:0;outline:none;
+      transform-style:preserve-3d;
     }
     .brand-link--wide:hover{ text-decoration:none }
-    .brand-link--wide:focus-visible{ box-shadow:0 0 0 6px var(--ring) }
+    .brand-link--wide:focus-visible{ box-shadow:0 0 0 6px var(--ring); border-radius:12px; padding:2px 4px }
+
     .brand-text{display:flex;flex-direction:column;line-height:1.1}
     .brand-name{
       font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:var(--bar-fg);
       transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease; will-change:transform;
     }
     .brand-creds{
-      color:color-mix(in srgb, var(--bar-fg) 55%, #cfd8e3);
+      color:color-mix(in srgb, var(--bar-fg) 65%, #cfd8e3);
       font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
       transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease; will-change:transform;
     }
@@ -95,20 +115,19 @@
       .brand-creds{ color:#5b6470 }
     }
 
-    /* Hover/focus: float & 3D for text and badge */
+    /* Hover/focus: gentle lift on text & badge (no container shadow) */
     @media (hover:hover) and (pointer:fine){
-      .brand-link--wide:hover{ transform:translateY(-2px); box-shadow:0 14px 26px rgba(0,0,0,.16) }
       .brand-link--wide:hover .brand-name{
         transform: translateY(-2px) rotateX(8deg) translateZ(10px);
-        text-shadow:0 10px 22px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.08);
+        text-shadow:0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
       }
       .brand-link--wide:hover .brand-creds{
-        transform: translateY(-1px) rotateX(6deg) translateZ(6px);
-        text-shadow:0 8px 18px rgba(0,0,0,.10), 0 2px 5px rgba(0,0,0,.06);
+        transform:translateY(-1px) rotateX(6deg) translateZ(6px);
+        text-shadow:0 8px 18px rgba(0,0,0,.08), 0 2px 5px rgba(0,0,0,.05);
       }
     }
     @media (prefers-reduced-motion:reduce){
-      .brand-name,.brand-creds,.brand-link--wide{ transition:none }
+      .brand-name,.brand-creds{ transition:none }
     }
 
     /* Avatar (clickable via the wide link) */
@@ -118,7 +137,8 @@
     /* Default shows LOGO by starting flipped; hover/focus flips to portrait */
     .avatar.is-flipped .avatar-inner{--ry:180deg}
     .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
-    .avatar-face.front{border:3px solid rgba(17,24,39,.08);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+    /* Softer edge so it doesn’t read as a “card” */
+    .avatar-face.front{border:3px solid rgba(17,24,39,.06);box-shadow:0 4px 10px rgba(0,0,0,.08)}
     body.nav-dark .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
     .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
     .avatar-face img{width:100%;height:100%;object-fit:cover}
@@ -154,6 +174,15 @@
     .tagline{grid-area:tagline;margin:4px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;font-size:clamp(14px,1.4vw,18px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .chips{grid-area:chips;display:flex;gap:10px;margin-top:4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
     .chip{display:inline-block;flex:0 0 auto;background:rgba(17,24,39,.08);color:var(--ink);padding:5px 12px;border-radius:999px;font-weight:700;font-size:.82rem;border:1px solid rgba(17,24,39,.08)}
+
+    /* Gradient divider between chips and Featured */
+    .section-divider{
+      height:12px; margin:10px 0 2px; border:0;
+      background:
+        linear-gradient(90deg, rgba(43,49,59,0) 0%, rgba(43,49,59,.18) 20%, rgba(10,102,194,.28) 50%, rgba(43,49,59,.18) 80%, rgba(43,49,59,0) 100%);
+      mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+      opacity:.85; border-radius:999px;
+    }
 
     /* ===== Sections ===== */
     main{padding:10px 0 40px;flex:1 0 auto}
@@ -300,6 +329,9 @@
     </div>
   </section>
 
+  <!-- Gradient divider between chips and Featured -->
+  <div class="section-divider" aria-hidden="true"></div>
+
   <!-- ===== Featured ===== -->
   <main class="wrap" id="main">
     <section>
@@ -346,7 +378,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
