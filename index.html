@@ -63,13 +63,41 @@
       border-bottom:1px solid rgba(255,255,255,.12);
       backdrop-filter:saturate(120%) blur(2px);
     }
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;
+      perspective:1100px; /* for subtle 3D on name hover */
+    }
     .brand{display:flex;align-items:center;gap:14px}
 
     /* Brand text (name + degrees) next to logo */
     .brand-text{display:flex;flex-direction:column;line-height:1.1}
     .brand-name{font-weight:900;color:#fff;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px)}
     .brand-creds{color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px)}
+
+    /* Home link on the name only (no underline; tasteful 3D float) */
+    .brand-link{
+      color:#fff;
+      text-decoration:none;
+      display:inline-block;
+      border-radius:8px;
+      outline:none;
+      transform-style:preserve-3d;
+    }
+    .brand-link:hover{ text-decoration:none; }
+    .brand-link:focus-visible{ box-shadow:0 0 0 6px var(--ring); }
+    .brand-link .brand-name{
+      transition: transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+      will-change: transform;
+    }
+    @media (hover:hover) and (pointer:fine){
+      .brand-link:hover .brand-name{
+        transform: translateY(-2px) rotateX(8deg) translateZ(10px);
+        text-shadow: 0 10px 22px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.2);
+      }
+    }
+    @media (prefers-reduced-motion:reduce){
+      .brand-link .brand-name{ transition:none; }
+    }
 
     /* Avatar (logo/photo flip on hover only; clicks do nothing) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
@@ -227,21 +255,23 @@
       <div class="brand">
         <!-- Start on LOGO; hover flips to photo; clicks have NO effect -->
         <div class="avatar is-flipped" aria-hidden="true">
-          <div class="avatar-badge" title="Hover to flip">
-            <div class="avatar-inner">
-              <div class="avatar-face front">
-                <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
-              </div>
-              <div class="avatar-face back">
-                <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" />
+            <div class="avatar-badge" title="Hover to flip">
+              <div class="avatar-inner">
+                <div class="avatar-face front">
+                  <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
+                </div>
+                <div class="avatar-face back">
+                  <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" />
+                </div>
               </div>
             </div>
-          </div>
         </div>
 
-        <!-- Name + degrees -->
+        <!-- Name (links Home) + degrees -->
         <div class="brand-text" aria-label="Site owner">
-          <div class="brand-name">Isaac B. Michael</div>
+          <a href="/" class="brand-link" aria-label="Home">
+            <span class="brand-name">Isaac B. Michael</span>
+          </a>
           <div class="brand-creds">PhD · MS · MApSt</div>
         </div>
       </div>
@@ -319,7 +349,7 @@
         </a>
         <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Schedule with Calendly">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/>
+            <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0  0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/>
           </svg>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
