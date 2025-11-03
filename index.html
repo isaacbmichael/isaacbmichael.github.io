@@ -40,8 +40,9 @@
       --drawer-bg:#ffffff;
       --drawer-fg:#111827;
 
-      /* NEW: dedicated edge padding for the header only (Far Harbor-style tight gutters) */
-      --nav-edge-pad: clamp(10px, 2vw, 18px);
+      /* Header-only (Far Harbor–style) tight edge gutters */
+      /* ~16px on phones → up to 28px max on wide desktops */
+      --nav-edge-pad: clamp(16px, 2.5vw, 28px);
     }
     @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -93,7 +94,7 @@
     .site-header .wrap{ max-width:none; padding-left:0; padding-right:0 }
     .topbar{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
-      /* Tight edge gutters with safe-area support */
+      /* Tight, symmetric edge gutters with safe-area support */
       padding:10px calc(var(--nav-edge-pad) + env(safe-area-inset-right))
                10px calc(var(--nav-edge-pad) + env(safe-area-inset-left));
       perspective:1100px
@@ -211,7 +212,7 @@
     .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word}
     .tagline{grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;font-size:clamp(14px,1.6vw,18px)}
 
-    /* ===== Chips: non-scroll, one row on laptops, wrap on small phones ===== */
+    /* ===== Chips ===== */
     .chips{
       grid-area:chips;
       display:flex; align-items:center;
@@ -219,11 +220,11 @@
       margin-top:6px;
       padding-bottom:4px;
       white-space:normal;
-      overflow:visible;       /* no hidden scroller */
-      flex-wrap:nowrap;       /* single row on typical laptop widths */
+      overflow:visible;
+      flex-wrap:nowrap;
     }
     @media (max-width:640px){
-      .chips{ flex-wrap:wrap } /* small phones can wrap gracefully */
+      .chips{ flex-wrap:wrap }
     }
 
     .chip{
@@ -238,7 +239,7 @@
       border:1px solid rgba(17,24,39,.08)
     }
 
-    /* ===== Gradient divider: cross-browser (no masks) ===== */
+    /* ===== Gradient divider ===== */
     .section-divider{
       position:relative;
       height:12px; margin:10px 0 2px; border:0;
