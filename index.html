@@ -71,18 +71,20 @@
     .brand-name{font-weight:900;color:#fff;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px)}
     .brand-creds{color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px)}
 
-    /* Avatar (logo/photo flip on hover) */
+    /* Avatar (logo/photo flip on hover only; clicks do nothing) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
-    .avatar-btn{all:unset;display:block;cursor:default;width:100%;height:100%;border-radius:50%;outline:none}
+    .avatar-badge{
+      display:block;width:100%;height:100%;border-radius:50%;outline:none;
+      user-select:none;-webkit-tap-highlight-color:transparent;cursor:default;
+    }
     .avatar-inner{
       position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform;
       --ry:0deg; transform:rotateY(var(--ry));
       transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
     }
-    /* Default shows LOGO by starting flipped; hover/focus flips to portrait */
+    /* Default shows LOGO by starting flipped; hover flips to portrait */
     .avatar.is-flipped .avatar-inner{--ry:180deg}
-    .avatar:hover .avatar-inner,
-    .avatar:focus-within .avatar-inner{
+    .avatar:hover .avatar-inner{
       --ry:0deg;
       transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
     }
@@ -91,7 +93,6 @@
     .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
     .avatar-face img{width:100%;height:100%;object-fit:cover}
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
-    .avatar-btn:focus-visible{box-shadow:0 0 0 6px var(--ring)}
     @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
     @media (max-width:960px){ :root{ --avatar-size:72px } }
 
@@ -224,9 +225,9 @@
   <header class="site-header">
     <div class="wrap topbar">
       <div class="brand">
-        <!-- Start on LOGO; hover/focus flips to photo -->
+        <!-- Start on LOGO; hover flips to photo; clicks have NO effect -->
         <div class="avatar is-flipped" aria-hidden="true">
-          <button class="avatar-btn" aria-label="Logo / portrait badge (hover to flip)" title="Hover to flip">
+          <div class="avatar-badge" title="Hover to flip">
             <div class="avatar-inner">
               <div class="avatar-face front">
                 <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
@@ -235,7 +236,7 @@
                 <img id="logoImg" src="/assets/brands/logo-white.svg" alt="Isaac B. Michael personal logo" decoding="async" />
               </div>
             </div>
-          </button>
+          </div>
         </div>
 
         <!-- Name + degrees -->
