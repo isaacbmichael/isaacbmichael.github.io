@@ -21,7 +21,7 @@
       --muted:#5b6470;
 
       --nav:#1f2d3a;                    /* sticky top bar + footer */
-      --hero:var(--bg);                 /* hero now same as page bg */
+      --hero:var(--bg);                 /* hero same as page bg */
       --accent:#0a66c2;                 /* LinkedIn blue */
       --ring:rgba(10,102,194,.35);
 
@@ -71,16 +71,21 @@
     .brand-name{font-weight:900;color:#fff;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px)}
     .brand-creds{color:#cfd8e3;font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px)}
 
-    /* Avatar (logo/photo flip) */
+    /* Avatar (logo/photo flip on hover) */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
-    .avatar-btn{all:unset;display:block;cursor:pointer;width:100%;height:100%;border-radius:50%;outline:none}
+    .avatar-btn{all:unset;display:block;cursor:default;width:100%;height:100%;border-radius:50%;outline:none}
     .avatar-inner{
       position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform;
       --ry:0deg; transform:rotateY(var(--ry));
       transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
     }
+    /* Default shows LOGO by starting flipped; hover/focus flips to portrait */
     .avatar.is-flipped .avatar-inner{--ry:180deg}
-    .avatar:hover .avatar-inner{transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px)}
+    .avatar:hover .avatar-inner,
+    .avatar:focus-within .avatar-inner{
+      --ry:0deg;
+      transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
+    }
     .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
     .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
     .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
@@ -219,9 +224,9 @@
   <header class="site-header">
     <div class="wrap topbar">
       <div class="brand">
-        <!-- Start on LOGO; click to flip to photo -->
+        <!-- Start on LOGO; hover/focus flips to photo -->
         <div class="avatar is-flipped" aria-hidden="true">
-          <button id="avatarToggle" class="avatar-btn" aria-label="Toggle portrait/logo" aria-pressed="true" title="Click to flip">
+          <button class="avatar-btn" aria-label="Logo / portrait badge (hover to flip)" title="Hover to flip">
             <div class="avatar-inner">
               <div class="avatar-face front">
                 <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" />
@@ -233,7 +238,7 @@
           </button>
         </div>
 
-        <!-- Name + degrees (always visible next to logo) -->
+        <!-- Name + degrees -->
         <div class="brand-text" aria-label="Site owner">
           <div class="brand-name">Isaac B. Michael</div>
           <div class="brand-creds">PhD · MS · MApSt</div>
@@ -363,35 +368,23 @@
     // Current year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Logo/Photo flip (no auto-flip)
-    const avatar   = document.querySelector('.avatar');
-    const inner    = avatar.querySelector('.avatar-inner');
-    const btnFlip  = document.getElementById('avatarToggle');
+    // Preload images for the badge flip
     const portrait = document.getElementById('portraitImg');
     const logo     = document.getElementById('logoImg');
-
-    function preload(src){ return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
-    const sources = [portrait.getAttribute('src'), logo.getAttribute('src')];
-
-    let animating = false;
-    function toggleFlip(){
-      if (animating) return;
-      animating = true;
-      avatar.classList.toggle('is-flipped');
-      btnFlip.setAttribute('aria-pressed', avatar.classList.contains('is-flipped'));
-      const done = () => { animating = false; inner.removeEventListener('transitionend', done); };
-      inner.addEventListener('transitionend', done, { once: true });
+    function preload(src){
+      return new Promise(res => {
+        const i = new Image();
+        i.onload = res; i.onerror = res; i.src = src;
+      });
     }
-    btnFlip.addEventListener('click', toggleFlip);
-    btnFlip.setAttribute('aria-pressed', avatar.classList.contains('is-flipped'));
-    Promise.all(sources.map(preload)).then(()=>{ /* images ready */ });
+    Promise.all([portrait.getAttribute('src'), logo.getAttribute('src')].map(preload));
 
     // Contact modal
     const dialog = document.getElementById('contactDialog');
-    const contactOpen = document.getElementById('contactOpen');
+    const contactOpen  = document.getElementById('contactOpen');
     const contactClose = document.getElementById('contactClose');
-    const contactCancel = document.getElementById('contactCancel');
-    const quickForm = document.getElementById('quickForm');
+    const contactCancel= document.getElementById('contactCancel');
+    const quickForm    = document.getElementById('quickForm');
 
     function openDialog(e){ if (e) e.preventDefault(); if (!dialog.open) dialog.showModal(); }
     function closeDialog(e){ if (e) e.preventDefault(); if (dialog.open) dialog.close(); }
@@ -403,11 +396,11 @@
 
     quickForm.addEventListener('submit', (e)=>{
       e.preventDefault();
-      const name = (document.getElementById('qName').value || '').trim();
+      const name  = (document.getElementById('qName').value || '').trim();
       const email = (document.getElementById('qEmail').value || '').trim();
-      const msg = (document.getElementById('qMsg').value || '').trim();
+      const msg   = (document.getElementById('qMsg').value || '').trim();
       const subject = encodeURIComponent('Website inquiry');
-      const body = encodeURIComponent(`${msg}\n\n— ${name}${email ? ' <'+email+'>' : ''}`);
+      const body    = encodeURIComponent(`${msg}\n\n— ${name}${email ? ' <'+email+'>' : ''}`);
       window.location.href = `mailto:isaac.b.michael@gmail.com?subject=${subject}&body=${body}`;
       closeDialog();
     });
