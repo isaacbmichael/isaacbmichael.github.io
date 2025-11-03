@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Isaac B. Michael — Data-Driven Strategy & Execution</title>
   <meta name="description" content="Survey methodology, analytics automation, and decision analytics.">
-  <!-- Open Graph / social -->
   <meta property="og:title" content="Isaac B. Michael — Data-Driven Strategy & Execution">
   <meta property="og:description" content="Modernizing data systems; reproducible analytics; executive reporting.">
   <meta property="og:url" content="https://isaacbmichael.com/">
@@ -15,87 +14,76 @@
   <style>
     /* ===== Design Tokens ===== */
     :root{
-      /* Softer blue page canvas */
-      --bg:#F4F8FF;
-      --surface:#ffffff;
+      /* Brand blues */
+      --brand-blue-900:#1E40AF;  /* dark bar bg */
+      --brand-blue-700:#1D4ED8;  /* primary blue (professional) */
+      --brand-blue-600:#2563EB;
+      /* Accent for links (kept consistent) */
+      --accent:var(--brand-blue-700);
+
+      /* Canvas & text */
       --ink:#111827;
       --muted:#5b6470;
 
-      /* Header/Footer (LIGHT default) — graphite text to match logo-graphite.svg */
-      --bar-bg:#ffffff;
-      --bar-fg:#2B313B;                 /* <-- matches graphite logo */
+      /* Bars (LIGHT baseline) */
+      --bar-bg:#ffffff;             /* light bars bg */
+      --bar-fg:var(--brand-blue-900); /* light bars text/link color */
       --bar-border:#e5e7eb;
 
-      /* Accent + focus */
-      --accent:#0a66c2;                 /* LinkedIn blue */
-      --ring:rgba(10,102,194,.35);
+      /* Page background (subtle light gradient) */
+      --page-gradient:linear-gradient(180deg,#F8FBFF 0%, #F4F8FF 40%, #F8FBFF 100%);
 
-      /* Legacy dark brand tone (for buttons, etc.) */
-      --nav:#1f2d3a;
+      /* Focus ring */
+      --ring:rgba(37, 99, 235, .35);
 
+      /* Misc */
+      --surface:#ffffff;
       --radius:14px;
       --w:1360px;
       --wrap-pad:clamp(8px,1.5vw,16px);
-
       --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
       --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
       --avatar-size:96px;
-
-      /* Optional background image (enable by adding class bg-photo to <body>) */
-      --bg-image:none;
-      --bg-overlay:linear-gradient(180deg, rgba(244,248,255,.9), rgba(244,248,255,.95));
     }
     @media (min-width:1600px){ :root{ --w:1440px } }
 
-    /* Optional: DARK bars theme (applied by body.nav-dark) */
-    body.nav-dark{
-      --bar-bg:#1f2d3a;
+    /* Bars DARK variant (used at the top; toggled by body.bars-dark) */
+    body.bars-dark{
+      --bar-bg:var(--brand-blue-900);
       --bar-fg:#ffffff;
-      --bar-border:rgba(255,255,255,.12);
+      --bar-border:rgba(255,255,255,.16);
     }
 
     /* ===== Base / Layout ===== */
     *{box-sizing:border-box}
-    html{background:var(--bg)}
     html,body{height:100%}
+    html{background:#fff}
     body{
-      margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-      color:var(--ink);background:var(--bg);
+      margin:0;
+      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      color:var(--ink);
+      background:var(--page-gradient);
       min-height:100svh;display:flex;flex-direction:column;
-      transition:background-color .25s ease;
     }
-    /* Optional: photo background */
-    body.bg-photo{
-      background:
-        var(--bg-overlay),
-        var(--bg-image);
-      background-size:cover;
-      background-position:center top;
-      background-repeat:no-repeat;
-      /* Avoid parallax jank on mobile */
-      background-attachment:scroll;
-    }
-
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
 
-    /* ===== Sticky Site Header ===== */
+    /* ===== Sticky Header ===== */
     header.site-header{
       position:sticky; top:0; z-index:1000;
       background:var(--bar-bg); color:var(--bar-fg);
       border-bottom:1px solid var(--bar-border);
       backdrop-filter:saturate(120%) blur(2px);
+      transition:background-color .2s ease, color .2s ease, border-color .2s ease;
     }
     .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;perspective:1100px}
     .brand{display:flex;align-items:center;gap:14px}
 
-    /* ===== Brand (wide home link: avatar + name + creds) ===== */
+    /* ===== Brand link (no “floating card”, but still lift on hover) ===== */
     .brand-link--wide{
       display:flex;align-items:center;gap:14px;
-      color:var(--bar-fg);text-decoration:none;
-      /* Remove “floating card” look: no bg, no shadow on container */
-      border-radius:0;padding:0;outline:none;
+      color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
       transform-style:preserve-3d;
     }
     .brand-link--wide:hover{ text-decoration:none }
@@ -104,18 +92,18 @@
     .brand-text{display:flex;flex-direction:column;line-height:1.1}
     .brand-name{
       font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:var(--bar-fg);
-      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease; will-change:transform;
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
     }
     .brand-creds{
-      color:color-mix(in srgb, var(--bar-fg) 65%, #cfd8e3);
+      color:color-mix(in srgb, var(--bar-fg) 70%, #cfd8e3);
       font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
-      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease; will-change:transform;
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
     }
     @supports not (color-mix: in srgb, white 50%, black 50%){
-      .brand-creds{ color:#5b6470 }
+      .brand-creds{ color:#c3c9d2 }
     }
 
-    /* Hover/focus: gentle lift on text & badge (no container shadow) */
+    /* Gentle lift on hover (text + badge only) */
     @media (hover:hover) and (pointer:fine){
       .brand-link--wide:hover .brand-name{
         transform: translateY(-2px) rotateX(8deg) translateZ(10px);
@@ -130,29 +118,23 @@
       .brand-name,.brand-creds{ transition:none }
     }
 
-    /* Avatar (clickable via the wide link) */
+    /* Avatar with flip */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
     .avatar-badge{display:block;width:100%;height:100%;border-radius:50%;outline:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
     .avatar-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform;--ry:0deg;transform:rotateY(var(--ry));transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease}
-    /* Default shows LOGO by starting flipped; hover/focus flips to portrait */
     .avatar.is-flipped .avatar-inner{--ry:180deg}
     .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
-    /* Softer edge so it doesn’t read as a “card” */
-    .avatar-face.front{border:3px solid rgba(17,24,39,.06);box-shadow:0 4px 10px rgba(0,0,0,.08)}
-    body.nav-dark .avatar-face.front{border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 16px rgba(0,0,0,.28)}
+    .avatar-face.front{border:3px solid rgba(0,0,0,.06);box-shadow:0 4px 10px rgba(0,0,0,.08)}
+    body.bars-dark .avatar-face.front{border:3px solid rgba(255,255,255,.75);box-shadow:0 6px 16px rgba(0,0,0,.28)}
     .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
     .avatar-face img{width:100%;height:100%;object-fit:cover}
     .avatar-face.back img{object-fit:contain;padding:8px;background:transparent}
-    @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
-    @media (max-width:960px){ :root{ --avatar-size:72px } }
-
-    /* Flip & float the badge when hovering the whole brand link */
     @media (hover:hover) and (pointer:fine){
-      .brand-link--wide:hover .avatar-inner{
-        --ry:0deg; transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px);
-      }
+      .brand-link--wide:hover .avatar-inner{ --ry:0deg; transform:rotateY(var(--ry)) rotateX(8deg) translateY(-2px) }
     }
     .brand-link--wide.reflip .avatar-inner{ --ry:180deg; transform:rotateY(var(--ry)) }
+    @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
+    @media (max-width:960px){ :root{ --avatar-size:72px } }
 
     /* Primary nav */
     nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
@@ -167,7 +149,7 @@
     nav a:focus-visible::after{transform:scaleX(1)}
 
     /* ===== HERO ===== */
-    .hero-section{ background:var(--bg); color:var(--ink); border-bottom:0 }
+    .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
     .hero{padding:12px 0 10px}
     .hero-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";row-gap:6px;align-items:start}
     .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(34px,4vw,56px);line-height:1.08;color:var(--ink);grid-area:title}
@@ -179,9 +161,9 @@
     .section-divider{
       height:12px; margin:10px 0 2px; border:0;
       background:
-        linear-gradient(90deg, rgba(43,49,59,0) 0%, rgba(43,49,59,.18) 20%, rgba(10,102,194,.28) 50%, rgba(43,49,59,.18) 80%, rgba(43,49,59,0) 100%);
+        linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(29,78,216,.25) 10%, rgba(29,78,216,.35) 50%, rgba(29,78,216,.25) 90%, rgba(0,0,0,0) 100%);
       mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-      opacity:.85; border-radius:999px;
+      opacity:.9; border-radius:999px;
     }
 
     /* ===== Sections ===== */
@@ -196,32 +178,33 @@
     .tile h3{margin:0 0 8px}
     .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
-    /* ===== Footer (LIGHT by default) ===== */
+    /* ===== Footer (shares bar variables) ===== */
     footer{
       background:var(--bar-bg); color:var(--bar-fg); padding:18px 0; text-align:center;
       border-top:1px solid var(--bar-border);
+      transition:background-color .2s ease, color .2s ease, border-color .2s ease;
     }
     footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
     .social{display:flex;align-items:center;gap:10px}
     .icon-btn{
       display:inline-flex;align-items:center;justify-content:center;
       width:38px;height:38px;border-radius:999px;
-      background:rgba(15,23,42,.06); border:1px solid rgba(15,23,42,.14); color:var(--bar-fg);
+      background:color-mix(in srgb, var(--bar-fg) 12%, transparent);
+      border:1px solid color-mix(in srgb, var(--bar-fg) 22%, transparent);
+      color:var(--bar-fg);
       transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
     }
-    .icon-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.12);background:rgba(15,23,42,.10)}
+    .icon-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.12);background:color-mix(in srgb, var(--bar-fg) 22%, transparent)}
     .icon-btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
-    body.nav-dark .icon-btn{ background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.25); color:#fff }
-
     .icon{width:18px;height:18px;fill:currentColor}
 
-    /* ===== Buttons (modal) ===== */
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:.65rem 1rem;border-radius:999px;font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--nav);box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;text-decoration:none}
+    /* ===== Buttons ===== */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:.65rem 1rem;border-radius:999px;font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--brand-blue-900);box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;text-decoration:none}
     .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
     .btn:active{transform:translateY(-1px)}
     .btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
     .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
-    .btn-primary{background:var(--nav);color:#fff;border-color:transparent}
+    .btn-primary{background:var(--brand-blue-700);color:#fff;border-color:transparent}
 
     /* ===== Contact Modal ===== */
     dialog{width:min(680px,92vw);border:none;border-radius:16px;padding:0;background:var(--surface);box-shadow:var(--shadow-hover)}
@@ -257,13 +240,12 @@
     @media (max-width:520px){ .tagline{ white-space:normal; overflow:visible; text-overflow:clip } }
   </style>
 </head>
-<body>
+<body class="bars-dark"><!-- Start with blue bars -->
 
   <!-- ===== Sticky Header ===== -->
   <header class="site-header">
     <div class="wrap topbar">
       <div class="brand">
-        <!-- Wide Home link -->
         <a href="/" rel="home" aria-label="Home" class="brand-link--wide" id="brandLink">
           <div class="avatar is-flipped" aria-hidden="true">
             <div class="avatar-badge" title="Hover to flip">
@@ -272,10 +254,10 @@
                   <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" width="96" height="96" />
                 </div>
                 <div class="avatar-face back">
-                  <!-- Auto-switching logo (light/dark) -->
+                  <!-- Auto-switching logo (blue for light bars, white for dark bars) -->
                   <img id="logoImg"
-                       src="/assets/brands/logo-graphite.svg"
-                       data-logo-light="/assets/brands/logo-graphite.svg"
+                       src="/assets/brands/logo-white.svg"
+                       data-logo-light="/assets/brands/logo-blue-500.svg"
                        data-logo-dark="/assets/brands/logo-white.svg"
                        alt="Isaac B. Michael logo"
                        decoding="async" width="96" height="96" />
@@ -329,7 +311,7 @@
     </div>
   </section>
 
-  <!-- Gradient divider between chips and Featured -->
+  <!-- Divider -->
   <div class="section-divider" aria-hidden="true"></div>
 
   <!-- ===== Featured ===== -->
@@ -378,7 +360,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
@@ -463,23 +445,35 @@
     brandLink?.addEventListener('click', ()=>{
       avatarWrap?.classList.add('is-flipped'); // logo visible
       brandLink.classList.add('reflip');
-      // allow default navigation to "/"
     });
 
-    // OPTIONAL: Adaptive bars (light at top, dark after hero)
-    const enableAdaptiveBars = false; // set to true to activate
-    if (enableAdaptiveBars && 'IntersectionObserver' in window){
-      const logoEl = document.getElementById('logoImg');
-      const setDark = (isDark) => {
-        document.body.classList.toggle('nav-dark', isDark);
-        logoEl.src = isDark ? logoEl.dataset.logoDark : logoEl.dataset.logoLight;
-      };
-      const hero = document.querySelector('.hero-section');
-      const io = new IntersectionObserver(
-        (entries)=> entries.forEach(e=> setDark(!e.isIntersecting)),
-        { threshold: 0 }
-      );
+    // Adaptive bars: blue at top (bars-dark), switch to light after hero exits viewport
+    const hero = document.querySelector('.hero-section');
+    const logoEl = document.getElementById('logoImg');
+
+    function setBarsDark(isDark){
+      document.body.classList.toggle('bars-dark', isDark);
+      // Swap logo color
+      logoEl.src = isDark ? logoEl.dataset.logoDark : logoEl.dataset.logoLight;
+    }
+
+    // Start dark at top:
+    setBarsDark(true);
+
+    if ('IntersectionObserver' in window){
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          // If the hero is NOT visible, switch to light bars
+          setBarsDark(entry.isIntersecting);
+        });
+      }, {threshold: 0});
       io.observe(hero);
+    } else {
+      // Fallback: switch after scrolling 60px
+      window.addEventListener('scroll', ()=>{
+        const isDark = window.scrollY < 60;
+        setBarsDark(isDark);
+      });
     }
   </script>
 </body>
