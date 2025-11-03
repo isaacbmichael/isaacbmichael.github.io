@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -14,27 +14,21 @@
   <style>
     /* ===== Design Tokens (Aegean Slate) ===== */
     :root{
-      /* Brand blues (calm teal-navy) */
       --brand-blue-900:#143C52;  /* dark bar bg */
       --brand-blue-700:#1B4965;  /* primary accents */
       --accent:var(--brand-blue-700);
 
-      /* Canvas & text */
       --ink:#111827;
       --muted:#5b6470;
 
-      /* Bars (LIGHT baseline) */
       --bar-bg:#ffffff;
       --bar-fg:var(--brand-blue-900);
       --bar-border:#e5e7eb;
 
-      /* Page background (soft light gradient) */
       --page-gradient:linear-gradient(180deg,#F3F7FA 0%, #EDF3F7 40%, #F7FAFC 100%);
 
-      /* Focus ring */
       --ring:rgba(27,73,101,.35);
 
-      /* Misc */
       --surface:#ffffff;
       --radius:14px;
       --w:1360px;
@@ -43,7 +37,6 @@
       --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
       --avatar-size:96px;
 
-      /* Drawer */
       --drawer-bg:#ffffff;
       --drawer-fg:#111827;
     }
@@ -54,7 +47,7 @@
       --bar-bg:var(--brand-blue-900);
       --bar-fg:#ffffff;
       --bar-border:rgba(255,255,255,.16);
-      --drawer-bg:#0e2a39;           /* dark-themed drawer when bars are dark */
+      --drawer-bg:#0e2a39;
       --drawer-fg:#eaf2f6;
     }
 
@@ -69,7 +62,6 @@
       background:var(--page-gradient);
       min-height:100svh;display:flex;flex-direction:column;
       scroll-behavior:smooth;
-      /* iOS safe areas */
       padding-top: env(safe-area-inset-top);
     }
     :focus-visible{ outline:none; box-shadow:0 0 0 6px var(--ring) }
@@ -78,7 +70,7 @@
     a:hover{text-decoration:underline}
     .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
 
-    /* Visually hidden (for screen-reader-only text) */
+    /* Visually hidden text */
     .sr-only{
       position:absolute !important;
       width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
@@ -118,14 +110,11 @@
       .brand-creds{ color:#c3c9d2 }
     }
 
-    /* Gentle lift on hover (text + badge only) */
     @media (hover:hover) and (pointer:fine){
       .brand-link--wide:hover .brand-name{ transform: translateY(-2px) rotateX(8deg) translateZ(10px); text-shadow:0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06) }
       .brand-link--wide:hover .brand-creds{ transform:translateY(-1px) rotateX(6deg) translateZ(6px); text-shadow:0 8px 18px rgba(0,0,0,.08), 0 2px 5px rgba(0,0,0,.05) }
     }
-    @media (prefers-reduced-motion:reduce){
-      .brand-name,.brand-creds{ transition:none }
-    }
+    @media (prefers-reduced-motion:reduce){ .brand-name,.brand-creds{ transition:none } }
 
     /* Avatar with flip */
     .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
@@ -210,48 +199,21 @@
     .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word}
     .tagline{grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;font-size:clamp(14px,1.6vw,18px)}
 
-    /* Single-row horizontally scrollable chip rail (no scrollbar) */
+    /* ===== Chips: non-scroll, one row on laptops, wrap on small phones ===== */
     .chips{
       grid-area:chips;
       display:flex; align-items:center;
       gap:8px;
       margin-top:6px;
       padding-bottom:4px;
-      overflow-x:auto; overflow-y:hidden;
-      white-space:nowrap;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;                 /* Firefox */
-      position:relative;                    /* for edge fades */
-      cursor:grab;
-      touch-action:pan-x;
-      user-select:none;
+      white-space:normal;
+      overflow:visible;       /* no hidden scroller */
+      flex-wrap:nowrap;       /* single row on typical laptop widths */
     }
-    .chips.dragging{ cursor:grabbing }
-    .chips:focus-visible{ outline:none; box-shadow:0 0 0 6px var(--ring) }
-    .chips::-webkit-scrollbar{ display:none } /* WebKit */
+    @media (max-width:640px){
+      .chips{ flex-wrap:wrap } /* small phones can wrap gracefully */
+    }
 
-    /* Edge fades to hint scroll */
-    .chips::before,
-    .chips::after{
-      content:"";
-      position:absolute; top:0; bottom:0; width:40px; pointer-events:none;
-      transition:opacity .2s ease;
-    }
-    .chips::before{
-      left:-6px;
-      background:linear-gradient(to right, #F3F7FA 0%, rgba(243,247,250,0) 100%);
-      opacity:0;
-    }
-    .chips::after{
-      right:-6px;
-      background:linear-gradient(to left, #F3F7FA 0%, rgba(243,247,250,0) 100%);
-      opacity:1;
-    }
-    .chips.at-start::before{ opacity:0 }
-    .chips.at-end::after{ opacity:0 }
-    .chips:not(.at-start)::before{ opacity:1 }
-
-    /* Chip pill (slightly compact) */
     .chip{
       display:inline-block;
       flex:0 0 auto;
@@ -264,19 +226,23 @@
       border:1px solid rgba(17,24,39,.08)
     }
 
-    /* Gradient divider between chips and Featured (tinted to brand) */
+    /* ===== Gradient divider: cross-browser (no masks) ===== */
     .section-divider{
+      position:relative;
       height:12px; margin:10px 0 2px; border:0;
-      background:
-        linear-gradient(90deg, rgba(0,0,0,0) 0%,
-                              rgba(27,73,101,.22) 10%,
-                              rgba(27,73,101,.35) 50%,
-                              rgba(27,73,101,.22) 90%,
-                              rgba(0,0,0,0) 100%);
-      /* Safari needs the prefixed mask */
-      -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-              mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-      opacity:.9; border-radius:999px;
+    }
+    .section-divider::before{
+      content:"";
+      position:absolute; left:0; right:0; top:50%;
+      transform:translateY(-50%);
+      height:2px; border-radius:999px;
+      background:linear-gradient(90deg,
+        rgba(0,0,0,0) 0%,
+        rgba(27,73,101,.22) 10%,
+        rgba(27,73,101,.35) 50%,
+        rgba(27,73,101,.22) 90%,
+        rgba(0,0,0,0) 100%);
+      box-shadow:0 6px 10px rgba(27,73,101,.20), 0 -6px 10px rgba(27,73,101,.20);
     }
 
     /* ===== Sections ===== */
@@ -291,7 +257,7 @@
     .tile h3{margin:0 0 8px}
     .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
-    /* ===== Footer (shares bar variables) ===== */
+    /* ===== Footer ===== */
     footer{
       background:var(--bar-bg); color:var(--bar-fg); padding:18px 0; text-align:center;
       border-top:1px solid var(--bar-border);
@@ -336,9 +302,9 @@
       .tiles{ grid-template-columns:repeat(2,1fr) }
     }
     @media (max-width:960px){
-      nav.primary-nav{ display:none } /* hide desktop menu */
+      nav.primary-nav{ display:none }
       .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
-      .tiles{ grid-template-columns:1fr } /* phones */
+      .tiles{ grid-template-columns:1fr }
       main{ padding-bottom:90px } /* space for mobile dock */
       .mobile-dock{ display:block }
     }
@@ -347,9 +313,9 @@
     }
   </style>
 </head>
-<body class="bars-dark"><!-- Start with dark (blue) bars -->
+<body class="bars-dark">
 
-  <!-- ===== Mobile drawer & backdrop (mounted early for z-order) ===== -->
+  <!-- ===== Mobile drawer & backdrop ===== -->
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
   <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
     <header>
@@ -387,7 +353,6 @@
                   <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" width="96" height="96" />
                 </div>
                 <div class="avatar-face back">
-                  <!-- Auto-switching logo (teal-navy for light bars, white for dark bars) -->
                   <img id="logoImg"
                        src="/assets/brands/logo-white.svg"
                        data-logo-light="/assets/brands/logo-tealnavy.svg"
@@ -436,15 +401,14 @@
           Research Scientist | Mathematical Statistician | Program Director
         </p>
 
-        <div class="chips" role="region" aria-label="Expertise chips" tabindex="0">
+        <!-- Trimmed chips: fits one row on laptops -->
+        <div class="chips" aria-label="Expertise chips">
           <span class="chip">Public health &amp; education</span>
           <span class="chip">Reproducible pipelines</span>
           <span class="chip">Survey methodology</span>
           <span class="chip">Analytics automation</span>
           <span class="chip">Decision analytics</span>
           <span class="chip">Data modernization</span>
-          <span class="chip">Data governance &amp; quality</span>
-          <span class="chip">Audit-ready reporting</span>
           <span class="chip">Enterprise data strategy</span>
         </div>
       </div>
@@ -595,7 +559,7 @@
       closeDialog();
     });
 
-    // Brand link click: ensure badge flips back to logo just before navigation.
+    // Brand link click: flip back to logo just before navigation
     const brandLink = document.getElementById('brandLink');
     const avatarWrap = brandLink?.querySelector('.avatar');
     brandLink?.addEventListener('click', ()=>{
@@ -606,7 +570,6 @@
     // Adaptive bars: dark at top, switch to light after hero exits viewport
     const hero = document.querySelector('.hero-section');
     const logoEl = document.getElementById('logoImg');
-
     function setBarsDark(isDark){
       document.body.classList.toggle('bars-dark', isDark);
       logoEl.src = isDark ? logoEl.dataset.logoDark : logoEl.dataset.logoLight;
@@ -625,95 +588,28 @@
       });
     }
 
-    // ===== Chip rail: fades + input methods (wheel, drag, keyboard) =====
-    const chipRail = document.querySelector('.chips');
-
-    function updateChipFades(){
-      if(!chipRail) return;
-      const {scrollLeft, scrollWidth, clientWidth} = chipRail;
-      chipRail.classList.toggle('at-start', scrollLeft <= 1);
-      chipRail.classList.toggle('at-end', scrollLeft + clientWidth >= scrollWidth - 1);
+    // --- Hide the mobile dock when the footer is visible (avoid duplicate icons) ---
+    const footerEl = document.querySelector('footer');
+    const mobileDockEl = document.querySelector('.mobile-dock');
+    function setDockHidden(hidden) {
+      if (!mobileDockEl) return;
+      mobileDockEl.hidden = hidden;
+      mobileDockEl.setAttribute('aria-hidden', hidden ? 'true' : 'false');
     }
-
-    // Map vertical mouse wheel to horizontal scroll (Windows mice)
-    chipRail?.addEventListener('wheel', (e)=>{
-      // If user primarily scrolls vertically, use it to move horizontally.
-      if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
-        chipRail.scrollBy({ left: e.deltaY, behavior: 'auto' });
-        e.preventDefault();
-        updateChipFades();
+    if (footerEl && mobileDockEl && 'IntersectionObserver' in window) {
+      const ioDock = new IntersectionObserver(([entry]) => {
+        setDockHidden(entry.isIntersecting);
+      }, { threshold: 0.01 });
+      ioDock.observe(footerEl);
+    } else {
+      // Fallback: if very small screens, prefer sticky dock and hide footer icons
+      if (window.matchMedia('(max-width: 960px)').matches) {
+        const footerSocial = document.querySelector('footer .social');
+        if (footerSocial) footerSocial.style.display = 'none';
       }
-    }, {passive:false});
-
-    // Drag-to-pan (pointer events: works with mouse, pen, touch)
-    let dragging = false, startX = 0, startLeft = 0, pointerId = null;
-    chipRail?.addEventListener('pointerdown', (e)=>{
-      dragging = true;
-      pointerId = e.pointerId;
-      chipRail.setPointerCapture(pointerId);
-      startX = e.clientX;
-      startLeft = chipRail.scrollLeft;
-      chipRail.classList.add('dragging');
-    });
-    chipRail?.addEventListener('pointermove', (e)=>{
-      if(!dragging) return;
-      const dx = e.clientX - startX;
-      chipRail.scrollLeft = startLeft - dx;
-      updateChipFades();
-    });
-    function endDrag(e){
-      if(!dragging) return;
-      dragging = false;
-      chipRail.classList.remove('dragging');
-      try{ chipRail.releasePointerCapture(pointerId); }catch(_){}
-      pointerId = null;
-    }
-    chipRail?.addEventListener('pointerup', endDrag);
-    chipRail?.addEventListener('pointercancel', endDrag);
-    chipRail?.addEventListener('pointerleave', endDrag);
-
-    // Keyboard support
-    chipRail?.addEventListener('keydown', (e)=>{
-      const step = 120;
-      if(e.key === 'ArrowRight'){ chipRail.scrollBy({left: step, behavior: 'smooth'}); e.preventDefault(); }
-      else if(e.key === 'ArrowLeft'){ chipRail.scrollBy({left: -step, behavior: 'smooth'}); e.preventDefault(); }
-      else if(e.key === 'Home'){ chipRail.scrollTo({left: 0, behavior: 'smooth'}); e.preventDefault(); }
-      else if(e.key === 'End'){ chipRail.scrollTo({left: chipRail.scrollWidth, behavior: 'smooth'}); e.preventDefault(); }
-    });
-
-    window.addEventListener('resize', updateChipFades);
-    chipRail && updateChipFades();
-
-    // ===== Mobile drawer logic =====
-    const drawerBackdrop = document.getElementById('drawerBackdrop');
-    const mobileDrawer   = document.getElementById('mobileDrawer');
-    const menuToggle     = document.getElementById('menuToggle');
-    const menuClose      = document.getElementById('menuClose');
-
-    function openDrawer(){
-      document.body.classList.add('drawer-open');
-      drawerBackdrop.hidden = false;
-      mobileDrawer.setAttribute('aria-hidden','false');
-      menuToggle.setAttribute('aria-expanded','true');
-      const firstLink = mobileDrawer.querySelector('a,button');
-      firstLink && firstLink.focus();
-    }
-    function closeDrawer(){
-      document.body.classList.remove('drawer-open');
-      drawerBackdrop.hidden = true;
-      mobileDrawer.setAttribute('aria-hidden','true');
-      menuToggle.setAttribute('aria-expanded','false');
-      menuToggle.focus();
     }
 
-    menuToggle?.addEventListener('click', ()=>{
-      if (document.body.classList.contains('drawer-open')) closeDrawer();
-      else openDrawer();
-    });
-    menuClose?.addEventListener('click', closeDrawer);
-    drawerBackdrop?.addEventListener('click', closeDrawer);
-    window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeDrawer(); });
-
+    // (Removed: all horizontal scroll/drag/keyboard code for the chip rail)
   </script>
 </body>
 </html>
