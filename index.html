@@ -314,6 +314,13 @@
     border-color:rgba(27,73,101,.35);
     box-shadow:var(--shadow);
   }
+  /* Focus lift for keyboard users (polish tip) */
+  .chip:focus-visible{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    background: #fff;
+    border-color: rgba(27,73,101,.35);
+  }
 
   /* Chips proof dialog */
   dialog#chipsDialog{
@@ -345,9 +352,6 @@
 
   .chips-content{ opacity:1; transition:opacity .16s ease }
   .chips-content.is-fading{ opacity:0 }
-
-  .proof-list{ margin:8px 0 0 0; padding-left:20px }
-  .proof-list li{ margin:6px 0 }
 
   @media (prefers-reduced-motion:reduce){
     .chip, .chips-content{ transition:none }
@@ -410,6 +414,7 @@
     box-shadow:var(--shadow);
     transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
     text-decoration:none;
+    cursor:pointer; /* ensure pointer on real <button> elements too */
   }
   .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
   .btn:active{transform:translateY(-1px)}
@@ -868,7 +873,7 @@
     const contactOpen  = document.getElementById('contactOpen');
     const contactClose = document.getElementById('contactClose');
     const contactCancel= document.getElementById('contactCancel');
-    const quickForm    = document.getElementById('quickForm');
+    const quickForm    = document.getElementById('quickForm']);
 
     function openDialog(e){
       if (e) e.preventDefault();
@@ -1031,7 +1036,7 @@
     const chipsDialog   = document.getElementById('chipsDialog');
     const chipsTitleEl  = document.getElementById('chipsTitle');
     const chipsContent  = document.getElementById('chipsContent');
-    const chipsCloseBtn = document.getElementById('chipsClose');
+    const chipsCloseBtn = document.getElementById('chipsClose']);
 
     const CHIP_PROOFS = {
       "public-health": {
@@ -1159,4 +1164,3 @@
   </script>
 </body>
 </html>
-
