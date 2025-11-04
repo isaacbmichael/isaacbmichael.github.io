@@ -542,6 +542,22 @@
     @media (prefers-reduced-motion:reduce){
       .chip, .chips-content{ transition:none }
     }
+
+    /* === FIX #1: keep brand text crisp (no 3D transform/text-shadow on hover) === */
+    @media (hover:hover) and (pointer:fine){
+      .brand-link--wide:hover .brand-name,
+      .brand-link--wide:hover .brand-creds{
+        transform:none !important;
+        text-shadow:none !important;
+      }
+    }
+
+    /* === FIX #2: remove focus ring on chips dialog title (Safari/iOS box) === */
+    #chipsDialog .modal-title:focus,
+    #chipsDialog .modal-title:focus-visible{
+      outline:none !important;
+      box-shadow:none !important;
+    }
   </style>
 </head>
 <body class="bars-dark">
