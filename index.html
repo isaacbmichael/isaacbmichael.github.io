@@ -74,7 +74,6 @@
   a{color:var(--accent);text-decoration:none}
   a:hover{text-decoration:underline}
   .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
-  .muted{color:var(--muted)}
 
   /* Visually hidden text */
   .sr-only{
@@ -98,7 +97,6 @@
   .topbar{
     display:flex;align-items:center;justify-content:space-between;gap:12px;
     padding:10px 0; /* vertical only; horizontal gutters handled below */
-    perspective:1100px;
   }
 
   /* Desktop: gutters that match the page wrap */
@@ -126,7 +124,6 @@
   .brand-link--wide{
     display:flex;align-items:center;gap:12px;
     color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
-    transform-style:preserve-3d;
   }
   .brand-link--wide:hover{ text-decoration:none }
 
@@ -144,16 +141,6 @@
     .brand-creds{ color:#c3c9d2 }
   }
 
-  @media (hover:hover) and (pointer:fine){
-    .brand-link--wide:hover .brand-name{
-      transform: translateY(-2px) rotateX(8deg) translateZ(10px);
-      text-shadow:0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06)
-    }
-    .brand-link--wide:hover .brand-creds{
-      transform:translateY(-1px) rotateX(6deg) translateZ(6px);
-      text-shadow:0 8px 18px rgba(0,0,0,.08), 0 2px 5px rgba(0,0,0,.05)
-    }
-  }
   @media (prefers-reduced-motion:reduce){ .brand-name,.brand-creds{ transition:none } }
 
   /* ===== Avatar with logo flip (no portrait) ===== */
@@ -357,15 +344,6 @@
     .chip, .chips-content{ transition:none }
   }
 
-  /* === FIX #1: keep brand text crisp (no 3D transform/text-shadow on hover) === */
-  @media (hover:hover) and (pointer:fine){
-    .brand-link--wide:hover .brand-name,
-    .brand-link--wide:hover .brand-creds{
-      transform:none !important;
-      text-shadow:none !important;
-    }
-  }
-
   /* === FIX #2: remove focus ring on chips dialog title (Safari/iOS box) === */
   #chipsDialog .modal-title:focus,
   #chipsDialog .modal-title:focus-visible{
@@ -377,7 +355,6 @@
   main{padding:10px 0 40px;flex:1 0 auto}
   section{padding:24px 0}
   h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
-  .hero-section .wrap, main.wrap{padding-left:var(--wrap-pad);padding-right:var(--wrap-pad)}
 
   .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .tile{position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
@@ -519,7 +496,7 @@
     display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
   }
   .form-hint{
-    grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#fff;
+    grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted);
   }
 
   @media (max-width:640px){
@@ -771,19 +748,16 @@
           <h3 id="tile-portfolio">Technical Portfolio</h3>
           <p>Selected projects in survey methods, automation, reporting, and templates.</p>
           <a class="card-link" href="/portfolio/" aria-labelledby="tile-portfolio">View</a>
-          <p><a href="/portfolio/">Explore the portfolio →</a></p>
         </div>
         <div class="tile">
           <h3 id="tile-writing">Writing</h3>
           <p>Notes and essays on methodology, automation, and governance.</p>
           <a class="card-link" href="/writing/" aria-labelledby="tile-writing">View</a>
-          <p><a href="/writing/">Browse posts →</a></p>
         </div>
         <div class="tile">
           <h3 id="tile-speaking">Speaking &amp; Services</h3>
           <p>Talks, workshops, and consulting offers with clear outcomes.</p>
           <a class="card-link" href="/speaking/" aria-labelledby="tile-speaking">View</a>
-          <p><a href="/speaking/">Speaking →</a> · <a href="/services/">Services →</a></p>
         </div>
       </div>
     </section>
@@ -798,7 +772,7 @@
           <span class="sr-only">Email</span>
         </a>
         <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Schedule with Calendly">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
           <span class="sr-only">Calendly</span>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
@@ -815,7 +789,7 @@
   </footer>
 
   <!-- ===== Bottom quick-contact dock (mobile) ===== -->
-  <div class="mobile-dock" aria-hidden="false">
+  <div class="mobile-dock">
     <div class="dock">
       <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
@@ -962,11 +936,13 @@
       });
     }
     function trapFocusWithin(el){
-      const focusables = el.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
-      if (!focusables.length) return;
-      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (el.__trapBound) return;
+      el.__trapBound = true;
       el.addEventListener('keydown', (e) => {
         if (e.key !== 'Tab') return;
+        const focusables = el.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
+        if (!focusables.length) return;
+        const first = focusables[0], last = focusables[focusables.length - 1];
         if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
       });
@@ -1191,5 +1167,3 @@
   </script>
 </body>
 </html>
-
-
