@@ -19,6 +19,7 @@
       --accent:var(--brand-blue-700);
 
       --ink:#111827;
+      --muted:#5b6470;
 
       --bar-bg:#ffffff;
       --bar-fg:var(--brand-blue-900);
@@ -68,6 +69,7 @@
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
+    .muted{color:var(--muted)}
 
     /* Visually hidden text */
     .sr-only{
@@ -94,7 +96,7 @@
       perspective:1100px;
     }
 
-    /* Desktop: symmetrical gutters that match page wrap */
+    /* Desktop: gutters that match the page wrap */
     @media (min-width:961px){
       :root{ --nav-gutter: var(--wrap-pad); }
       .topbar > .brand{
@@ -321,6 +323,88 @@
     }
     .mobile-dock .icon-btn{ width:46px; height:46px }
 
+    /* ===== CONTACT MODAL (polished) ===== */
+    dialog#contactDialog{
+      width:min(840px, 94vw);
+      border:0;
+      padding:0;
+      border-radius:20px;
+      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+      background:#fff;
+      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
+    }
+    dialog#contactDialog::backdrop{
+      background:rgba(17,24,39,.55);
+      backdrop-filter:saturate(120%) blur(3px);
+      animation:backdrop-in .22s ease;
+    }
+    @keyframes modal-in{
+      from{ transform:translateY(14px) scale(.985); opacity:.0 }
+      to{ transform:none; opacity:1 }
+    }
+    @keyframes backdrop-in{ from{ opacity:.0 } to{ opacity:1 } }
+
+    .modal-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
+    }
+    .modal-title{
+      margin:0; font-weight:900; font-size:1.15rem; letter-spacing:.2px; color:#0f172a;
+    }
+    .modal-close{
+      width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+      box-shadow:var(--shadow);
+      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+
+    .modal-body{ padding:14px 18px 18px }
+    .contact-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+    .contact-actions .btn{ border-radius:999px }
+    .contact-actions .btn-primary{ filter:saturate(115%) }
+
+    .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:120px 1fr;
+      gap:10px 12px;
+      align-items:center;
+    }
+    .form-grid label{ font-weight:700; color:#0f172a }
+    .form-grid input,
+    .form-grid textarea{
+      width:100%;
+      font:inherit;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid #e5e7eb;
+      background:#f8fafc;
+      transition:border-color .16s ease, box-shadow .16s ease, background .16s ease;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
+    }
+    .form-grid textarea{ min-height:160px; resize:vertical }
+    .form-grid input:focus,
+    .form-grid textarea:focus{
+      outline:none;
+      border-color:#c5d6e2;
+      background:#fff;
+      box-shadow:0 0 0 6px var(--ring);
+    }
+    .form-actions{
+      grid-column:2 / -1;
+      display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
+    }
+    .form-hint{
+      grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted);
+    }
+
+    @media (max-width:640px){
+      .form-grid{ grid-template-columns:1fr; }
+      .form-actions, .form-hint{ grid-column:1 / -1 }
+    }
+
     /* ===== Responsive ===== */
     @media (max-width:1120px){
       .tiles{ grid-template-columns:repeat(2,1fr) }
@@ -426,7 +510,6 @@
           Research Scientist | Mathematical Statistician | Program Director
         </p>
 
-        <!-- Trimmed chips: fits one row on laptops -->
         <div class="chips" aria-label="Expertise chips">
           <span class="chip">Public health &amp; education</span>
           <span class="chip">Reproducible pipelines</span>
@@ -440,7 +523,6 @@
     </div>
   </section>
 
-  <!-- Divider -->
   <div class="section-divider" aria-hidden="true"></div>
 
   <!-- ===== Featured ===== -->
@@ -520,17 +602,19 @@
   <!-- ===== Contact Modal ===== -->
   <dialog id="contactDialog" aria-labelledby="contactTitle">
     <div class="modal-header">
-      <h3 id="contactTitle" class="modal-title">Contact</h3>
-      <button class="menu-toggle" id="contactClose" aria-label="Close contact dialog"><span class="bars"></span></button>
+      <h3 id="contactTitle" class="modal-title">Get in touch</h3>
+      <button class="modal-close" id="contactClose" aria-label="Close contact dialog">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z"/></svg>
+      </button>
     </div>
     <div class="modal-body">
-      <div class="contact-actions">
+      <div class="contact-actions" aria-label="Quick links">
         <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule time on Calendly</a>
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a>
         <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
       </div>
 
-      <div class="divider" aria-hidden="true" style="height:1px;background:#e5e7eb;margin:4px 0"></div>
+      <div class="divider" aria-hidden="true"></div>
 
       <form id="quickForm" class="form-grid">
         <label for="qName">Name</label>
@@ -538,12 +622,13 @@
         <label for="qEmail">Email</label>
         <input id="qEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
         <label for="qMsg">Message</label>
-        <textarea id="qMsg" name="message" rows="4" placeholder="Tell me a little about your project or request…"></textarea>
-        <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:6px">
+        <textarea id="qMsg" name="message" placeholder="Tell me a little about your project or request…"></textarea>
+
+        <div class="form-actions">
           <button type="button" class="btn btn-outline" id="contactCancel">Cancel</button>
           <button type="submit" class="btn btn-primary">Send via Email</button>
         </div>
-        <small class="muted">Submitting opens your email client with your message pre-filled (no data is stored on this site).</small>
+        <small class="form-hint">Submitting opens your email client with your message pre-filled (no data is stored on this site).</small>
       </form>
     </div>
   </dialog>
@@ -572,6 +657,7 @@
     contactClose?.addEventListener('click', closeDialog);
     contactCancel?.addEventListener('click', closeDialog);
     dialog.addEventListener('click', (e)=>{ if (e.target === dialog) closeDialog(); });
+    dialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeDialog(); });
 
     quickForm.addEventListener('submit', (e)=>{
       e.preventDefault();
