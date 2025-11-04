@@ -144,7 +144,7 @@
       .brand-creds{ color:#c3c9d2 }
     }
 
-    @media (hover:hover) and (pointer:fine){
+    @media (hover:hover) and (pointer:fine)){
       .brand-link--wide:hover .brand-name{ transform: translateY(-2px) rotateX(8deg) translateZ(10px); text-shadow:0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06) }
       .brand-link--wide:hover .brand-creds{ transform:translateY(-1px) rotateX(6deg) translateZ(6px); text-shadow:0 8px 18px rgba(0,0,0,.08), 0 2px 5px rgba(0,0,0,.05) }
     }
@@ -269,6 +269,8 @@
       white-space:normal;
       overflow:visible;
       flex-wrap:wrap;
+      /* Fuzziness fix: no constant 3D context */
+      perspective:none;
     }
 
     .chip{
@@ -282,25 +284,83 @@
       font-size:clamp(12px,1.3vw,14px);
       border:1px solid rgba(17,24,39,.08);
       white-space:nowrap;
+      cursor:pointer;
+      /* Fuzziness fix: don’t pre-promote layers at rest */
+      will-change:auto;
+      transition:
+        transform .18s cubic-bezier(.2,.8,.2,1),
+        box-shadow .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+    }
+    @media (hover:hover){
+      .chip:hover{
+        transform:translateY(-2px) scale(1.02);
+        box-shadow:var(--shadow-hover);
+        background:#fff;
+        border-color:rgba(27,73,101,.22);
+      }
+    }
+    .chip:active{ transform:translateY(-1px) }
+    .chip:is(:hover,:focus-visible){ will-change:transform } /* hint only while animating */
+    .chip[aria-pressed="true"]{
+      background:#fff;
+      border-color:rgba(27,73,101,.35);
+      box-shadow:var(--shadow);
     }
 
-    /* ===== Gradient divider ===== */
-    .section-divider{
-      position:relative;
-      height:12px; margin:10px 0 2px; border:0;
+    /* Chips proof dialog */
+    dialog#chipsDialog{
+      width:min(760px,94vw);
+      border:0; padding:0;
+      border-radius:20px;
+      background:#fff;
+      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
     }
-    .section-divider::before{
-      content:"";
-      position:absolute; left:0; right:0; top:50%;
-      transform:translateY(-50%);
-      height:2px; border-radius:999px;
-      background:linear-gradient(90deg,
-        rgba(0,0,0,0) 0%,
-        rgba(27,73,101,.22) 10%,
-        rgba(27,73,101,.35) 50%,
-        rgba(27,73,101,.22) 90%,
-        rgba(0,0,0,0) 100%);
-      box-shadow:0 6px 10px rgba(27,73,101,.20), 0 -6px 10px rgba(27,73,101,.20);
+    dialog#chipsDialog::backdrop{
+      background:rgba(17,24,39,.55);
+      backdrop-filter:saturate(120%) blur(3px);
+      animation:backdrop-in .22s ease;
+    }
+    #chipsDialog .modal-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
+    }
+    #chipsDialog .modal-title{ margin:0; font-weight:900; font-size:1.05rem; color:#0f172a }
+    #chipsDialog .modal-close{
+      width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+      box-shadow:var(--shadow);
+      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    #chipsDialog .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+    #chipsDialog .modal-body{ padding:14px 18px 18px }
+
+    .chips-content{ opacity:1; transition:opacity .16s ease }
+    .chips-content.is-fading{ opacity:0 }
+
+    .proof-list{ margin:8px 0 0 0; padding-left:20px }
+    .proof-list li{ margin:6px 0 }
+
+    @media (prefers-reduced-motion:reduce){
+      .chip, .chips-content{ transition:none }
+    }
+
+    /* === FIX #1: keep brand text crisp (no 3D transform/text-shadow on hover) === */
+    @media (hover:hover) and (pointer:fine){
+      .brand-link--wide:hover .brand-name,
+      .brand-link--wide:hover .brand-creds{
+        transform:none !important;
+        text-shadow:none !important;
+      }
+    }
+
+    /* === FIX #2: remove focus ring on chips dialog title (Safari/iOS box) === */
+    #chipsDialog .modal-title:focus,
+    #chipsDialog .modal-title:focus-visible{
+      outline:none !important;
+      box-shadow:none !important;
     }
 
     /* ===== Sections ===== */
@@ -335,12 +395,31 @@
     .icon-btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
     .icon{width:18px;height:18px;fill:currentColor}
 
-    /* ===== Buttons ===== */
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:.7rem 1rem;border-radius:999px;font-weight:800;border:1px solid rgba(0,0,0,.04);background:#fff;color:var(--brand-blue-900);box-shadow:var(--shadow);transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;text-decoration:none}
+    /* ===== Buttons (shadow consistency across variants & contexts) ===== */
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:.7rem 1rem;border-radius:999px;font-weight:800;
+      border:1px solid rgba(0,0,0,.04);
+      background:#fff;color:var(--brand-blue-900);
+      box-shadow:var(--shadow);
+      transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
+      text-decoration:none;
+    }
     .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
     .btn:active{transform:translateY(-1px)}
     .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
-    .btn-primary{background:var(--brand-blue-700);color:#fff;border-color:transparent}
+    .btn-primary{
+      background:var(--brand-blue-700);color:#fff;border-color:transparent;
+      /* Ensure primary CTAs get the same 3D shadow */
+      box-shadow:var(--shadow);
+    }
+    .btn-primary:hover{ box-shadow:var(--shadow-hover) }
+
+    /* Make sure buttons inside the contact modal match the 3D look too */
+    .contact-actions .btn,
+    .form-actions .btn{ box-shadow:var(--shadow) }
+    .contact-actions .btn:hover,
+    .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
 
     /* ===== Mobile dock (quick contact) ===== */
     .mobile-dock{
@@ -478,85 +557,6 @@
     .skip-link:focus{
       left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
       background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
-    }
-
-    /* ======= NEW: Interactive chips (hover 3D + dialog) ======= */
-    .chips{ perspective:1100px } /* subtle 3D context */
-    .chip{
-      cursor:pointer;
-      will-change:transform, box-shadow;
-      transition:
-        transform .18s cubic-bezier(.2,.8,.2,1),
-        box-shadow .18s ease,
-        background .18s ease,
-        border-color .18s ease;
-    }
-    @media (hover:hover){
-      .chip:hover{
-        transform:translateY(-2px) scale(1.02);
-        box-shadow:var(--shadow-hover);
-        background:#fff;
-        border-color:rgba(27,73,101,.22);
-      }
-    }
-    .chip:active{ transform:translateY(-1px) }
-    .chip[aria-pressed="true"]{
-      background:#fff;
-      border-color:rgba(27,73,101,.35);
-      box-shadow:var(--shadow);
-    }
-
-    dialog#chipsDialog{
-      width:min(760px,94vw);
-      border:0; padding:0;
-      border-radius:20px;
-      background:#fff;
-      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
-      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
-    }
-    dialog#chipsDialog::backdrop{
-      background:rgba(17,24,39,.55);
-      backdrop-filter:saturate(120%) blur(3px);
-      animation:backdrop-in .22s ease;
-    }
-    #chipsDialog .modal-header{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
-    }
-    #chipsDialog .modal-title{ margin:0; font-weight:900; font-size:1.05rem; color:#0f172a }
-    #chipsDialog .modal-close{
-      width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
-      display:inline-flex; align-items:center; justify-content:center;
-      box-shadow:var(--shadow);
-      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
-    }
-    #chipsDialog .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
-    #chipsDialog .modal-body{ padding:14px 18px 18px }
-
-    .chips-content{ opacity:1; transition:opacity .16s ease }
-    .chips-content.is-fading{ opacity:0 }
-
-    .proof-list{ margin:8px 0 0 0; padding-left:20px }
-    .proof-list li{ margin:6px 0 }
-
-    @media (prefers-reduced-motion:reduce){
-      .chip, .chips-content{ transition:none }
-    }
-
-    /* === FIX #1: keep brand text crisp (no 3D transform/text-shadow on hover) === */
-    @media (hover:hover) and (pointer:fine){
-      .brand-link--wide:hover .brand-name,
-      .brand-link--wide:hover .brand-creds{
-        transform:none !important;
-        text-shadow:none !important;
-      }
-    }
-
-    /* === FIX #2: remove focus ring on chips dialog title (Safari/iOS box) === */
-    #chipsDialog .modal-title:focus,
-    #chipsDialog .modal-title:focus-visible{
-      outline:none !important;
-      box-shadow:none !important;
     }
   </style>
 </head>
@@ -715,7 +715,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
