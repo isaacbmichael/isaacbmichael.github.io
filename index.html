@@ -269,7 +269,6 @@
       white-space:normal;
       overflow:visible;
       flex-wrap:wrap;
-      perspective:1100px; /* subtle 3D context */
     }
 
     .chip{
@@ -283,35 +282,7 @@
       font-size:clamp(12px,1.3vw,14px);
       border:1px solid rgba(17,24,39,.08);
       white-space:nowrap;
-      cursor:pointer;
-      will-change:transform, box-shadow;
-      transition:
-        transform .18s cubic-bezier(.2,.8,.2,1),
-        box-shadow .18s ease,
-        background .18s ease,
-        border-color .18s ease;
     }
-    @media (hover:hover){
-      .chip:hover{
-        transform:translateY(-2px) scale(1.02);
-        box-shadow:var(--shadow-hover);
-        background:#fff;
-        border-color:rgba(27,73,101,.22);
-      }
-    }
-    .chip:active{ transform:translateY(-1px) }
-    .chip[aria-pressed="true"]{
-      background:#fff;
-      border-color:rgba(27,73,101,.35);
-      box-shadow:var(--shadow);
-    }
-    /* Spring pop for chip click */
-    @keyframes chip-pop {
-      0%   { transform:translateY(-1px) scale(.98) }
-      60%  { transform:translateY(-1px) scale(1.03) }
-      100% { transform:none }
-    }
-    .chip.is-popping{ animation: chip-pop .32s cubic-bezier(.2,.8,.2,1) }
 
     /* ===== Gradient divider ===== */
     .section-divider{
@@ -509,14 +480,39 @@
       background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
     }
 
-    /* ======= NEW: Chips Proof Dialog (with spring animation) ======= */
+    /* ======= NEW: Interactive chips (hover 3D + dialog) ======= */
+    .chips{ perspective:1100px } /* subtle 3D context */
+    .chip{
+      cursor:pointer;
+      will-change:transform, box-shadow;
+      transition:
+        transform .18s cubic-bezier(.2,.8,.2,1),
+        box-shadow .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+    }
+    @media (hover:hover){
+      .chip:hover{
+        transform:translateY(-2px) scale(1.02);
+        box-shadow:var(--shadow-hover);
+        background:#fff;
+        border-color:rgba(27,73,101,.22);
+      }
+    }
+    .chip:active{ transform:translateY(-1px) }
+    .chip[aria-pressed="true"]{
+      background:#fff;
+      border-color:rgba(27,73,101,.35);
+      box-shadow:var(--shadow);
+    }
+
     dialog#chipsDialog{
       width:min(760px,94vw);
       border:0; padding:0;
       border-radius:20px;
       background:#fff;
       box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
-      will-change:transform, opacity;
+      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
     }
     dialog#chipsDialog::backdrop{
       background:rgba(17,24,39,.55);
@@ -727,7 +723,7 @@
         <span class="sr-only">LinkedIn</span>
       </a>
       <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
         <span class="sr-only">GitHub</span>
       </a>
     </div>
@@ -932,15 +928,7 @@
     const chipsContent  = document.getElementById('chipsContent');
     const chipsCloseBtn = document.getElementById('chipsClose');
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Expected external JSON at /assets/data/chip-proofs.json
-    // {
-    //   "public-health": { "title": "...", "bullets": ["...","...","..."] },
-    //   "enterprise-strategy": { "title": "...", "bullets": ["..."] },
-    //   ...
-    // }
-    const FALLBACK_PROOFS = {
+    const CHIP_PROOFS = {
       "public-health": {
         title: "Public health & education",
         bullets: [
@@ -999,18 +987,6 @@
       }
     };
 
-    let CHIP_PROOFS = null;
-    async function loadChipProofs(){
-      try{
-        const res = await fetch('/assets/data/chip-proofs.json', { cache: 'no-store', credentials: 'same-origin' });
-        if (res.ok){
-          CHIP_PROOFS = await res.json();
-          return;
-        }
-      }catch(_e){}
-      CHIP_PROOFS = FALLBACK_PROOFS;
-    }
-
     let activeChip = null;
 
     function setPageInert(on){
@@ -1037,148 +1013,44 @@
       }, 120);
     }
 
-    function animateDialogOpen(el){
-      if (prefersReduced || !el.animate) return;
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(10px) scale(.98)';
-      const anim = el.animate(
-        [
-          { opacity: 0, transform: 'translateY(10px) scale(.98)' },
-          { opacity: 1, transform: 'translateY(-2px) scale(1.02)' },
-          { opacity: 1, transform: 'translateY(0) scale(1)' }
-        ],
-        { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }
-      );
-      anim.finished.finally(()=>{
-        el.style.opacity = '';
-        el.style.transform = '';
-      });
-    }
-
-    function animateDialogClose(el){
-      if (prefersReduced || !el.animate) return Promise.resolve();
-      const anim = el.animate(
-        [
-          { opacity: 1, transform: 'translateY(0) scale(1)' },
-          { opacity: 0, transform: 'translateY(6px) scale(.985)' }
-        ],
-        { duration: 220, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }
-      );
-      return anim.finished.catch(()=>{});
-    }
-
-    function findChipEl(key){
-      return document.querySelector(`.chips .chip[data-chip="${CSS.escape(key)}"]`);
-    }
-
-    function setURLChip(key){
-      const url = new URL(location.href);
-      url.searchParams.set('chip', key);
-      history.replaceState({ chip: key }, '', url);
-    }
-
-    function clearURLChip(){
-      const url = new URL(location.href);
-      url.searchParams.delete('chip');
-      history.replaceState({}, '', url);
-    }
-
-    async function openChipsDialogFor(chipEl, opts={}){
-      const key = chipEl?.dataset?.chip;
+    function openChipsDialogFor(chipEl){
+      const key = chipEl.dataset.chip;
       if (!key) return;
 
-      // Visual pop on the chip
-      chipEl.classList.add('is-popping');
-      setTimeout(()=> chipEl.classList.remove('is-popping'), 340);
-
-      // Toggle pressed state across all chips
       document.querySelectorAll('.chips .chip[aria-pressed="true"]').forEach(c=>c.setAttribute('aria-pressed','false'));
       chipEl.setAttribute('aria-pressed','true');
       activeChip = chipEl;
 
-      // Persist preference
-      try { localStorage.setItem('ibm_last_chip', key); } catch(_){}
-
-      // Update URL (deep-linkable, but without spamming history)
-      setURLChip(key);
-
-      // Open dialog (first time) with spring animation
-      const firstOpen = !chipsDialog.open;
-      if (firstOpen){
+      if (!chipsDialog.open){
         chipsDialog.showModal();
         setPageInert(true);
-        animateDialogOpen(chipsDialog);
       }
-
-      // Swap content smoothly
       fillChipsContent(key);
+      chipsTitleEl.focus?.();
+    }
 
-      // Manage focus unless we're opening from a programmatic init
-      if (!opts.fromInit){
-        chipsTitleEl.focus?.();
+    function closeChipsDialog(){
+      if (chipsDialog.open){
+        chipsDialog.close();
+        setPageInert(false);
+        if (activeChip){
+          activeChip.setAttribute('aria-pressed','false');
+          activeChip.focus();
+          activeChip = null;
+        }
       }
     }
 
-    async function closeChipsDialog(){
-      if (!chipsDialog.open) return;
-      await animateDialogClose(chipsDialog);
-      chipsDialog.close();
-      setPageInert(false);
-      if (activeChip){
-        activeChip.setAttribute('aria-pressed','false');
-        activeChip.focus?.();
-        activeChip = null;
-      }
-      clearURLChip();
-    }
-
-    // Wire up chip interactions
-    function bindChipHandlers(){
-      document.querySelectorAll('.chips .chip').forEach(chip=>{
-        chip.addEventListener('click', ()=> openChipsDialogFor(chip));
-        chip.addEventListener('keydown', e=>{
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChipsDialogFor(chip); }
-        });
+    document.querySelectorAll('.chips .chip').forEach(chip=>{
+      chip.addEventListener('click', ()=> openChipsDialogFor(chip));
+      chip.addEventListener('keydown', e=>{
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChipsDialogFor(chip); }
       });
-    }
+    });
 
     chipsCloseBtn?.addEventListener('click', closeChipsDialog);
     chipsDialog.addEventListener('click', (e)=>{ if (e.target === chipsDialog) closeChipsDialog(); });
     chipsDialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeChipsDialog(); });
-
-    // Deep-link handling and "remember last chip"
-    function paramChip(){
-      try {
-        return new URL(location.href).searchParams.get('chip');
-      } catch(_) { return null; }
-    }
-
-    window.addEventListener('popstate', ()=>{
-      const key = paramChip();
-      if (key){
-        const el = findChipEl(key);
-        if (el) openChipsDialogFor(el, { fromInit: true });
-      } else {
-        // No chip param -> close if open
-        if (chipsDialog.open) closeChipsDialog();
-      }
-    });
-
-    // Boot
-    (async function initChips(){
-      await loadChipProofs();
-      bindChipHandlers();
-
-      // Open from ?chip=... OR fall back to last viewed
-      const keyFromParam = paramChip();
-      const keyFromMemory = (()=>{ try{ return localStorage.getItem('ibm_last_chip') }catch(_){ return null } })();
-      const initialKey = keyFromParam || keyFromMemory;
-
-      if (initialKey){
-        const el = findChipEl(initialKey);
-        if (el) openChipsDialogFor(el, { fromInit: true });
-      }
-    })();
   </script>
 </body>
 </html>
