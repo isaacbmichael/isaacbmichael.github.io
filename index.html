@@ -479,6 +479,69 @@
       left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
       background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
     }
+
+    /* ======= NEW: Interactive chips (hover 3D + dialog) ======= */
+    .chips{ perspective:1100px } /* subtle 3D context */
+    .chip{
+      cursor:pointer;
+      will-change:transform, box-shadow;
+      transition:
+        transform .18s cubic-bezier(.2,.8,.2,1),
+        box-shadow .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+    }
+    @media (hover:hover){
+      .chip:hover{
+        transform:translateY(-2px) scale(1.02);
+        box-shadow:var(--shadow-hover);
+        background:#fff;
+        border-color:rgba(27,73,101,.22);
+      }
+    }
+    .chip:active{ transform:translateY(-1px) }
+    .chip[aria-pressed="true"]{
+      background:#fff;
+      border-color:rgba(27,73,101,.35);
+      box-shadow:var(--shadow);
+    }
+
+    dialog#chipsDialog{
+      width:min(760px,94vw);
+      border:0; padding:0;
+      border-radius:20px;
+      background:#fff;
+      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
+    }
+    dialog#chipsDialog::backdrop{
+      background:rgba(17,24,39,.55);
+      backdrop-filter:saturate(120%) blur(3px);
+      animation:backdrop-in .22s ease;
+    }
+    #chipsDialog .modal-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
+    }
+    #chipsDialog .modal-title{ margin:0; font-weight:900; font-size:1.05rem; color:#0f172a }
+    #chipsDialog .modal-close{
+      width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+      box-shadow:var(--shadow);
+      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    #chipsDialog .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+    #chipsDialog .modal-body{ padding:14px 18px 18px }
+
+    .chips-content{ opacity:1; transition:opacity .16s ease }
+    .chips-content.is-fading{ opacity:0 }
+
+    .proof-list{ margin:8px 0 0 0; padding-left:20px }
+    .proof-list li{ margin:6px 0 }
+
+    @media (prefers-reduced-motion:reduce){
+      .chip, .chips-content{ transition:none }
+    }
   </style>
 </head>
 <body class="bars-dark">
@@ -578,13 +641,13 @@
         </p>
 
         <div class="chips" aria-label="Expertise chips">
-          <span class="chip">Public health &amp; education</span>
-          <span class="chip">Enterprise data strategy</span>
-          <span class="chip">Data modernization</span>
-          <span class="chip">Data governance &amp; quality</span>
-          <span class="chip">Decision analytics</span>
-          <span class="chip">Analytics automation</span>
-          <span class="chip">Survey methodology</span>          
+          <span class="chip" data-chip="public-health" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Public health &amp; education</span>
+          <span class="chip" data-chip="enterprise-strategy" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Enterprise data strategy</span>
+          <span class="chip" data-chip="modernization" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Data modernization</span>
+          <span class="chip" data-chip="governance-quality" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Data governance &amp; quality</span>
+          <span class="chip" data-chip="decision-analytics" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Decision analytics</span>
+          <span class="chip" data-chip="analytics-automation" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Analytics automation</span>
+          <span class="chip" data-chip="survey-methodology" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Survey methodology</span>
         </div>
       </div>
     </div>
@@ -636,7 +699,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
@@ -660,11 +723,26 @@
         <span class="sr-only">LinkedIn</span>
       </a>
       <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
         <span class="sr-only">GitHub</span>
       </a>
     </div>
   </div>
+
+  <!-- ===== Chips Proof Dialog ===== -->
+  <dialog id="chipsDialog" aria-labelledby="chipsTitle" aria-modal="true">
+    <div class="modal-header">
+      <h3 id="chipsTitle" class="modal-title" tabindex="-1">Expertise</h3>
+      <button class="modal-close" id="chipsClose" aria-label="Close">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="chips-content" id="chipsContent">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </dialog>
 
   <!-- ===== Contact Modal ===== -->
   <dialog id="contactDialog" aria-labelledby="contactTitle">
@@ -843,10 +921,136 @@
         if (here === path) a.setAttribute('aria-current','page');
       }catch(_){}
     });
+
+    // ===== Chips dialog behavior =====
+    const chipsDialog   = document.getElementById('chipsDialog');
+    const chipsTitleEl  = document.getElementById('chipsTitle');
+    const chipsContent  = document.getElementById('chipsContent');
+    const chipsCloseBtn = document.getElementById('chipsClose');
+
+    const CHIP_PROOFS = {
+      "public-health": {
+        title: "Public health & education",
+        bullets: [
+          "PRAMS multi-state delivery: standardized weighting & outputs across jurisdictions (CDC program).",
+          "State enablement: on-site SAS training (weighted freq/crosstabs) and QA upgrades.",
+          "STEM leadership: LSU Virtual Math Circle / BEE programs (AMS Epsilon; 100+ participants)."
+        ]
+      },
+      "enterprise-strategy": {
+        title: "Enterprise data strategy",
+        bullets: [
+          "Operating model & SLAs with KPI scorecards for public-sector analytics programs.",
+          "FERPA-governed data-sharing MOU and profit-sharing SOW for productized services.",
+          "Cross-jurisdiction service design from survey design → weighting → delivery."
+        ]
+      },
+      "modernization": {
+        title: "Data modernization",
+        bullets: [
+          "Modular SAS/SQL pipelines with automated QA and SAS↔R parity validation.",
+          "Retired legacy intake: moved forms to HR/ops systems; built searchable archives.",
+          "Version-controlled regeneration of analytics outputs (templates + documentation)."
+        ]
+      },
+      "governance-quality": {
+        title: "Data governance & quality",
+        bullets: [
+          "Sampling-verification protocols, audit logs, and scorecards for program oversight.",
+          "Section 508-compliant codebooks; ARF alignment and variable curation.",
+          "Legacy dataset validation: missingness scans and naming standards."
+        ]
+      },
+      "decision-analytics": {
+        title: "Decision analytics",
+        bullets: [
+          "Exec dashboards/briefings improving federal–state coordination and transparency.",
+          "Risk & funding-aware sampling/bias analysis informing approvals and priorities.",
+          "Undercount & mobility modeling to support policy decisions."
+        ]
+      },
+      "analytics-automation": {
+        title: "Analytics automation",
+        bullets: [
+          "Reusable SAS templates for weighted tables; distributed and maintained for sites.",
+          "Automated sampling-verification macros reducing manual checks.",
+          "End-to-end pipelines with QA gates and job controls for reproducible delivery."
+        ]
+      },
+      "survey-methodology": {
+        title: "Survey methodology",
+        bullets: [
+          "Leadership on complex survey weighting for PRAMS across jurisdictions.",
+          "Nonresponse-bias research informing federal guidance and practice.",
+          "Survey design/review at U.S. Census; formal trainings on weighting & verification."
+        ]
+      }
+    };
+
+    let activeChip = null;
+
+    function setPageInert(on){
+      ['main','header.site-header','.mobile-dock','.hero-section'].forEach(sel=>{
+        const el = document.querySelector(sel);
+        if (!el) return;
+        on ? el.setAttribute('inert','') : el.removeAttribute('inert');
+      });
+    }
+
+    function fillChipsContent(key){
+      const data = CHIP_PROOFS[key];
+      if (!data) return;
+      chipsTitleEl.textContent = data.title;
+      const html = `
+        <ul class="proof-list">
+          ${data.bullets.map(b=>`<li>${b}</li>`).join('')}
+        </ul>
+      `;
+      chipsContent.classList.add('is-fading');
+      setTimeout(()=>{
+        chipsContent.innerHTML = html;
+        chipsContent.classList.remove('is-fading');
+      }, 120);
+    }
+
+    function openChipsDialogFor(chipEl){
+      const key = chipEl.dataset.chip;
+      if (!key) return;
+
+      document.querySelectorAll('.chips .chip[aria-pressed="true"]').forEach(c=>c.setAttribute('aria-pressed','false'));
+      chipEl.setAttribute('aria-pressed','true');
+      activeChip = chipEl;
+
+      if (!chipsDialog.open){
+        chipsDialog.showModal();
+        setPageInert(true);
+      }
+      fillChipsContent(key);
+      chipsTitleEl.focus?.();
+    }
+
+    function closeChipsDialog(){
+      if (chipsDialog.open){
+        chipsDialog.close();
+        setPageInert(false);
+        if (activeChip){
+          activeChip.setAttribute('aria-pressed','false');
+          activeChip.focus();
+          activeChip = null;
+        }
+      }
+    }
+
+    document.querySelectorAll('.chips .chip').forEach(chip=>{
+      chip.addEventListener('click', ()=> openChipsDialogFor(chip));
+      chip.addEventListener('keydown', e=>{
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChipsDialogFor(chip); }
+      });
+    });
+
+    chipsCloseBtn?.addEventListener('click', closeChipsDialog);
+    chipsDialog.addEventListener('click', (e)=>{ if (e.target === chipsDialog) closeChipsDialog(); });
+    chipsDialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeChipsDialog(); });
   </script>
 </body>
 </html>
-
-
-
-
