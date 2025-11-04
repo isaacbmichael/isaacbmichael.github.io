@@ -295,11 +295,12 @@
     }
     @media (hover:hover){
       .chip:hover{
-        transform:translateY(-2px) scale(1.02);
+        transform:translateY(-2px);
         box-shadow:var(--shadow-hover);
         background:#fff;
         border-color:rgba(27,73,101,.22);
       }
+     .chip:is(:hover,:focus-visible){ will-change: transform; }
     }
     .chip:active{ transform:translateY(-1px) }
     .chip:is(:hover,:focus-visible){ will-change:transform } /* hint only while animating */
@@ -557,6 +558,17 @@
     .skip-link:focus{
       left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
       background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
+    }
+    .section-divider{
+      height:1px;
+      margin:10px 0 16px;
+      background:linear-gradient(
+        to right,
+        transparent,
+        rgba(17,24,39,.12) 12%,
+        rgba(17,24,39,.12) 88%,
+        transparent
+      );
     }
   </style>
 </head>
@@ -1070,3 +1082,4 @@
   </script>
 </body>
 </html>
+
