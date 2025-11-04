@@ -17,560 +17,581 @@
   <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
 
   <style>
-    /* ===== Design Tokens (Aegean Slate) ===== */
-    :root{
-      --brand-blue-900:#143C52;  /* dark bar bg */
-      --brand-blue-700:#1B4965;  /* primary accents */
-      --accent:var(--brand-blue-700);
+  /* ===== Design Tokens (Aegean Slate) ===== */
+  :root{
+    --brand-blue-900:#143C52;  /* dark bar bg */
+    --brand-blue-700:#1B4965;  /* primary accents */
+    --accent:var(--brand-blue-700);
 
-      --ink:#111827;
-      --muted:#5b6470;
+    --ink:#111827;
+    --muted:#5b6470;
 
-      --bar-bg:#ffffff;
-      --bar-fg:var(--brand-blue-900);
-      --bar-border:#e5e7eb;
+    --bar-bg:#ffffff;
+    --bar-fg:var(--brand-blue-900);
+    --bar-border:#e5e7eb;
 
-      --page-gradient:linear-gradient(180deg,#F3F7FA 0%, #EDF3F7 40%, #F7FAFC 100%);
+    --page-gradient:linear-gradient(180deg,#F3F7FA 0%, #EDF3F7 40%, #F7FAFC 100%);
 
-      --ring:rgba(27,73,101,.35);
+    --ring:rgba(27,73,101,.35);
 
-      --surface:#ffffff;
-      --radius:14px;
-      --w:1360px;
-      --wrap-pad:clamp(12px,2vw,20px);
-      --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
-      --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
-      --avatar-size:96px;
+    --surface:#ffffff;
+    --radius:14px;
+    --w:1360px;
+    --wrap-pad:clamp(12px,2vw,20px);
+    --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
+    --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
+    --avatar-size:96px;
 
-      --drawer-bg:#ffffff;
-      --drawer-fg:#111827;
+    --drawer-bg:#ffffff;
+    --drawer-fg:#111827;
+  }
+  @media (min-width:1600px){ :root{ --w:1440px } }
+
+  /* Bars DARK variant (used at the top; toggled by body.bars-dark) */
+  body.bars-dark{
+    --bar-bg:var(--brand-blue-900);
+    --bar-fg:#ffffff;
+    --bar-border:rgba(255,255,255,.16);
+    --drawer-bg:#0e2a39;
+    --drawer-fg:#eaf2f6;
+  }
+
+  /* ===== Base / Layout ===== */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  html{background:#fff}
+  body{
+    margin:0;
+    font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--page-gradient);
+    min-height:100svh;display:flex;flex-direction:column;
+    scroll-behavior:smooth;
+    padding-top: env(safe-area-inset-top);
+  }
+  :focus-visible{ outline:none; box-shadow:0 0 0 6px var(--ring) }
+
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
+  .muted{color:var(--muted)}
+
+  /* Visually hidden text */
+  .sr-only{
+    position:absolute !important;
+    width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+
+  /* ===== Sticky Header ===== */
+  header.site-header{
+    position:sticky; top:0; z-index:1000;
+    background:var(--bar-bg); color:var(--bar-fg);
+    border-bottom:1px solid var(--bar-border);
+    backdrop-filter:saturate(120%) blur(2px);
+    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
+  }
+
+  /* Make the header container full-bleed */
+  .site-header .wrap{ max-width:none; padding-left:0; padding-right:0 }
+
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px 0; /* vertical only; horizontal gutters handled below */
+    perspective:1100px;
+  }
+
+  /* Desktop: gutters that match the page wrap */
+  @media (min-width:961px){
+    :root{ --nav-gutter: var(--wrap-pad); }
+    .topbar > .brand{
+      margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left));
     }
-    @media (min-width:1600px){ :root{ --w:1440px } }
-
-    /* Bars DARK variant (used at the top; toggled by body.bars-dark) */
-    body.bars-dark{
-      --bar-bg:var(--brand-blue-900);
-      --bar-fg:#ffffff;
-      --bar-border:rgba(255,255,255,.16);
-      --drawer-bg:#0e2a39;
-      --drawer-fg:#eaf2f6;
+    .topbar > nav.primary-nav{
+      margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right));
     }
+  }
 
-    /* ===== Base / Layout ===== */
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    html{background:#fff}
-    body{
-      margin:0;
-      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-      color:var(--ink);
-      background:var(--page-gradient);
-      min-height:100svh;display:flex;flex-direction:column;
-      scroll-behavior:smooth;
-      padding-top: env(safe-area-inset-top);
-    }
-    :focus-visible{ outline:none; box-shadow:0 0 0 6px var(--ring) }
-
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
-    .muted{color:var(--muted)}
-
-    /* Visually hidden text */
-    .sr-only{
-      position:absolute !important;
-      width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
-      clip:rect(0,0,0,0);white-space:nowrap;border:0;
-    }
-
-    /* ===== Sticky Header ===== */
-    header.site-header{
-      position:sticky; top:0; z-index:1000;
-      background:var(--bar-bg); color:var(--bar-fg);
-      border-bottom:1px solid var(--bar-border);
-      backdrop-filter:saturate(120%) blur(2px);
-      transition:background-color .2s ease, color .2s ease, border-color .2s ease;
-    }
-
-    /* Make the header container full-bleed */
-    .site-header .wrap{ max-width:none; padding-left:0; padding-right:0 }
-
+  /* Mobile: modest side padding on the bar */
+  @media (max-width:960px){
     .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding:10px 0; /* vertical only; horizontal gutters handled below */
-      perspective:1100px;
+      padding-left: calc(16px + env(safe-area-inset-left));
+      padding-right: calc(16px + env(safe-area-inset-right));
     }
+  }
 
-    /* Desktop: gutters that match the page wrap */
-    @media (min-width:961px){
-      :root{ --nav-gutter: var(--wrap-pad); }
-      .topbar > .brand{
-        margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left));
-      }
-      .topbar > nav.primary-nav{
-        margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right));
-      }
-    }
+  .brand{display:flex;align-items:center;gap:12px}
 
-    /* Mobile: modest side padding on the bar */
-    @media (max-width:960px){
-      .topbar{
-        padding-left: calc(16px + env(safe-area-inset-left));
-        padding-right: calc(16px + env(safe-area-inset-right));
-      }
-    }
+  /* ===== Brand link ===== */
+  .brand-link--wide{
+    display:flex;align-items:center;gap:12px;
+    color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
+    transform-style:preserve-3d;
+  }
+  .brand-link--wide:hover{ text-decoration:none }
 
-    .brand{display:flex;align-items:center;gap:12px}
+  .brand-text{display:flex;flex-direction:column;line-height:1.1}
+  .brand-name{
+    font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:var(--bar-fg);
+    transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+  }
+  .brand-creds{
+    color:color-mix(in srgb, var(--bar-fg) 70%, #cfd8e3);
+    font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
+    transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+  }
+  @supports not (color-mix: in srgb, white 50%, black 50%){
+    .brand-creds{ color:#c3c9d2 }
+  }
 
-    /* ===== Brand link ===== */
-    .brand-link--wide{
-      display:flex;align-items:center;gap:12px;
-      color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
-      transform-style:preserve-3d;
+  @media (hover:hover) and (pointer:fine){
+    .brand-link--wide:hover .brand-name{
+      transform: translateY(-2px) rotateX(8deg) translateZ(10px);
+      text-shadow:0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06)
     }
-    .brand-link--wide:hover{ text-decoration:none }
+    .brand-link--wide:hover .brand-creds{
+      transform:translateY(-1px) rotateX(6deg) translateZ(6px);
+      text-shadow:0 8px 18px rgba(0,0,0,.08), 0 2px 5px rgba(0,0,0,.05)
+    }
+  }
+  @media (prefers-reduced-motion:reduce){ .brand-name,.brand-creds{ transition:none } }
 
-    .brand-text{display:flex;flex-direction:column;line-height:1.1}
-    .brand-name{
-      font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:var(--bar-fg);
-      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
-    }
-    .brand-creds{
-      color:color-mix(in srgb, var(--bar-fg) 70%, #cfd8e3);
-      font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
-      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
-    }
-    @supports not (color-mix: in srgb, white 50%, black 50%){
-      .brand-creds{ color:#c3c9d2 }
-    }
+  /* ===== Avatar with logo flip (no portrait) ===== */
+  .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
+  .avatar-badge{display:block;width:100%;height:100%;border-radius:50%;outline:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+  .avatar-inner{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;will-change:transform;
+    --ry: 0turn;       /* 0turn = front logo; .5turn = mirrored/back logo */
+    --spin: 0turn;     /* 1turn added on click */
+    transform: rotateY(calc(var(--ry) + var(--spin)));
+    transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+  }
+  .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
+  /* Remove white ring/border + shadows entirely */
+  .avatar-face.front{border:none;box-shadow:none}
+  body.bars-dark .avatar-face.front{border:none;box-shadow:none}
+  .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
+  .avatar-face img{width:100%;height:100%;object-fit:contain;padding:8px;background:transparent}
+  /* Make the "back" logo actually mirrored horizontally */
+  .avatar-face.back img{ transform: scaleX(-1); }
 
-    @media (hover:hover) and (pointer:fine)){
-      .brand-link--wide:hover .brand-name{ transform: translateY(-2px) rotateX(8deg) translateZ(10px); text-shadow:0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06) }
-      .brand-link--wide:hover .brand-creds{ transform:translateY(-1px) rotateX(6deg) translateZ(6px); text-shadow:0 8px 18px rgba(0,0,0,.08), 0 2px 5px rgba(0,0,0,.05) }
+  /* Hover: flip to mirrored logo */
+  @media (hover:hover) and (pointer:fine){
+    .brand-link--wide:hover .avatar-inner{
+      --ry: .5turn;
+      transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
     }
-    @media (prefers-reduced-motion:reduce){ .brand-name,.brand-creds{ transition:none } }
+  }
+  @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
+  @media (max-width:960px){ :root{ --avatar-size:72px } }
 
-    /* ===== Avatar with logo flip (no portrait) ===== */
-    .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
-    .avatar-badge{display:block;width:100%;height:100%;border-radius:50%;outline:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
-    .avatar-inner{
-      position:relative;width:100%;height:100%;
-      transform-style:preserve-3d;will-change:transform;
-      --ry: 0turn;       /* 0turn = front logo; .5turn = mirrored/back logo */
-      --spin: 0turn;     /* 1turn added on click */
-      transform: rotateY(calc(var(--ry) + var(--spin)));
-      transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
-    }
-    .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
-    /* Remove white ring/border + shadows entirely */
-    .avatar-face.front{border:none;box-shadow:none}
-    body.bars-dark .avatar-face.front{border:none;box-shadow:none}
-    .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
-    .avatar-face img{width:100%;height:100%;object-fit:contain;padding:8px;background:transparent}
-    /* Make the "back" logo actually mirrored horizontally */
-    .avatar-face.back img{ transform: scaleX(-1); }
+  /* ===== Desktop nav ===== */
+  nav.primary-nav{ display:flex }
+  nav.primary-nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
+  nav.primary-nav a{color:var(--bar-fg);font-weight:700;position:relative}
+  nav.primary-nav a::after{
+    content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:color-mix(in srgb, var(--bar-fg) 25%, transparent);transform:scaleX(0);
+    transform-origin:left;transition:transform .22s ease;
+  }
+  nav.primary-nav a:hover{color:var(--bar-fg);text-decoration:none}
+  nav.primary-nav a:hover::after{transform:scaleX(1)}
 
-    /* Hover: flip to mirrored logo */
-    @media (hover:hover) and (pointer:fine){
-      .brand-link--wide:hover .avatar-inner{
-        --ry: .5turn;
-        transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
-      }
-    }
-    @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
-    @media (max-width:960px){ :root{ --avatar-size:72px } }
+  /* ===== Mobile hamburger (hidden on desktop) ===== */
+  .menu-toggle{
+    display:none; /* shown on <= 960px */
+    background:transparent;border:none;color:var(--bar-fg);
+    width:44px;height:44px;border-radius:10px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .menu-toggle .bars,
+  .menu-toggle .bars::before,
+  .menu-toggle .bars::after{
+    display:block;width:22px;height:2px;background:currentColor;border-radius:2px;position:relative;margin:0 auto;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .menu-toggle .bars{ top:0 }
+  .menu-toggle .bars::before,
+  .menu-toggle .bars::after{ content:""; position:absolute; left:0 }
+  .menu-toggle .bars::before{ transform:translateY(-7px) }
+  .menu-toggle .bars::after{ transform:translateY(7px) }
 
-    /* ===== Desktop nav ===== */
-    nav.primary-nav{ display:flex }
-    nav.primary-nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
-    nav.primary-nav a{color:var(--bar-fg);font-weight:700;position:relative}
-    nav.primary-nav a::after{
-      content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:color-mix(in srgb, var(--bar-fg) 25%, transparent);transform:scaleX(0);
-      transform-origin:left;transition:transform .22s ease;
-    }
-    nav.primary-nav a:hover{color:var(--bar-fg);text-decoration:none}
-    nav.primary-nav a:hover::after{transform:scaleX(1)}
+  /* ===== Mobile drawer ===== */
+  .drawer-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:saturate(120%) blur(2px);
+    opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:1090; /* raised */
+  }
+  .mobile-drawer{
+    position:fixed; inset:0 0 0 auto; width:min(420px, 92vw);
+    background:var(--drawer-bg); color:var(--drawer-fg);
+    transform:translateX(100%); transition:transform .22s cubic-bezier(.2,.8,.2,1);
+    box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1100; /* raised above backdrop */
+    display:flex; flex-direction:column; gap:10px; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+  }
+  .mobile-drawer header{ display:flex; align-items:center; justify-content:space-between; }
+  .mobile-drawer h3{ margin:0; font-size:1.05rem; font-weight:900 }
+  .mobile-drawer nav ul{ list-style:none; margin:10px 0; padding:0; display:grid; gap:8px }
+  .mobile-drawer nav a{
+    display:block; padding:12px 10px; border-radius:12px; color:inherit; background:rgba(255,255,255,.06);
+    font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06)
+  }
+  .mobile-drawer nav a:hover{ background:rgba(255,255,255,.12) }
+  .mobile-drawer .quick{ display:grid; gap:10px; margin-top:4px }
+  .mobile-drawer .quick .btn{ width:100%; justify-content:center }
 
-    /* ===== Mobile hamburger (hidden on desktop) ===== */
-    .menu-toggle{
-      display:none; /* shown on <= 960px */
-      background:transparent;border:none;color:var(--bar-fg);
-      width:44px;height:44px;border-radius:10px;cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .menu-toggle .bars,
-    .menu-toggle .bars::before,
-    .menu-toggle .bars::after{
-      display:block;width:22px;height:2px;background:currentColor;border-radius:2px;position:relative;margin:0 auto;
-      transition:transform .2s ease, opacity .2s ease;
-    }
-    .menu-toggle .bars{ top:0 }
-    .menu-toggle .bars::before,
-    .menu-toggle .bars::after{ content:""; position:absolute; left:0 }
-    .menu-toggle .bars::before{ transform:translateY(-7px) }
-    .menu-toggle .bars::after{ transform:translateY(7px) }
+  body.drawer-open .drawer-backdrop{ opacity:1; pointer-events:auto }
+  body.drawer-open .mobile-drawer{ transform:none }
+  body.drawer-open{ overflow:hidden }
 
-    /* ===== Mobile drawer ===== */
-    .drawer-backdrop{
-      position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:saturate(120%) blur(2px);
-      opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:1090; /* raised */
-    }
-    .mobile-drawer{
-      position:fixed; inset:0 0 0 auto; width:min(420px, 92vw);
-      background:var(--drawer-bg); color:var(--drawer-fg);
-      transform:translateX(100%); transition:transform .22s cubic-bezier(.2,.8,.2,1);
-      box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1100; /* raised above backdrop */
-      display:flex; flex-direction:column; gap:10px; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
-    }
-    .mobile-drawer header{ display:flex; align-items:center; justify-content:space-between; }
-    .mobile-drawer h3{ margin:0; font-size:1.05rem; font-weight:900 }
-    .mobile-drawer nav ul{ list-style:none; margin:10px 0; padding:0; display:grid; gap:8px }
-    .mobile-drawer nav a{
-      display:block; padding:12px 10px; border-radius:12px; color:inherit; background:rgba(255,255,255,.06);
-      font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06)
-    }
-    .mobile-drawer nav a:hover{ background:rgba(255,255,255,.12) }
-    .mobile-drawer .quick{ display:grid; gap:10px; margin-top:4px }
-    .mobile-drawer .quick .btn{ width:100%; justify-content:center }
+  /* ===== HERO ===== */
+  .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
+  .hero{padding:14px 0 10px}
+  .hero-grid{
+    display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";
+    row-gap:6px;align-items:start
+  }
+  /* Allow children to shrink and wrap instead of overflowing */
+  .hero-grid > *{ min-width:0 }
 
-    body.drawer-open .drawer-backdrop{ opacity:1; pointer-events:auto }
-    body.drawer-open .mobile-drawer{ transform:none }
-    body.drawer-open{ overflow:hidden }
+  .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word}
 
-    /* ===== HERO ===== */
-    .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
-    .hero{padding:14px 0 10px}
-    .hero-grid{
-      display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";
-      row-gap:6px;align-items:start
-    }
-    /* Allow children to shrink and wrap instead of overflowing */
-    .hero-grid > *{ min-width:0 }
+  .tagline{
+    grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;
+    font-size:clamp(14px,1.6vw,18px);
+    line-height:1.35;
+    white-space:normal;
+  }
+  @supports (text-wrap: balance){
+    .tagline{ text-wrap:balance }
+  }
 
-    .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word}
+  /* ===== Chips ===== */
+  .chips{
+    grid-area:chips;
+    display:flex; align-items:center;
+    gap:8px 8px;
+    margin-top:6px;
+    padding-bottom:4px;
+    white-space:normal;
+    overflow:visible;
+    flex-wrap:wrap;
+    /* Fuzziness fix: no constant 3D context */
+    perspective:none;
+  }
 
-    .tagline{
-      grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;
-      font-size:clamp(14px,1.6vw,18px);
-      line-height:1.35;
-      white-space:normal;
-    }
-    @supports (text-wrap: balance){
-      .tagline{ text-wrap:balance }
-    }
-
-    /* ===== Chips ===== */
-    .chips{
-      grid-area:chips;
-      display:flex; align-items:center;
-      gap:8px 8px;
-      margin-top:6px;
-      padding-bottom:4px;
-      white-space:normal;
-      overflow:visible;
-      flex-wrap:wrap;
-      /* Fuzziness fix: no constant 3D context */
-      perspective:none;
-    }
-
-    .chip{
-      display:inline-block;
-      flex:0 0 auto;
-      background:rgba(17,24,39,.08);
-      color:var(--ink);
-      padding:6px 10px;
-      border-radius:999px;
-      font-weight:700;
-      font-size:clamp(12px,1.3vw,14px);
-      border:1px solid rgba(17,24,39,.08);
-      white-space:nowrap;
-      cursor:pointer;
-      /* Fuzziness fix: don’t pre-promote layers at rest */
-      will-change:auto;
-      transition:
-        transform .18s cubic-bezier(.2,.8,.2,1),
-        box-shadow .18s ease,
-        background .18s ease,
-        border-color .18s ease;
-    }
-    @media (hover:hover){
-      .chip:hover{
-        transform:translateY(-2px);
-        box-shadow:var(--shadow-hover);
-        background:#fff;
-        border-color:rgba(27,73,101,.22);
-      }
-     .chip:is(:hover,:focus-visible){ will-change: transform; }
-    }
-    .chip:active{ transform:translateY(-1px) }
-    .chip:is(:hover,:focus-visible){ will-change:transform } /* hint only while animating */
-    .chip[aria-pressed="true"]{
+  .chip{
+    display:inline-block;
+    flex:0 0 auto;
+    background:rgba(17,24,39,.08);
+    color:var(--ink);
+    padding:6px 10px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:clamp(12px,1.3vw,14px);
+    border:1px solid rgba(17,24,39,.08);
+    white-space:nowrap;
+    cursor:pointer;
+    /* Fuzziness fix: don’t pre-promote layers at rest */
+    will-change:auto;
+    transition:
+      transform .18s cubic-bezier(.2,.8,.2,1),
+      box-shadow .18s ease,
+      background .18s ease,
+      border-color .18s ease;
+  }
+  @media (hover:hover){
+    .chip:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-hover);
       background:#fff;
-      border-color:rgba(27,73,101,.35);
-      box-shadow:var(--shadow);
+      border-color:rgba(27,73,101,.22);
     }
+  }
+  .chip:active{ transform:translateY(-1px) }
+  .chip:is(:hover,:focus-visible){ will-change:transform } /* hint only while animating */
+  .chip[aria-pressed="true"]{
+    background:#fff;
+    border-color:rgba(27,73,101,.35);
+    box-shadow:var(--shadow);
+  }
 
-    /* Chips proof dialog */
-    dialog#chipsDialog{
-      width:min(760px,94vw);
-      border:0; padding:0;
-      border-radius:20px;
-      background:#fff;
-      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
-      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
-    }
-    dialog#chipsDialog::backdrop{
-      background:rgba(17,24,39,.55);
-      backdrop-filter:saturate(120%) blur(3px);
-      animation:backdrop-in .22s ease;
-    }
-    #chipsDialog .modal-header{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
-    }
-    #chipsDialog .modal-title{ margin:0; font-weight:900; font-size:1.05rem; color:#0f172a }
-    #chipsDialog .modal-close{
-      width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
-      display:inline-flex; align-items:center; justify-content:center;
-      box-shadow:var(--shadow);
-      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
-    }
-    #chipsDialog .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
-    #chipsDialog .modal-body{ padding:14px 18px 18px }
+  /* Chips proof dialog */
+  dialog#chipsDialog{
+    width:min(760px,94vw);
+    border:0; padding:0;
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+    animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
+  }
+  dialog#chipsDialog::backdrop{
+    background:rgba(17,24,39,.55);
+    backdrop-filter:saturate(120%) blur(3px);
+    animation:backdrop-in .22s ease;
+  }
+  #chipsDialog .modal-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
+  }
+  #chipsDialog .modal-title{ margin:0; font-weight:900; font-size:1.05rem; color:#0f172a }
+  #chipsDialog .modal-close{
+    width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow);
+    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+  }
+  #chipsDialog .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+  #chipsDialog .modal-body{ padding:14px 18px 18px }
 
-    .chips-content{ opacity:1; transition:opacity .16s ease }
-    .chips-content.is-fading{ opacity:0 }
+  .chips-content{ opacity:1; transition:opacity .16s ease }
+  .chips-content.is-fading{ opacity:0 }
 
-    .proof-list{ margin:8px 0 0 0; padding-left:20px }
-    .proof-list li{ margin:6px 0 }
+  .proof-list{ margin:8px 0 0 0; padding-left:20px }
+  .proof-list li{ margin:6px 0 }
 
-    @media (prefers-reduced-motion:reduce){
-      .chip, .chips-content{ transition:none }
-    }
+  @media (prefers-reduced-motion:reduce){
+    .chip, .chips-content{ transition:none }
+  }
 
-    /* === FIX #1: keep brand text crisp (no 3D transform/text-shadow on hover) === */
-    @media (hover:hover) and (pointer:fine){
-      .brand-link--wide:hover .brand-name,
-      .brand-link--wide:hover .brand-creds{
-        transform:none !important;
-        text-shadow:none !important;
-      }
-    }
-
-    /* === FIX #2: remove focus ring on chips dialog title (Safari/iOS box) === */
-    #chipsDialog .modal-title:focus,
-    #chipsDialog .modal-title:focus-visible{
-      outline:none !important;
-      box-shadow:none !important;
-    }
-
-    /* ===== Sections ===== */
-    main{padding:10px 0 40px;flex:1 0 auto}
-    section{padding:24px 0}
-    h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
-    .hero-section .wrap, main.wrap{padding-left:var(--wrap-pad);padding-right:var(--wrap-pad)}
-
-    .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .tile{position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
-    .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
-    .tile h3{margin:0 0 8px}
-    .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
-
-    /* ===== Footer ===== */
-    footer{
-      background:var(--bar-bg); color:var(--bar-fg); padding:18px 0; text-align:center;
-      border-top:1px solid var(--bar-border);
-      transition:background-color .2s ease, color .2s ease, border-color .2s ease;
-    }
-    footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
-    .social{display:flex;align-items:center;gap:10px}
-    .icon-btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      width:38px;height:38px;border-radius:999px;
-      background:color-mix(in srgb, var(--bar-fg) 12%, transparent);
-      border:1px solid color-mix(in srgb, var(--bar-fg) 22%, transparent);
-      color:var(--bar-fg);
-      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-    }
-    .icon-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.12);background:color-mix(in srgb, var(--bar-fg) 22%, transparent)}
-    .icon-btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
-    .icon{width:18px;height:18px;fill:currentColor}
-
-    /* ===== Buttons (shadow consistency across variants & contexts) ===== */
-    .btn{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:.7rem 1rem;border-radius:999px;font-weight:800;
-      border:1px solid rgba(0,0,0,.04);
-      background:#fff;color:var(--brand-blue-900);
-      box-shadow:var(--shadow);
-      transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
-      text-decoration:none;
-    }
-    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
-    .btn:active{transform:translateY(-1px)}
-    .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
-    .btn-primary{
-      background:var(--brand-blue-700);color:#fff;border-color:transparent;
-      /* Ensure primary CTAs get the same 3D shadow */
-      box-shadow:var(--shadow);
-    }
-    .btn-primary:hover{ box-shadow:var(--shadow-hover) }
-
-    /* Make sure buttons inside the contact modal match the 3D look too */
-    .contact-actions .btn,
-    .form-actions .btn{ box-shadow:var(--shadow) }
-    .contact-actions .btn:hover,
-    .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
-
-    /* ===== Mobile dock (quick contact) ===== */
-    .mobile-dock{
-      position:fixed; left:0; right:0; bottom:0; z-index:980;
-      background:var(--bar-bg); color:var(--bar-fg);
-      border-top:1px solid var(--bar-border);
-      padding:6px 10px calc(6px + env(safe-area-inset-bottom));
-      display:none; /* shown on <= 960px */
-    }
-    .mobile-dock .dock{
-      max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px;
-    }
-    .mobile-dock .icon-btn{ width:46px; height:46px }
-
-    /* ===== CONTACT MODAL (polished) ===== */
-    dialog#contactDialog{
-      width:min(840px, 94vw);
-      border:0;
-      padding:0;
-      border-radius:20px;
-      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
-      background:#fff;
-      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
-    }
-    dialog#contactDialog::backdrop{
-      background:rgba(17,24,39,.55);
-      backdrop-filter:saturate(120%) blur(3px);
-      animation:backdrop-in .22s ease;
-    }
-    @keyframes modal-in{
-      from{ transform:translateY(14px) scale(.985); opacity:.0 }
-      to{ transform:none; opacity:1 }
-    }
-    @keyframes backdrop-in{ from{ opacity:.0 } to{ opacity:1 } }
-
-    .modal-header{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
-    }
-    .modal-title{
-      margin:0; font-weight:900; font-size:1.15rem; letter-spacing:.2px; color:#0f172a;
-    }
-    .modal-close{
-      width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
-      display:inline-flex; align-items:center; justify-content:center;
-      box-shadow:var(--shadow);
-      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
-    }
-    .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
-
-    .modal-body{ padding:14px 18px 18px }
-    .contact-actions{ display:flex; gap:12px; flex-wrap:wrap; }
-    .contact-actions .btn{ border-radius:999px }
-    .contact-actions .btn-primary{ filter:saturate(115%) }
-
-    .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:120px 1fr;
-      gap:10px 12px;
-      align-items:center;
-    }
-    .form-grid label{ font-weight:700; color:#0f172a }
-    .form-grid input,
-    .form-grid textarea{
-      width:100%;
-      font:inherit;
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid #e5e7eb;
-      background:#f8fafc;
-      transition:border-color .16s ease, box-shadow .16s ease, background .16s ease;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
-    }
-    .form-grid textarea{ min-height:160px; resize:vertical }
-    .form-grid input:focus,
-    .form-grid textarea:focus{
-      outline:none;
-      border-color:#c5d6e2;
-      background:#fff;
-      box-shadow:0 0 0 6px var(--ring);
-    }
-    .form-actions{
-      grid-column:2 / -1;
-      display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
-    }
-    .form-hint{
-      grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted);
-    }
-
-    @media (max-width:640px){
-      .form-grid{ grid-template-columns:1fr; }
-      .form-actions, .form-hint{ grid-column:1 / -1 }
-    }
-
-    /* ===== Responsive ===== */
-    @media (max-width:1120px){
-      .tiles{ grid-template-columns:repeat(2,1fr) }
-    }
-    @media (max-width:960px){
-      nav.primary-nav{ display:none }
-      .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
-      .tiles{ grid-template-columns:1fr }
-      main{ padding-bottom:90px } /* space for mobile dock */
-      .mobile-dock{ display:block }
-      footer .social{ display:none !important; }
-    }
-    @media (max-width:520px){
-      .h1{ font-size:clamp(26px,8vw,40px) }
-    }
-
-    /* ===== Additions: subtle hover color for brand & nav, skip link ===== */
+  /* === FIX #1: keep brand text crisp (no 3D transform/text-shadow on hover) === */
+  @media (hover:hover) and (pointer:fine){
     .brand-link--wide:hover .brand-name,
-    .brand-link--wide:focus-visible .brand-name{
-      color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+    .brand-link--wide:hover .brand-creds{
+      transform:none !important;
+      text-shadow:none !important;
     }
-    .brand-link--wide:hover .brand-creds,
-    .brand-link--wide:focus-visible .brand-creds{
-      color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%);
-    }
-    nav.primary-nav a:hover,
-    nav.primary-nav a:focus-visible{
-      color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
-    }
-    @supports not (color-mix: in srgb, white 50%, black 50%){
-      .brand-link--wide:hover .brand-name,
-      .brand-link--wide:hover .brand-creds,
-      nav.primary-nav a:hover{ opacity:.92 }
-    }
+  }
 
-    .skip-link{
-      position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;
-    }
-    .skip-link:focus{
-      left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
-      background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
-    }
-    .section-divider{
-      height:1px;
-      margin:10px 0 16px;
-      background:linear-gradient(
-        to right,
-        transparent,
-        rgba(17,24,39,.12) 12%,
-        rgba(17,24,39,.12) 88%,
-        transparent
-      );
-    }
-  </style>
+  /* === FIX #2: remove focus ring on chips dialog title (Safari/iOS box) === */
+  #chipsDialog .modal-title:focus,
+  #chipsDialog .modal-title:focus-visible{
+    outline:none !important;
+    box-shadow:none !important;
+  }
+
+  /* ===== Sections ===== */
+  main{padding:10px 0 40px;flex:1 0 auto}
+  section{padding:24px 0}
+  h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
+  .hero-section .wrap, main.wrap{padding-left:var(--wrap-pad);padding-right:var(--wrap-pad)}
+
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .tile{position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
+  .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+  .tile h3{margin:0 0 8px}
+  .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
+
+  /* ===== Footer ===== */
+  footer{
+    background:var(--bar-bg); color:var(--bar-fg); padding:18px 0; text-align:center;
+    border-top:1px solid var(--bar-border);
+    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
+  }
+  footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
+  .social{display:flex;align-items:center;gap:10px}
+  .icon-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:38px;height:38px;border-radius:999px;
+    background:color-mix(in srgb, var(--bar-fg) 12%, transparent);
+    border:1px solid color-mix(in srgb, var(--bar-fg) 22%, transparent);
+    color:var(--bar-fg);
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .icon-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.12);background:color-mix(in srgb, var(--bar-fg) 22%, transparent)}
+  .icon-btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
+  .icon{width:18px;height:18px;fill:currentColor}
+
+  /* ===== Buttons (shadow consistency across variants & contexts) ===== */
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:.7rem 1rem;border-radius:999px;font-weight:800;
+    border:1px solid rgba(0,0,0,.04);
+    background:#fff;color:var(--brand-blue-900);
+    box-shadow:var(--shadow);
+    transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
+    text-decoration:none;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
+  .btn:active{transform:translateY(-1px)}
+  .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
+  .btn-primary{
+    background:var(--brand-blue-700);color:#fff;border-color:transparent;
+    /* Ensure primary CTAs get the same 3D shadow */
+    box-shadow:var(--shadow);
+  }
+  .btn-primary:hover{ box-shadow:var(--shadow-hover) }
+
+  /* Make sure buttons inside the contact modal match the 3D look too */
+  .contact-actions .btn,
+  .form-actions .btn{ box-shadow:var(--shadow) }
+  .contact-actions .btn:hover,
+  .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
+
+  /* ===== Mobile dock (quick contact) ===== */
+  .mobile-dock{
+    position:fixed; left:0; right:0; bottom:0; z-index:980;
+    background:var(--bar-bg); color:var(--bar-fg);
+    border-top:1px solid var(--bar-border);
+    padding:6px 10px calc(6px + env(safe-area-inset-bottom));
+    display:none; /* shown on <= 960px */
+  }
+  .mobile-dock .dock{
+    max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px;
+  }
+  .mobile-dock .icon-btn{ width:46px; height:46px }
+
+  /* ===== CONTACT MODAL (polished) ===== */
+  dialog#contactDialog{
+    width:min(840px, 94vw);
+    border:0;
+    padding:0;
+    border-radius:20px;
+    box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+    background:#fff;
+    animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
+  }
+  dialog#contactDialog::backdrop{
+    background:rgba(17,24,39,.55);
+    backdrop-filter:saturate(120%) blur(3px);
+    animation:backdrop-in .22s ease;
+  }
+  @keyframes modal-in{
+    from{ transform:translateY(14px) scale(.985); opacity:.0 }
+    to{ transform:none; opacity:1 }
+  }
+  @keyframes backdrop-in{ from{ opacity:.0 } to{ opacity:1 } }
+
+  .modal-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
+  }
+  .modal-title{
+    margin:0; font-weight:900; font-size:1.15rem; letter-spacing:.2px; color:#0f172a;
+  }
+  .modal-close{
+    width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow);
+    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+  }
+  .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+
+  .modal-body{ padding:14px 18px 18px }
+  .contact-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+  .contact-actions .btn{ border-radius:999px }
+  .contact-actions .btn-primary{ filter:saturate(115%) }
+
+  .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
+
+  .form-grid{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:10px 12px;
+    align-items:center;
+  }
+  .form-grid label{ font-weight:700; color:#0f172a }
+  .form-grid input,
+  .form-grid textarea{
+    width:100%;
+    font:inherit;
+    padding:12px 14px;
+    border-radius:14px;
+    border:1px solid #e5e7eb;
+    background:#f8fafc;
+    transition:border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
+  }
+  .form-grid textarea{ min-height:160px; resize:vertical }
+  .form-grid input:focus,
+  .form-grid textarea:focus{
+    outline:none;
+    border-color:#c5d6e2;
+    background:#fff;
+    box-shadow:0 0 0 6px var(--ring);
+  }
+  .form-actions{
+    grid-column:2 / -1;
+    display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
+  }
+  .form-hint{
+    grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#fff;
+  }
+
+  @media (max-width:640px){
+    .form-grid{ grid-template-columns:1fr; }
+    .form-actions, .form-hint{ grid-column:1 / -1 }
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width:1120px){
+    .tiles{ grid-template-columns:repeat(2,1fr) }
+  }
+  @media (max-width:960px){
+    nav.primary-nav{ display:none }
+    .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
+    .tiles{ grid-template-columns:1fr }
+    main{ padding-bottom:90px } /* space for mobile dock */
+    .mobile-dock{ display:block }
+    footer .social{ display:none !important; }
+  }
+  @media (max-width:520px){
+    .h1{ font-size:clamp(26px,8vw,40px) }
+  }
+
+  /* ===== Additions: subtle hover color for brand & nav, skip link ===== */
+  .brand-link--wide:hover .brand-name,
+  .brand-link--wide:focus-visible .brand-name{
+    color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+  }
+  .brand-link--wide:hover .brand-creds,
+  .brand-link--wide:focus-visible .brand-creds{
+    color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%);
+  }
+  nav.primary-nav a:hover,
+  nav.primary-nav a:focus-visible{
+    color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+  }
+  @supports not (color-mix: in srgb, white 50%, black 50%){
+    .brand-link--wide:hover .brand-name,
+    .brand-link--wide:hover .brand-creds,
+    nav.primary-nav a:hover{ opacity:.92 }
+  }
+
+  .skip-link{
+    position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;
+  }
+  .skip-link:focus{
+    left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
+    background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
+  }
+
+  /* ===== Gradient divider (original look restored) ===== */
+  .section-divider{
+    position:relative;
+    height:12px;
+    margin:10px 0 2px;
+    border:0;
+  }
+  .section-divider::before{
+    content:"";
+    position:absolute;
+    left:0; right:0; top:50%;
+    transform:translateY(-50%);
+    height:2px;
+    border-radius:999px;
+    background:linear-gradient(
+      90deg,
+      rgba(0,0,0,0) 0%,
+      rgba(27,73,101,.22) 10%,
+      rgba(27,73,101,.35) 50%,
+      rgba(27,73,101,.22) 90%,
+      rgba(0,0,0,0) 100%
+    );
+    box-shadow:
+      0 6px 10px rgba(27,73,101,.20),
+      0 -6px 10px rgba(27,73,101,.20);
+  }
+</style>
 </head>
 <body class="bars-dark">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -1082,4 +1103,5 @@
   </script>
 </body>
 </html>
+
 
