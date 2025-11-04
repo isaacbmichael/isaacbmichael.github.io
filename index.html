@@ -194,13 +194,13 @@
     /* ===== Mobile drawer ===== */
     .drawer-backdrop{
       position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:saturate(120%) blur(2px);
-      opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:999;
+      opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:1090; /* raised */
     }
     .mobile-drawer{
       position:fixed; inset:0 0 0 auto; width:min(420px, 92vw);
       background:var(--drawer-bg); color:var(--drawer-fg);
       transform:translateX(100%); transition:transform .22s cubic-bezier(.2,.8,.2,1);
-      box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1000;
+      box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1100; /* raised above backdrop */
       display:flex; flex-direction:column; gap:10px; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
     }
     .mobile-drawer header{ display:flex; align-items:center; justify-content:space-between; }
@@ -576,7 +576,7 @@
           <span class="sr-only">Email</span>
         </a>
         <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Schedule with Calendly">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
           <span class="sr-only">Calendly</span>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
@@ -600,7 +600,7 @@
         <span class="sr-only">Email</span>
       </a>
       <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Calendly">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
         <span class="sr-only">Calendly</span>
       </a>
       <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
@@ -608,7 +608,7 @@
         <span class="sr-only">LinkedIn</span>
       </a>
       <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
         <span class="sr-only">GitHub</span>
       </a>
     </div>
@@ -683,6 +683,39 @@
       const body    = encodeURIComponent(`${msg}\n\n— ${name}${email ? ' <'+email+'>' : ''}`);
       window.location.href = `mailto:isaac.b.michael@gmail.com?subject=${subject}&body=${body}`;
       closeDialog();
+    });
+
+    // === Mobile drawer (open/close) ===
+    const drawer    = document.getElementById('mobileDrawer');
+    const backdrop  = document.getElementById('drawerBackdrop');
+    const menuBtn   = document.getElementById('menuToggle');
+    const menuClose = document.getElementById('menuClose');
+
+    function openDrawer(e){
+      if (e) e.preventDefault();
+      backdrop.hidden = false;                         // show overlay (removes display:none)
+      document.body.classList.add('drawer-open');      // slide drawer in
+      drawer.setAttribute('aria-hidden','false');
+      menuBtn?.setAttribute('aria-expanded','true');
+    }
+
+    function closeDrawer(e){
+      if (e) e.preventDefault();
+      document.body.classList.remove('drawer-open');   // slide drawer out
+      drawer.setAttribute('aria-hidden','true');
+      menuBtn?.setAttribute('aria-expanded','false');
+      // hide overlay after transition ends
+      setTimeout(()=>{ backdrop.hidden = true; }, 220);
+    }
+
+    menuBtn?.addEventListener('click', openDrawer);
+    menuClose?.addEventListener('click', closeDrawer);
+    backdrop?.addEventListener('click', closeDrawer);
+    // Close when tapping any link inside the drawer
+    drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+    // Esc to close
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer();
     });
 
     // Brand link click: flip back to logo just before navigation
