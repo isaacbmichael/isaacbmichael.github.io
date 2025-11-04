@@ -19,7 +19,6 @@
       --accent:var(--brand-blue-700);
 
       --ink:#111827;
-      --muted:#5b6470;
 
       --bar-bg:#ffffff;
       --bar-fg:var(--brand-blue-900);
@@ -39,10 +38,6 @@
 
       --drawer-bg:#ffffff;
       --drawer-fg:#111827;
-
-      /* Header-only (Far Harbor–style) tight edge gutters */
-      /* ~16px on phones → up to 28px max on wide desktops */
-      --nav-edge-pad: clamp(22px, 3.5vw, 48px);
     }
     @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -90,18 +85,37 @@
       transition:background-color .2s ease, color .2s ease, border-color .2s ease;
     }
 
-    /* Make the header container full-bleed and use tighter edge pads ONLY here */
+    /* Make the header container full-bleed */
     .site-header .wrap{ max-width:none; padding-left:0; padding-right:0 }
+
     .topbar{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
-      /* Tight, symmetric edge gutters with safe-area support */
-      padding:10px calc(var(--nav-edge-pad) + env(safe-area-inset-right))
-               10px calc(var(--nav-edge-pad) + env(safe-area-inset-left));
-      perspective:1100px
+      padding:10px 0; /* vertical only; horizontal gutters handled below */
+      perspective:1100px;
     }
+
+    /* Desktop: symmetrical gutters using margins on edge children */
+    @media (min-width:961px){
+      :root{ --nav-gutter: clamp(36px, 5vw, 88px); }
+      .topbar > .brand{
+        margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left));
+      }
+      .topbar > nav.primary-nav{
+        margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right));
+      }
+    }
+
+    /* Mobile: modest side padding on the bar */
+    @media (max-width:960px){
+      .topbar{
+        padding-left: calc(16px + env(safe-area-inset-left));
+        padding-right: calc(16px + env(safe-area-inset-right));
+      }
+    }
+
     .brand{display:flex;align-items:center;gap:12px}
 
-    /* ===== Brand link (no floating card) ===== */
+    /* ===== Brand link ===== */
     .brand-link--wide{
       display:flex;align-items:center;gap:12px;
       color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
@@ -174,9 +188,6 @@
     .menu-toggle .bars::after{ content:""; position:absolute; left:0 }
     .menu-toggle .bars::before{ transform:translateY(-7px) }
     .menu-toggle .bars::after{ transform:translateY(7px) }
-    .menu-toggle[aria-expanded="true"] .bars{ opacity:0 }
-    .menu-toggle[aria-expanded="true"] .bars::before{ transform:rotate(45deg) }
-    .menu-toggle[aria-expanded="true"] .bars::after{ transform:rotate(-45deg) }
 
     /* ===== Mobile drawer ===== */
     .drawer-backdrop{
@@ -320,7 +331,7 @@
       .tiles{ grid-template-columns:1fr }
       main{ padding-bottom:90px } /* space for mobile dock */
       .mobile-dock{ display:block }
-      footer .social{ display:none !important; } /* hide footer icons on phones; floating dock is the single source of truth */
+      footer .social{ display:none !important; }
     }
     @media (max-width:520px){
       .h1{ font-size:clamp(26px,8vw,40px) }
@@ -601,9 +612,6 @@
         setBarsDark(isDark);
       });
     }
-
-    // (No JS needed for header gutters; handled via CSS)
   </script>
 </body>
 </html>
-
