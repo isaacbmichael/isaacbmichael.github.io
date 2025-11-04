@@ -600,6 +600,10 @@
       0 6px 10px rgba(27,73,101,.20),
       0 -6px 10px rgba(27,73,101,.20);
   }
+  .hero-section .wrap {
+    padding-left: calc(var(--wrap-pad) + env(safe-area-inset-left));
+    padding-right: calc(var(--wrap-pad) + env(safe-area-inset-right));
+  }
 </style>
 
   <!-- Inert polyfill (progressive) -->
@@ -1167,3 +1171,4 @@
   </script>
 </body>
 </html>
+
