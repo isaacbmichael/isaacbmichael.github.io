@@ -221,23 +221,37 @@
     /* ===== HERO ===== */
     .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
     .hero{padding:14px 0 10px}
-    .hero-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";row-gap:6px;align-items:start}
+    .hero-grid{
+      display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";
+      row-gap:6px;align-items:start
+    }
+    /* Allow children to shrink and wrap instead of overflowing */
+    .hero-grid > *{ min-width:0 }
+
     .h1{margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word}
-    .tagline{grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;font-size:clamp(14px,1.6vw,18px)}
+
+    .tagline{
+      grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;
+      font-size:clamp(14px,1.6vw,18px);
+      line-height:1.35;
+      white-space:normal;
+    }
+    /* Nicer multi-line breaks where supported */
+    @supports (text-wrap: balance){
+      .tagline{ text-wrap:balance }
+    }
 
     /* ===== Chips ===== */
     .chips{
       grid-area:chips;
       display:flex; align-items:center;
-      gap:8px;
+      gap:8px 8px;
       margin-top:6px;
       padding-bottom:4px;
       white-space:normal;
       overflow:visible;
-      flex-wrap:nowrap;
-    }
-    @media (max-width:640px){
-      .chips{ flex-wrap:wrap }
+      /* Always allow wrapping into multiple rows as needed */
+      flex-wrap:wrap;
     }
 
     .chip{
@@ -248,8 +262,9 @@
       padding:6px 10px;
       border-radius:999px;
       font-weight:700;
-      font-size:.88rem;
-      border:1px solid rgba(17,24,39,.08)
+      font-size:clamp(12px,1.3vw,14px); /* responsive size for graceful wrapping */
+      border:1px solid rgba(17,24,39,.08);
+      white-space:nowrap; /* keep each chip intact */
     }
 
     /* ===== Gradient divider ===== */
@@ -701,4 +716,3 @@
   </script>
 </body>
 </html>
-
