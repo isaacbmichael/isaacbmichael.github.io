@@ -10,6 +10,11 @@
   <meta property="og:url" content="https://isaacbmichael.com/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://isaacbmichael.com/">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#143C52">
+  <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
+  <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
 
   <style>
     /* ===== Design Tokens (Aegean Slate) ===== */
@@ -435,9 +440,37 @@
     @media (max-width:520px){
       .h1{ font-size:clamp(26px,8vw,40px) }
     }
+
+    /* ===== Additions: subtle hover color for brand & nav, skip link ===== */
+    .brand-link--wide:hover .brand-name,
+    .brand-link--wide:focus-visible .brand-name{
+      color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+    }
+    .brand-link--wide:hover .brand-creds,
+    .brand-link--wide:focus-visible .brand-creds{
+      color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%);
+    }
+    nav.primary-nav a:hover,
+    nav.primary-nav a:focus-visible{
+      color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+    }
+    @supports not (color-mix: in srgb, white 50%, black 50%){
+      .brand-link--wide:hover .brand-name,
+      .brand-link--wide:hover .brand-creds,
+      nav.primary-nav a:hover{ opacity:.92 }
+    }
+
+    .skip-link{
+      position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;
+    }
+    .skip-link:focus{
+      left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
+      background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
+    }
   </style>
 </head>
 <body class="bars-dark">
+  <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- ===== Mobile drawer & backdrop ===== -->
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
@@ -474,7 +507,7 @@
             <div class="avatar-badge" title="Hover to flip">
               <div class="avatar-inner">
                 <div class="avatar-face front">
-                  <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" width="96" height="96" />
+                  <img id="portraitImg" src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael" decoding="async" width="96" height="96" loading="eager" fetchpriority="high" />
                 </div>
                 <div class="avatar-face back">
                   <img id="logoImg"
@@ -547,21 +580,21 @@
       <h2>Featured</h2>
       <div class="tiles">
         <div class="tile">
-          <h3>Technical Portfolio</h3>
+          <h3 id="tile-portfolio">Technical Portfolio</h3>
           <p>Selected projects in survey methods, automation, reporting, and templates.</p>
-          <a class="card-link" href="/portfolio/">View</a>
+          <a class="card-link" href="/portfolio/" aria-labelledby="tile-portfolio">View</a>
           <p><a href="/portfolio/">Explore the portfolio →</a></p>
         </div>
         <div class="tile">
-          <h3>Writing</h3>
+          <h3 id="tile-writing">Writing</h3>
           <p>Notes and essays on methodology, automation, and governance.</p>
-          <a class="card-link" href="/writing/">View</a>
+          <a class="card-link" href="/writing/" aria-labelledby="tile-writing">View</a>
           <p><a href="/writing/">Browse posts →</a></p>
         </div>
         <div class="tile">
-          <h3>Speaking &amp; Services</h3>
+          <h3 id="tile-speaking">Speaking &amp; Services</h3>
           <p>Talks, workshops, and consulting offers with clear outcomes.</p>
-          <a class="card-link" href="/speaking/">View</a>
+          <a class="card-link" href="/speaking/" aria-labelledby="tile-speaking">View</a>
           <p><a href="/speaking/">Speaking →</a> · <a href="/services/">Services →</a></p>
         </div>
       </div>
@@ -585,7 +618,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2 .7 2 1.8.3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
@@ -666,8 +699,27 @@
     const contactCancel= document.getElementById('contactCancel');
     const quickForm    = document.getElementById('quickForm');
 
-    function openDialog(e){ if (e) e.preventDefault(); if (!dialog.open) dialog.showModal(); }
-    function closeDialog(e){ if (e) e.preventDefault(); if (dialog.open) dialog.close(); }
+    function openDialog(e){
+      if (e) e.preventDefault();
+      if (!dialog.open){
+        window.__lastFocused = document.activeElement;
+        dialog.showModal();
+        document.querySelector('main')?.setAttribute('inert','');
+        document.querySelector('header.site-header')?.setAttribute('inert','');
+        document.querySelector('.mobile-dock')?.setAttribute('inert','');
+        document.getElementById('qName')?.focus();
+      }
+    }
+    function closeDialog(e){
+      if (e) e.preventDefault();
+      if (dialog.open){
+        dialog.close();
+        document.querySelector('main')?.removeAttribute('inert');
+        document.querySelector('header.site-header')?.removeAttribute('inert');
+        document.querySelector('.mobile-dock')?.removeAttribute('inert');
+        (window.__lastFocused || document.getElementById('contactOpen'))?.focus?.();
+      }
+    }
 
     contactOpen?.addEventListener('click', openDialog);
     contactClose?.addEventListener('click', closeDialog);
@@ -747,8 +799,15 @@
         setBarsDark(isDark);
       });
     }
+
+    // Mark current page in desktop nav
+    document.querySelectorAll('nav.primary-nav a').forEach(a=>{
+      try{
+        const here = new URL(a.href, location.origin).pathname.replace(/\/+$/,'') || '/';
+        const path = location.pathname.replace(/\/+$/,'') || '/';
+        if (here === path) a.setAttribute('aria-current','page');
+      }catch(_){}
+    });
   </script>
 </body>
 </html>
-
-
