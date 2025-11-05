@@ -272,44 +272,45 @@
   .btn-primary:hover{box-shadow:var(--shadow-hover)}
 
   /* Gradient divider — uniform & soft across the page */
-.section-divider{
-  position:relative;
-  height:12px;
-  margin:6px 0;
-  border:0;
-  isolation:isolate; /* prevents background tints from bleeding in */
-}
-.section-divider::after{
-  /* Full-bleed neutral backdrop so the line never picks up background tint */
-  content:"";
-  position:absolute;
-  left:50%; top:0; bottom:0;
-  width:100vw;
-  transform:translateX(-50%);
-  background:#ffffff;
-  opacity:.98;
-  z-index:-1;
-}
-.section-divider::before{
-  /* Softer, smoother gradient line */
-  content:"";
-  position:absolute;
-  left:0; right:0; top:50%;
-  transform:translateY(-50%);
-  height:2px; border-radius:999px;
-  background:linear-gradient(
-    90deg,
-    rgba(15,91,102,0) 0%,
-    rgba(15,91,102,.12) 12%,
-    rgba(15,91,102,.20) 50%,
-    rgba(15,91,102,.12) 88%,
-    rgba(15,91,102,0) 100%
-  );
-  box-shadow:
-    0 3px 8px rgba(15,91,102,.10),
-    0 -3px 8px rgba(15,91,102,.10);
-}
-
+  .section-divider{
+    position:relative;
+    height:12px;
+    margin:6px 0;
+    border:0;
+    isolation:isolate; /* prevents background tints from bleeding in */
+  }
+  .section-divider::after{
+    /* Full-bleed neutral backdrop so the line never picks up background tint */
+    content:"";
+    position:absolute;
+    left:50%; top:0; bottom:0;
+    width:100vw;
+    transform:translateX(-50%);
+    background:#ffffff;
+    opacity:.98;
+    z-index:-1;
+  }
+  .section-divider::before{
+    /* Softer, smoother gradient line */
+    content:"";
+    position:absolute;
+    left:0; right:0; top:50%;
+    transform:translateY(-50%);
+    height:2px; border-radius:999px;
+    background:linear-gradient(
+      90deg,
+      rgba(15,91,102,0) 0%,
+      rgba(15,91,102,.12) 12%,
+      rgba(15,91,102,.20) 50%,
+      rgba(15,91,102,.12) 88%,
+      rgba(15,91,102,0) 100%
+    );
+    box-shadow:
+      0 3px 8px rgba(15,91,102,.10),
+      0 -3px 8px rgba(15,91,102,.10);
+  }
+  /* When the divider is the first child inside a band, remove extra top gap */
+  .band > .section-divider { margin-top:0; }
   /* Footer — lock to TEAL always */
   footer{
     background:var(--brand-blue-900) !important;
@@ -521,11 +522,9 @@
       </section>
     </div>
 
-    <!-- Divider between hero and Recent impact (tightened) -->
-    <div class="section-divider" aria-hidden="true"></div>
-
     <!-- Recent impact (forced white background to eliminate teal bar) -->
     <section class="band plain" aria-labelledby="impact">
+      <div class="section-divider" aria-hidden="true"></div>     
       <div class="wrap">
         <h2 id="impact">Recent impact</h2>
         <div class="tiles">
