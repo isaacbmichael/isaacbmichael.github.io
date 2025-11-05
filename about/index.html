@@ -74,6 +74,17 @@
   .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
   .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
+  /* ===== Full-bleed alternating bands ===== */
+  section.band{position:relative; isolation:isolate; padding:28px 0}
+  section.band::before{
+    content:""; position:absolute; inset:0; left:50%; width:100vw; transform:translateX(-50%);
+    z-index:-1;
+  }
+  .band-white::before{ background:#fff }
+  .band-teal::before{ background:var(--page-gradient) }
+
+  h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
+
   /* ===== Header (same as home) ===== */
   header.site-header{
     position:sticky; top:0; z-index:1000;
@@ -141,8 +152,8 @@
   body.drawer-open .mobile-drawer{ transform:none }
   body.drawer-open{ overflow:hidden }
 
-  /* ===== Hero ===== */
-  .hero-section{ background:transparent; color:var(--ink); border-bottom:0; position:relative }
+  /* ===== Hero (white background to divider) ===== */
+  .hero-section{ background:#fff; color:var(--ink); border-bottom:0; position:relative }
   .hero{padding:14px 0 10px}
   .hero-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";row-gap:6px;align-items:start}
   .hero-grid>*{min-width:0}
@@ -151,13 +162,13 @@
   @supports (text-wrap: balance){ .tagline{ text-wrap:balance } }
 
   /* Subtle scroll cue */
-  .scroll-cue{display:flex;justify-content:center;margin-top:10px}
+  .scroll-cue{display:flex;justify-content:center;margin-top:14px}
   .scroll-arrow{
     display:inline-grid;place-items:center;
     width:38px;height:38px;border-radius:999px;
     background:#fff;border:1px solid rgba(15,91,102,.25);
     color:var(--brand-blue-700);
-    box-shadow:var(--shadow);
+    box-shadow:0 8px 18px rgba(17,24,39,.18);
     text-decoration:none;
     animation:floaty 2.4s ease-in-out infinite;
   }
@@ -191,19 +202,6 @@
   .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
   .modal-body{ padding:14px 18px 18px }
 
-  /* ===== Sections ===== */
-  main{padding:10px 0 40px;flex:1 0 auto}
-  section{padding:24px 0}
-  h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
-
-  /* Gradient divider */
-  .section-divider{position:relative;height:12px;margin:10px 0 2px;border:0}
-  .section-divider::before{
-    content:"";position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:2px;border-radius:999px;
-    background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(15,91,102,.22) 10%,rgba(15,91,102,.35) 50%,rgba(15,91,102,.22) 90%,rgba(0,0,0,0) 100%);
-    box-shadow:0 6px 10px rgba(15,91,102,.20),0 -6px 10px rgba(15,91,102,.20);
-  }
-
   /* ===== About-specific layout ===== */
   .profile{
     display:grid; gap:18px;
@@ -211,7 +209,7 @@
     align-items:start;
   }
 
-  /* Large circular photo badge — teal ring + heavy 3D float */
+  /* Large circular photo badge — teal ring + HEAVY 3D float */
   .photo-badge{
     width:clamp(220px, 28vw, 380px);
     aspect-ratio:1 / 1;
@@ -220,36 +218,36 @@
     overflow:hidden;
     background:#fff;
 
-    /* Teal ring */
+    /* Teal ring + dramatic drop shadows */
     box-shadow:
-      0 0 0 12px var(--brand-blue-700),               /* teal border */
-      0 18px 50px rgba(11,63,71,.45),                 /* deep shadow */
-      0 8px 22px rgba(17,24,39,.18),                  /* mid shadow */
-      0 2px 6px rgba(17,24,39,.10);                   /* soft near shadow */
+      0 0 0 12px var(--brand-blue-700),                 /* teal ring */
+      0 34px 88px rgba(11,63,71,.55),                   /* deep, far shadow */
+      0 20px 44px rgba(17,24,39,.28),                   /* mid shadow */
+      0 8px 20px rgba(17,24,39,.18);                    /* near shadow */
     transform:translateZ(0);
   }
   .photo-badge::after{
-    /* big blurred floor shadow to enhance 3D float */
+    /* Big blurred “floor” shadow */
     content:"";
-    position:absolute; left:8%; right:8%; bottom:-18px;
-    height:34px; border-radius:999px;
-    background:rgba(0,0,0,.45);
-    filter:blur(18px);
+    position:absolute; left:6%; right:6%; bottom:-26px;
+    height:48px; border-radius:999px;
+    background:rgba(0,0,0,.55);
+    filter:blur(26px);
     z-index:-1;
   }
   .photo-badge::before{
-    /* subtle inner vignette for depth */
+    /* Subtle inner vignette for depth */
     content:"";
     position:absolute; inset:0;
-    background:radial-gradient(ellipse at 30% 25%, rgba(0,0,0,.0) 55%, rgba(0,0,0,.12) 100%);
+    background:radial-gradient(ellipse at 30% 25%, rgba(0,0,0,.0) 55%, rgba(0,0,0,.14) 100%);
     pointer-events:none;
   }
   .photo-badge img{ width:100%; height:100%; object-fit:cover; display:block }
 
-  /* Bio as regular text (no card) */
-  .bio{ padding-top:6px }
+  /* Bio text */
   .bio p{ margin:0 0 10px }
 
+  /* Cards */
   .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .tile{position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
   .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
@@ -262,6 +260,14 @@
   .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
   .btn-primary{background:var(--brand-blue-700);color:#fff;border-color:transparent;box-shadow:var(--shadow)}
   .btn-primary:hover{box-shadow:var(--shadow-hover)}
+
+  /* Divider under hero */
+  .section-divider{position:relative;height:12px;margin:10px 0 2px;border:0}
+  .section-divider::before{
+    content:"";position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:2px;border-radius:999px;
+    background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(15,91,102,.22) 10%,rgba(15,91,102,.35) 50%,rgba(15,91,102,.22) 90%,rgba(0,0,0,0) 100%);
+    box-shadow:0 6px 10px rgba(15,91,102,.20),0 -6px 10px rgba(15,91,102,.20);
+  }
 
   /* Footer — lock to TEAL always */
   footer{
@@ -432,8 +438,8 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero-section">
+  <!-- Hero (white band) -->
+  <section class="hero-section band band-white">
     <div class="wrap hero">
       <div class="hero-grid">
         <h1 class="h1">About</h1>
@@ -448,26 +454,28 @@
           <span class="chip" data-chip="survey-methodology" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Survey methodology</span>
         </div>
       </div>
-
-      <!-- Scroll cue -->
-      <div class="scroll-cue">
-        <a class="scroll-arrow" href="#main" aria-label="Scroll for more">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5 5.8 9.3l1.4-1.4L12 12.7l4.8-4.8 1.4 1.4z"/></svg>
-        </a>
-      </div>
     </div>
   </section>
 
   <div class="section-divider" aria-hidden="true"></div>
 
-  <main class="wrap" id="main">
-    <!-- Profile: bio text + large circular badge (right) -->
-    <section aria-labelledby="about-bio">
-      <div class="profile">
+  <main id="main">
+    <!-- Executive bio (teal band) -->
+    <section class="band band-teal" aria-labelledby="about-bio">
+      <div class="wrap profile">
         <article class="bio">
           <h2 id="about-bio">Executive bio</h2>
           <p>
             I help organizations turn complex data into decisions they can stand behind. My work spans survey methodology, analytics automation, and program operations in public health and education. The focus is clear documentation, reproducibility, and measurable outcomes.
+          </p>
+          <p>
+            I co-led data weighting for <strong>50 CDC PRAMS sites</strong>, covering ~<strong>81% of U.S. live births</strong>, delivering standardized, audit-ready outputs across jurisdictions. I build <strong>automated statistical analysis programs</strong> that are both robust and user-friendly—reducing time-to-insight while improving QA and documentation.
+          </p>
+          <p>
+            I provide <strong>statistical consulting</strong> to state programs and researchers, including sampling and nonresponse analysis, verification templates, and reproducible reporting. My contributions to <strong>nonresponse-bias research</strong> supported the <strong>Office of Management and Budget (OMB)</strong> in removing the historic response-rate threshold, aligning practice with empirical evidence.
+          </p>
+          <p>
+            Beyond public health, I drastically expanded the <strong>Virtual Math Research Circle</strong>, creating an online platform for high-school math research at national—and now international—scale. This included funding growth, year-round operations, and <strong>MOUs with partners in China</strong> to broaden global participation.
           </p>
           <p>
             Recent projects include modernization of multi-program weighting systems in SAS, audit-ready verification pipelines, and standardized reporting templates used across teams. I also led a named engagement with the Virginia Department of Health’s Comprehensive Harm Reduction program, delivering automated analyses and concise reports for program leadership.
@@ -478,91 +486,107 @@
           <img src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael">
         </figure>
       </div>
-    </section>
 
-    <!-- Recent impact -->
-    <section aria-labelledby="impact">
-      <h2 id="impact">Recent impact</h2>
-      <div class="tiles">
-        <div class="tile">
-          <h3>Independent public-health analytics</h3>
-          <p>
-            Designed a multi-program SAS weighting system with end-to-end QA gates, exception handling, and reproducible outputs; created sampling-verification templates and automated checks (client confidential).
-          </p>
-        </div>
-        <div class="tile">
-          <h3>Virginia Dept. of Health — CHR</h3>
-          <p>
-            Built SAS workflows (Totals3/4) to automate survey processing and visualization; delivered focused 29- and 71-page reports to inform program decisions.
-          </p>
-          <a class="card-link" href="/portfolio/" aria-label="See portfolio items">View</a>
-        </div>
-        <div class="tile">
-          <h3>Virtual Math Research Circle</h3>
-          <p>
-            Expanded LSU’s national program to run year-round; secured funding, modernized hiring and onboarding, and overhauled the public site.
-          </p>
-          <a class="card-link" href="https://www.math.lsu.edu/mathcircle" aria-label="LSU Virtual Math Circle (new tab)" target="_blank" rel="noopener">Visit</a>
+      <!-- Scroll cue moved here -->
+      <div class="wrap">
+        <div class="scroll-cue">
+          <a class="scroll-arrow" href="#impact" aria-label="Scroll to Recent impact">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5 5.8 9.3l1.4-1.4L12 12.7l4.8-4.8 1.4 1.4z"/></svg>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- How I work -->
-    <section aria-labelledby="how">
-      <h2 id="how">How I work</h2>
-      <div class="tiles">
-        <div class="tile">
-          <h3>Rigor and reproducibility</h3>
-          <p>Documented pipelines, versioned artifacts, and reusable templates so results are consistent and defensible.</p>
-        </div>
-        <div class="tile">
-          <h3>Governance by design</h3>
-          <p>Sampling verification, audit logs, accessible documentation, and SLAs mapped to decision-makers and outcomes.</p>
-        </div>
-        <div class="tile">
-          <h3>Confidentiality first</h3>
-          <p>Client identities remain private under NDA. I share methods and impacts, not sensitive data.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Credentials -->
-    <section aria-labelledby="credentials">
-      <h2 id="credentials">Credentials</h2>
-      <div class="tiles">
-        <div class="tile">
-          <h3>Education</h3>
-          <ul>
-            <li>MApSt, Applied Statistics — Louisiana State University (2023)</li>
-            <li>PhD, Mathematics — Baylor University (2019)</li>
-            <li>MS, Mathematics — Baylor University (2015)</li>
-            <li>BS, Mathematics — Tarleton State University (2013)</li>
-          </ul>
-        </div>
-        <div class="tile">
-          <h3>Selected publications</h3>
-          <p>Work spans operator theory and applied analytics, including weighted Rellich-type inequalities and public-health data applications.</p>
-          <a class="card-link" href="/writing/" aria-label="See publications and writing">View</a>
-        </div>
-        <div class="tile">
-          <h3>Tools and platforms</h3>
-          <p>SAS, R, Python, SQL; automation templates; Databricks and reproducible reporting with strong QA gates.</p>
+    <!-- Recent impact (white band) -->
+    <section class="band band-white" aria-labelledby="impact">
+      <div class="wrap">
+        <h2 id="impact">Recent impact</h2>
+        <div class="tiles">
+          <div class="tile">
+            <h3>Independent public-health analytics</h3>
+            <p>
+              Designed a multi-program SAS weighting system with end-to-end QA gates, exception handling, and reproducible outputs; created sampling-verification templates and automated checks (client confidential).
+            </p>
+          </div>
+          <div class="tile">
+            <h3>Virginia Dept. of Health — CHR</h3>
+            <p>
+              Built SAS workflows (Totals3/4) to automate survey processing and visualization; delivered focused 29- and 71-page reports to inform program decisions.
+            </p>
+            <a class="card-link" href="/portfolio/" aria-label="See portfolio items">View</a>
+          </div>
+          <div class="tile">
+            <h3>Virtual Math Research Circle</h3>
+            <p>
+              Expanded LSU’s national program to run year-round; secured funding, modernized hiring and onboarding, and overhauled the public site.
+            </p>
+            <a class="card-link" href="https://www.math.lsu.edu/mathcircle" aria-label="LSU Virtual Math Circle (new tab)" target="_blank" rel="noopener">Visit</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section aria-labelledby="next">
-      <h2 id="next">What would you like to explore?</h2>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="/services/">Work with me</a>
-        <a class="btn" href="/portfolio/">Technical portfolio</a>
-        <a class="btn" href="/cv/">Résumé</a>
-        <a class="btn btn-outline" href="/writing/">Writing</a>
-        <a class="btn btn-outline" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule time</a>
+    <!-- How I work (teal band) -->
+    <section class="band band-teal" aria-labelledby="how">
+      <div class="wrap">
+        <h2 id="how">How I work</h2>
+        <div class="tiles">
+          <div class="tile">
+            <h3>Rigor and reproducibility</h3>
+            <p>Documented pipelines, versioned artifacts, and reusable templates so results are consistent and defensible.</p>
+          </div>
+          <div class="tile">
+            <h3>Governance by design</h3>
+            <p>Sampling verification, audit logs, accessible documentation, and SLAs mapped to decision-makers and outcomes.</p>
+          </div>
+          <div class="tile">
+            <h3>Confidentiality first</h3>
+            <p>Client identities remain private under NDA. I share methods and impacts, not sensitive data.</p>
+          </div>
+        </div>
       </div>
     </section>
 
+    <!-- Credentials (white band) -->
+    <section class="band band-white" aria-labelledby="credentials">
+      <div class="wrap">
+        <h2 id="credentials">Credentials</h2>
+        <div class="tiles">
+          <div class="tile">
+            <h3>Education</h3>
+            <ul>
+              <li>MApSt, Applied Statistics — Louisiana State University (2023)</li>
+              <li>PhD, Mathematics — Baylor University (2019)</li>
+              <li>MS, Mathematics — Baylor University (2015)</li>
+              <li>BS, Mathematics — Tarleton State University (2013)</li>
+            </ul>
+          </div>
+          <div class="tile">
+            <h3>Selected publications</h3>
+            <p>Work spans operator theory and applied analytics, including weighted Rellich-type inequalities and public-health data applications.</p>
+            <a class="card-link" href="/writing/" aria-label="See publications and writing">View</a>
+          </div>
+          <div class="tile">
+            <h3>Tools and platforms</h3>
+            <p>SAS, R, Python, SQL; automation templates; Databricks and reproducible reporting with strong QA gates.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA (teal band) -->
+    <section class="band band-teal" aria-labelledby="next">
+      <div class="wrap">
+        <h2 id="next">What would you like to explore?</h2>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="/services/">Work with me</a>
+          <a class="btn" href="/portfolio/">Technical portfolio</a>
+          <a class="btn" href="/cv/">Résumé</a>
+          <a class="btn btn-outline" href="/writing/">Writing</a>
+          <a class="btn btn-outline" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule time</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Footer (teal, persistent) -->
