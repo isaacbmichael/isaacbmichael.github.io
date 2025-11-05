@@ -80,7 +80,8 @@
   .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   /* ===== Bands (spacing + full-bleed container) ===== */
-  section.band{position:relative; isolation:isolate; padding:clamp(48px,8vw,110px) 0}
+  /* Restore tighter section spacing like before */
+  section.band{position:relative; isolation:isolate; padding:28px 0}
   section.band::before{content:""; position:absolute; inset:0; left:50%; width:100vw; transform:translateX(-50%); z-index:-1}
 
   /* Full-bleed gradient sweeps */
@@ -165,20 +166,23 @@
   body.drawer-open{ overflow:hidden }
 
   /* ===== Hero (now contains Executive bio + photo) ===== */
-  .hero{padding:14px 0 10px}
+  .hero{padding:6px 0 0} /* pull content up a bit */
+  .hero-section.band{ padding-top:22px; padding-bottom:18px } /* tighter hero top/bottom to match the old position */
+
   .hero-grid{
     display:grid;
     grid-template-columns:minmax(0,1fr) auto;
     grid-template-areas:"title title" "bio photo";
-    gap:18px 26px; align-items:start;
+    gap: clamp(20px,2.2vw,24px) 26px; /* a little more space between title and bio */
+    align-items:start;
   }
   .hero-grid>*{min-width:0}
   .h1{grid-area:title;margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink)}
   .bio{grid-area:bio}
-  .photo-badge{grid-area:photo}
+  .photo-badge{grid-area:photo; align-self:start; margin-top:-10px} /* raise photo to align with bio */
 
-  /* Scroll cue */
-  .scroll-cue{display:flex;justify-content:center;margin-top:14px}
+  /* Scroll cue — bring it closer */
+  .scroll-cue{display:flex;justify-content:center;margin-top:6px}
   .scroll-arrow{
     display:inline-grid;place-items:center;
     width:38px;height:38px;border-radius:999px;
@@ -190,8 +194,6 @@
   }
   .scroll-arrow:hover{ text-decoration:none; transform:translateY(-2px) }
   @keyframes floaty{ 0%,100%{transform:translateY(0)}50%{transform:translateY(4px)} }
-
-  /* (Chips removed) */
 
   /* Modal polish (contact only now) */
   dialog#contactDialog{
@@ -267,8 +269,8 @@
   .btn-primary{background:var(--brand-blue-700);color:#fff;border-color:transparent;box-shadow:var(--shadow)}
   .btn-primary:hover{box-shadow:var(--shadow-hover)}
 
-  /* Gradient divider */
-  .section-divider{position:relative;height:12px;margin:10px 0 2px;border:0}
+  /* Gradient divider — tighter before/after spacing */
+  .section-divider{position:relative;height:12px;margin:6px 0;border:0}
   .section-divider::before{
     content:"";position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:2px;border-radius:999px;
     background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(15,91,102,.22) 10%,rgba(15,91,102,.35) 50%,rgba(15,91,102,.22) 90%,rgba(0,0,0,0) 100%);
@@ -322,7 +324,7 @@
     .mobile-dock{ display:block }
     footer .social{ display:none !important }
     .hero-grid{ grid-template-columns:1fr; grid-template-areas:"title" "photo" "bio" }
-    .photo-badge{ justify-self:center }
+    .photo-badge{ justify-self:center; margin-top:0 } /* reset raise on small screens */
   }
   @media (max-width:520px){ .h1{ font-size:clamp(26px,8vw,40px) } }
 
@@ -483,7 +485,7 @@
       </section>
     </div>
 
-    <!-- Divider between hero and Recent impact -->
+    <!-- Divider between hero and Recent impact (moved up by tightening hero padding) -->
     <div class="section-divider" aria-hidden="true"></div>
 
     <!-- Recent impact -->
@@ -598,7 +600,7 @@
           <span class="sr-only">Email</span>
         </a>
         <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Schedule with Calendly">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
           <span class="sr-only">Calendly</span>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
@@ -618,7 +620,7 @@
   <div class="mobile-dock" role="region" aria-label="Quick contact">
     <div class="dock">
       <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0  0 0 2-2V6a2 2 0  0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
         <span class="sr-only">Email</span>
       </a>
       <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Calendly">
@@ -741,7 +743,7 @@
         const here=new URL(a.href, location.origin).pathname.replace(/\/+$/,'')||'/';
         const path=location.pathname.replace(/\/+$/,'')||'/';
         if(here===path) a.setAttribute('aria-current','page');
-      }catch(_){}
+      }catch(_){ }
     });
   </script>
 </body>
