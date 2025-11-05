@@ -80,9 +80,11 @@
   .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   /* ===== Bands (spacing + full-bleed container) ===== */
-  /* Restore tighter section spacing like before */
+  /* Tighter section spacing */
   section.band{position:relative; isolation:isolate; padding:28px 0}
   section.band::before{content:""; position:absolute; inset:0; left:50%; width:100vw; transform:translateX(-50%); z-index:-1}
+  /* Utility: force a pure-white full-bleed background for a band */
+  section.band.plain::before{ background:#fff }
 
   /* Full-bleed gradient sweeps */
   .sweep-top, .sweep-bottom{ position:relative; isolation:isolate }
@@ -165,7 +167,7 @@
   body.drawer-open .mobile-drawer{ transform:none }
   body.drawer-open{ overflow:hidden }
 
-  /* ===== Hero (now contains Executive bio + photo) ===== */
+  /* ===== Hero (Executive bio + photo) ===== */
   .hero{padding:6px 0 0} /* pull content up a bit */
   .hero-section.band{ padding-top:22px; padding-bottom:18px } /* tighter hero top/bottom to match the old position */
 
@@ -468,6 +470,10 @@
               <p>
                 Beyond public health, I expanded LSU’s Virtual Math Research Circle into a durable online program with international partnerships—including a Zhejiang MOU—supporting year-round high-school research. I’m most effective when partnering with leaders and analysts to translate complex methods into audit-ready, scalable services that raise confidence in decisions.
               </p>
+              <!-- Added concise accomplishments paragraph -->
+              <p>
+                Along the way I advised PRAMS sites and CDC teams on study design and analysis, reviewed and co-authored statistical papers, and turned manual workflows into clear, user-friendly programs. My work to measure and explain nonresponse bias contributed to the Office of Management and Budget’s decision to lower the minimum response-rate requirement, removing a barrier to timely reporting. For a confidential public-health partner, I built a three-program weighting system and an automated reporting engine in SAS that scaled quality checks and cut turnaround time.
+              </p>
             </article>
 
             <figure class="photo-badge" aria-label="Portrait">
@@ -485,11 +491,11 @@
       </section>
     </div>
 
-    <!-- Divider between hero and Recent impact (moved up by tightening hero padding) -->
+    <!-- Divider between hero and Recent impact (tightened) -->
     <div class="section-divider" aria-hidden="true"></div>
 
-    <!-- Recent impact -->
-    <section class="band" aria-labelledby="impact">
+    <!-- Recent impact (forced white background to eliminate teal bar) -->
+    <section class="band plain" aria-labelledby="impact">
       <div class="wrap">
         <h2 id="impact">Recent impact</h2>
         <div class="tiles">
@@ -736,6 +742,19 @@
     }else{
       window.addEventListener('scroll', ()=> setBarsDark(window.scrollY<60));
     }
+
+    // Smooth glide on the scroll arrow (explicit, in addition to CSS smooth scrolling)
+    document.querySelectorAll('a.scroll-arrow').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const href = a.getAttribute('href') || '';
+        if(href.startsWith('#')){
+          e.preventDefault();
+          const id = href.slice(1);
+          const target = document.getElementById(id);
+          target?.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+      });
+    });
 
     // Mark current page in nav
     document.querySelectorAll('nav.primary-nav a').forEach(a=>{
