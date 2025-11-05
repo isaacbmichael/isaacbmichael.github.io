@@ -283,11 +283,11 @@
     /* Full-bleed neutral backdrop so the line never picks up background tint */
     content:"";
     position:absolute;
-    left:50%; top:0; bottom:0;
+    left:50%; top:-10px; bottom:-10px;  /* extend backdrop to catch blur */
     width:100vw;
     transform:translateX(-50%);
     background:#ffffff;
-    opacity:.98;
+    opacity:1;
     z-index:-1;
   }
   .section-divider::before{
