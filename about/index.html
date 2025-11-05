@@ -271,13 +271,44 @@
   .btn-primary{background:var(--brand-blue-700);color:#fff;border-color:transparent;box-shadow:var(--shadow)}
   .btn-primary:hover{box-shadow:var(--shadow-hover)}
 
-  /* Gradient divider — tighter before/after spacing */
-  .section-divider{position:relative;height:12px;margin:6px 0;border:0}
-  .section-divider::before{
-    content:"";position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:2px;border-radius:999px;
-    background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(15,91,102,.22) 10%,rgba(15,91,102,.35) 50%,rgba(15,91,102,.22) 90%,rgba(0,0,0,0) 100%);
-    box-shadow:0 6px 10px rgba(15,91,102,.20),0 -6px 10px rgba(15,91,102,.20);
-  }
+  /* Gradient divider — uniform & soft across the page */
+.section-divider{
+  position:relative;
+  height:12px;
+  margin:6px 0;
+  border:0;
+  isolation:isolate; /* prevents background tints from bleeding in */
+}
+.section-divider::after{
+  /* Full-bleed neutral backdrop so the line never picks up background tint */
+  content:"";
+  position:absolute;
+  left:50%; top:0; bottom:0;
+  width:100vw;
+  transform:translateX(-50%);
+  background:#ffffff;
+  opacity:.98;
+  z-index:-1;
+}
+.section-divider::before{
+  /* Softer, smoother gradient line */
+  content:"";
+  position:absolute;
+  left:0; right:0; top:50%;
+  transform:translateY(-50%);
+  height:2px; border-radius:999px;
+  background:linear-gradient(
+    90deg,
+    rgba(15,91,102,0) 0%,
+    rgba(15,91,102,.12) 12%,
+    rgba(15,91,102,.20) 50%,
+    rgba(15,91,102,.12) 88%,
+    rgba(15,91,102,0) 100%
+  );
+  box-shadow:
+    0 3px 8px rgba(15,91,102,.10),
+    0 -3px 8px rgba(15,91,102,.10);
+}
 
   /* Footer — lock to TEAL always */
   footer{
