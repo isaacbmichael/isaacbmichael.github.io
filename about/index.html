@@ -126,7 +126,7 @@
     .avatar-face.back{ transform: rotateY(180deg) }
     .avatar-face img{ width: 100%; height: 100%; object-fit: contain; padding: 8px; background: transparent }
     .avatar-face.back img{ transform: scaleX(-1) }
-    @media (hover:hover) and (pointer:fine){
+    @media (hover:hover) and (pointer:fine)){
       .brand-link--wide:hover .avatar-inner{ --ry:.5turn; transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px) }
     }
     @media (max-width:960px){ :root{ --avatar-size:72px } }
@@ -232,6 +232,7 @@
       border-radius: 50%;
       perspective: 1100px;
       cursor: pointer;
+      touch-action: manipulation;
     }
 
     /* Shadow under the badge (can stay “on the ground”) */
@@ -264,7 +265,8 @@
       --rx: 0deg;
       --ry: 0deg;
       --flip: 0turn;
-      transform: rotateX(var(--rx)) rotateY(calc(var(--ry) + var(--flip)));
+      /* split rotations for cross-browser reliability */
+      transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateY(var(--flip));
     }
 
     /* subtle top vignette that flips with the badge */
@@ -288,6 +290,7 @@
       border-radius: 50%;
       overflow: hidden;
       backface-visibility: hidden;
+      -webkit-backface-visibility: hidden; /* Safari */
       display: grid;
       place-items: center;
     }
@@ -813,7 +816,7 @@
     // Contact modal
     const dialog = document.getElementById('contactDialog');
     const contactOpen  = document.getElementById('contactOpen');
-    const contactClose = document.getElementById('contactClose');
+    aconst contactClose = document.getElementById('contactClose');
     const contactCancel = document.getElementById('contactCancel');
     const quickForm    = document.getElementById('quickForm');
     function openDialog(e){
