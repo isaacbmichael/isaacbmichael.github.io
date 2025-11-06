@@ -127,20 +127,22 @@
     .avatar-face img{ width: 100%; height: 100%; object-fit: contain; padding: 8px; background: transparent }
     .avatar-face.back img{ transform: scaleX(-1) }
     @media (hover:hover) and (pointer:fine){
-     .brand-link--wide:hover .avatar-inner{
-       --ry:.5turn;
-       transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
-     }
-   }
-   @media (hover:hover) and (pointer:fine){
-     .photo-badge:hover .tilt{
-       --rx: -3deg;
-       --ry:  3deg;
-     }
-   }
-   @media (max-width:960px){
-     :root{ --avatar-size:72px }
-   }
+      .brand-link--wide:hover .avatar-inner{
+        --ry:.5turn;
+        transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
+      }
+    }
+
+    /* Hover tilt for the large photo badge */
+    @media (hover:hover) and (pointer:fine){
+      .photo-badge:hover .tilt{
+        --rx: -3deg;
+        --ry:  3deg;
+      }
+    }
+    @media (max-width:960px){
+      :root{ --avatar-size:72px }
+    }
     
     /* Desktop nav */
     nav.primary-nav{ display: flex }
@@ -223,7 +225,7 @@
         rgba(15,91,102,var(--divider-center-alpha)) 50%,
         rgba(15,91,102,var(--divider-edge-alpha)) 100%
       );
-   }
+    }
     .modal-title{ margin: 0; font-weight: 900; font-size: 1.05rem; color: #0f172a }
     .modal-close{
       width: 38px; height: 38px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; color: #0f172a;
@@ -261,6 +263,7 @@
       position: absolute; inset: 0;
       border-radius: 50%;
       overflow: hidden;
+      -webkit-transform-style: preserve-3d;
       transform-style: preserve-3d;
       will-change: transform, filter;
       transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
@@ -280,6 +283,9 @@
       transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateY(var(--flip));
     }
 
+    /* Flip state via class (most reliable everywhere) */
+    .photo-badge.is-flipped .tilt { --flip: 180deg; }
+
     /* subtle top vignette that flips with the badge */
     .photo-badge .tilt::before{
       content: "";
@@ -292,6 +298,7 @@
     /* coin = faces stack (no transform here; transform is on .tilt) */
     .photo-badge .coin{
       position: absolute; inset: 0;
+      -webkit-transform-style: preserve-3d;
       transform-style: preserve-3d;
       z-index: 1;
     }
@@ -368,29 +375,29 @@
       height:4px;                 /* exact total height */
       margin: var(--divider-gap) 0; /* equal margins */
       border:0;
-   }
-   .section-divider::after{
-     content:"";
-     position:absolute;
-     inset:0;
-     background: var(--page-bg);
-     z-index:0;
-   }
-   .section-divider::before{
-     content:"";
-     position:absolute;
-     left:0; right:0; top:50%;
-     transform:translateY(-50%);
-     height:1px;                 /* exact line thickness */
-     border-radius:999px;
-     background:linear-gradient(
-       90deg,
-       rgba(15,91,102,var(--divider-edge-alpha)) 0%,
-       rgba(15,91,102,var(--divider-center-alpha)) 50%,
-       rgba(15,91,102,var(--divider-edge-alpha)) 100%
-     );
-     z-index:1;
-   }
+    }
+    .section-divider::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: var(--page-bg);
+      z-index:0;
+    }
+    .section-divider::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:50%;
+      transform:translateY(-50%);
+      height:1px;                 /* exact line thickness */
+      border-radius:999px;
+      background:linear-gradient(
+        90deg,
+        rgba(15,91,102,var(--divider-edge-alpha)) 0%,
+        rgba(15,91,102,var(--divider-center-alpha)) 50%,
+        rgba(15,91,102,var(--divider-edge-alpha)) 100%
+      );
+      z-index:1;
+    }
 
     /* Footer — teal always */
     footer{
@@ -479,7 +486,7 @@
   <!-- Inert polyfill -->
   <script>
     if (!('inert' in HTMLElement.prototype)) {
-      const s = document.createElement('script');
+      var s = document.createElement('script');
       s.src = 'https://unpkg.com/wicg-inert@3.1.2/dist/inert.min.js';
       s.defer = true;
       document.head.appendChild(s);
@@ -743,11 +750,11 @@
           <span class="sr-only">Email</span>
         </a>
         <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Schedule with Calendly">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0  0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0  0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0  0 0 1 1h12a1 1 0  0 0 1-1V8Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0  0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0  0 0 1 1h12a1 1 0  0 0 1-1V8Z"/></svg>
           <span class="sr-only">Calendly</span>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0  4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
@@ -771,7 +778,7 @@
         <span class="sr-only">Calendly</span>
       </a>
       <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0  4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
         <span class="sr-only">LinkedIn</span>
       </a>
       <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
@@ -813,170 +820,204 @@
   </dialog>
 
   <script>
-    // Current year
-    document.getElementById('y')?.textContent = new Date().getFullYear?.() ?? '';
+    /* ========== Util helpers (no optional chaining) ========== */
+    function $(sel){ return document.querySelector(sel); }
+    function $all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+    // Current year (no optional chaining / nullish coalescing)
+    (function(){
+      var yEl = document.getElementById('y');
+      if (yEl) yEl.textContent = new Date().getFullYear();
+    })();
 
     // Preload logos
-    const logoFront = document.getElementById('logoFront');
-    const logoBack  = document.getElementById('logoBack');
-    function preload(src){ return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
-    if (logoFront?.dataset?.logoLight && logoFront?.dataset?.logoDark){
+    var logoFront = document.getElementById('logoFront');
+    var logoBack  = document.getElementById('logoBack');
+    function preload(src){
+      return new Promise(function(res){
+        var i = new Image();
+        i.onload = res; i.onerror = res; i.src = src;
+      });
+    }
+    if (logoFront && logoFront.dataset && logoFront.dataset.logoLight && logoFront.dataset.logoDark){
       Promise.all([ logoFront.dataset.logoLight, logoFront.dataset.logoDark ].map(preload));
     }
 
     // Contact modal
-    const dialog = document.getElementById('contactDialog');
-    const contactOpen  = document.getElementById('contactOpen');
-    const contactClose = document.getElementById('contactClose');
-    const contactCancel = document.getElementById('contactCancel');
-    const quickForm    = document.getElementById('quickForm');
+    var dialog = document.getElementById('contactDialog');
+    var contactOpen  = document.getElementById('contactOpen');
+    var contactClose = document.getElementById('contactClose');
+    var contactCancel = document.getElementById('contactCancel');
+    var quickForm    = document.getElementById('quickForm');
+
     function openDialog(e){
       if(e) e.preventDefault();
-      if(!dialog.open){
+      if(dialog && !dialog.open){
         window.__lastFocused = document.activeElement;
-        dialog.showModal();
-        document.querySelector('main')?.setAttribute('inert','');
-        document.querySelector('header.site-header')?.setAttribute('inert','');
-        document.querySelector('.mobile-dock')?.setAttribute('inert','');
-        document.getElementById('qName')?.focus();
+        if (typeof dialog.showModal === 'function') dialog.showModal();
+        var mainEl = $('main');
+        var headerEl = $('header.site-header');
+        var dockEl = $('.mobile-dock');
+        if (mainEl) mainEl.setAttribute('inert','');
+        if (headerEl) headerEl.setAttribute('inert','');
+        if (dockEl) dockEl.setAttribute('inert','');
+        var nameEl = document.getElementById('qName');
+        if (nameEl) nameEl.focus();
       }
     }
     function closeDialog(e){
       if(e) e.preventDefault();
-      if(dialog.open){
+      if(dialog && dialog.open){
         dialog.close();
-        document.querySelector('main')?.removeAttribute('inert');
-        document.querySelector('header.site-header')?.removeAttribute('inert');
-        document.querySelector('.mobile-dock')?.removeAttribute('inert');
-        (window.__lastFocused || document.getElementById('contactOpen'))?.focus?.();
+        var mainEl = $('main');
+        var headerEl = $('header.site-header');
+        var dockEl = $('.mobile-dock');
+        if (mainEl) mainEl.removeAttribute('inert');
+        if (headerEl) headerEl.removeAttribute('inert');
+        if (dockEl) dockEl.removeAttribute('inert');
+        var backTo = window.__lastFocused || document.getElementById('contactOpen');
+        if (backTo && backTo.focus) backTo.focus();
       }
     }
-    contactOpen?.addEventListener('click', (e)=>{ if(typeof dialog?.showModal==='function'){ e.preventDefault(); openDialog(e) } });
-    contactClose?.addEventListener('click', closeDialog);
-    contactCancel?.addEventListener('click', closeDialog);
-    dialog?.addEventListener('click', (e)=>{ if(e.target===dialog) closeDialog(); });
-    dialog?.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeDialog(); });
-    quickForm?.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const name=(qName.value||'').trim();
-      const email=(qEmail.value||'').trim();
-      const msg=(qMsg.value||'').trim();
-      const subject=encodeURIComponent('Website inquiry');
-      const body=encodeURIComponent(`${msg}\n\n— ${name}${email?' <'+email+'>':''}`);
-      window.location.href=`mailto:isaac.b.michael@gmail.com?subject=${subject}&body=${body}`;
-      closeDialog();
-    });
+    if (contactOpen)  contactOpen.addEventListener('click', function(e){ if(dialog && typeof dialog.showModal==='function'){ e.preventDefault(); openDialog(e); } });
+    if (contactClose) contactClose.addEventListener('click', closeDialog);
+    if (contactCancel) contactCancel.addEventListener('click', closeDialog);
+    if (dialog) {
+      dialog.addEventListener('click', function(e){ if(e.target===dialog) closeDialog(); });
+      dialog.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDialog(); });
+    }
+    if (quickForm){
+      quickForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        var name  = (qName.value||'').trim();
+        var email = (qEmail.value||'').trim();
+        var msg   = (qMsg.value||'').trim();
+        var subject = encodeURIComponent('Website inquiry');
+        var body = encodeURIComponent(msg + "\n\n— " + name + (email ? ' <'+email+'>' : ''));
+        window.location.href = 'mailto:isaac.b.michael@gmail.com?subject=' + subject + '&body=' + body;
+        closeDialog();
+      });
+    }
 
     // Mobile drawer
-    const drawer    = document.getElementById('mobileDrawer');
-    const backdrop  = document.getElementById('drawerBackdrop');
-    const menuBtn   = document.getElementById('menuToggle');
-    const menuClose = document.getElementById('menuClose');
+    var drawer    = document.getElementById('mobileDrawer');
+    var backdrop  = document.getElementById('drawerBackdrop');
+    var menuBtn   = document.getElementById('menuToggle');
+    var menuClose = document.getElementById('menuClose');
+
     function setAppInert(on){
-      ['main','header.site-header','.hero-section','footer','.mobile-dock'].forEach(sel=>{
-        const el=document.querySelector(sel);
+      ['main','header.site-header','.hero-section','footer','.mobile-dock'].forEach(function(sel){
+        var el = $(sel);
         if(!el) return;
-        on?el.setAttribute('inert',''):el.removeAttribute('inert');
+        if(on) el.setAttribute('inert',''); else el.removeAttribute('inert');
       });
     }
     function trapFocusWithin(el){
-      if(el.__trapBound) return;
-      el.__trapBound=true;
-      el.addEventListener('keydown', (e)=>{
+      if (!el || el.__trapBound) return;
+      el.__trapBound = true;
+      el.addEventListener('keydown', function(e){
         if(e.key!=='Tab') return;
-        const f=el.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
+        var f = el.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
         if(!f.length) return;
-        const first=f[0], last=f[f.length-1];
+        var first=f[0], last=f[f.length-1];
         if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
         else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
       });
     }
     function openDrawer(e){
       if(e) e.preventDefault();
-      backdrop.hidden=false;
+      if (backdrop) backdrop.hidden=false;
       document.body.classList.add('drawer-open');
-      drawer.setAttribute('aria-hidden','false');
-      menuBtn?.setAttribute('aria-expanded','true');
+      if (drawer) drawer.setAttribute('aria-hidden','false');
+      if (menuBtn) menuBtn.setAttribute('aria-expanded','true');
       setAppInert(true);
-      drawer.querySelector('a')?.focus();
+      if (drawer) { var firstLink = drawer.querySelector('a'); if (firstLink) firstLink.focus(); }
       trapFocusWithin(drawer);
     }
     function closeDrawer(e){
       if(e) e.preventDefault();
       document.body.classList.remove('drawer-open');
-      drawer.setAttribute('aria-hidden','true');
-      menuBtn?.setAttribute('aria-expanded','false');
-      setTimeout(()=>{ backdrop.hidden=true },220);
+      if (drawer) drawer.setAttribute('aria-hidden','true');
+      if (menuBtn) menuBtn.setAttribute('aria-expanded','false');
+      setTimeout(function(){ if (backdrop) backdrop.hidden=true; }, 220);
       setAppInert(false);
-      menuBtn?.focus();
+      if (menuBtn && menuBtn.focus) menuBtn.focus();
     }
-    menuBtn?.addEventListener('click', openDrawer);
-    menuClose?.addEventListener('click', closeDrawer);
-    backdrop?.addEventListener('click', closeDrawer);
-    drawer?.querySelectorAll('a').forEach(a=>a.addEventListener('click', () => closeDrawer()));
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && document.body.classList.contains('drawer-open')) closeDrawer(); });
+    if (menuBtn)   menuBtn.addEventListener('click', openDrawer);
+    if (menuClose) menuClose.addEventListener('click', closeDrawer);
+    if (backdrop)  backdrop.addEventListener('click', closeDrawer);
+    if (drawer) $all('#mobileDrawer a').forEach(function(a){ a.addEventListener('click', function(){ closeDrawer(); }); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && document.body.classList.contains('drawer-open')) closeDrawer(); });
 
     // Brand link spin → home
-    const brandLink=document.getElementById('brandLink');
-    brandLink?.addEventListener('click',(e)=>{
-      e.preventDefault();
-      const inner=brandLink.querySelector('.avatar-inner');
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){ window.location.href='/'; return; }
-      inner.style.setProperty('--spin','1turn');
-      const go=()=>{ window.location.href='/' };
-      let done=false;
-      inner.addEventListener('transitionend', (evt)=>{ if(!done && evt.propertyName==='transform'){ done=true; go(); } });
-      setTimeout(go, 800);
-    });
+    var brandLink = document.getElementById('brandLink');
+    if (brandLink){
+      brandLink.addEventListener('click', function(e){
+        e.preventDefault();
+        var inner = brandLink.querySelector('.avatar-inner');
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ window.location.href='/'; return; }
+        if (inner) {
+          inner.style.setProperty('--spin','1turn');
+          var go = function(){ window.location.href='/'; };
+          var done = false;
+          inner.addEventListener('transitionend', function(evt){ if(!done && evt.propertyName==='transform'){ done=true; go(); } });
+          setTimeout(go, 800);
+        } else {
+          window.location.href='/';
+        }
+      });
+    }
 
     // Bars: dark while hero in view
-    const hero=document.querySelector('.hero-section');
+    var hero = document.querySelector('.hero-section');
     function setBarsDark(isDark){
       document.body.classList.toggle('bars-dark', isDark);
-      const src=isDark?logoFront.dataset.logoDark:logoFront.dataset.logoLight;
-      if (logoFront && logoBack){ logoFront.src=src; logoBack.src=src; }
+      if (logoFront && logoBack && logoFront.dataset){
+        var src = isDark ? logoFront.dataset.logoDark : logoFront.dataset.logoLight;
+        if (src){ logoFront.src = src; logoBack.src = src; }
+      }
     }
     setBarsDark(true);
     if('IntersectionObserver' in window && hero){
-      const io=new IntersectionObserver(entries=>{
-        entries.forEach(entry=> setBarsDark(entry.isIntersecting))
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){ setBarsDark(entry.isIntersecting); });
       },{threshold:0});
       io.observe(hero);
     }else{
-      window.addEventListener('scroll', ()=> setBarsDark(window.scrollY<60));
+      window.addEventListener('scroll', function(){ setBarsDark(window.scrollY<60); });
     }
 
     // Smooth glide on the scroll arrow
-    document.querySelectorAll('a.scroll-arrow').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        const href = a.getAttribute('href') || '';
-        if(href.startsWith('#')){
+    $all('a.scroll-arrow').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var href = a.getAttribute('href') || '';
+        if(href.indexOf('#') === 0){
           e.preventDefault();
-          const id = href.slice(1);
-          const target = document.getElementById(id);
-          target?.scrollIntoView({ behavior:'smooth', block:'start' });
+          var id = href.slice(1);
+          var target = document.getElementById(id);
+          if (target && target.scrollIntoView) target.scrollIntoView({ behavior:'smooth', block:'start' });
         }
       });
     });
 
     // Mark current page in nav
-    document.querySelectorAll('nav.primary-nav a').forEach(a=>{
+    $all('nav.primary-nav a').forEach(function(a){
       try{
-        const here=new URL(a.href, location.origin).pathname.replace(/\/+$/,'')||'/';
-        const path=location.pathname.replace(/\/+$/,'')||'/';
+        var here=new URL(a.href, location.origin).pathname.replace(/\/+$/,'')||'/';
+        var path=location.pathname.replace(/\/+$/,'')||'/';
         if(here===path) a.setAttribute('aria-current','page');
       }catch(_){ }
     });
 
     // === PHOTO BADGE: 3D tilt + flip + rotating quotes (ring moves with photo) ===
     (function(){
-      const badge = document.getElementById('photoBadge');
-      const tilt  = document.getElementById('tiltWrap');
-      const back  = document.getElementById('quoteFace');
+      var badge = document.getElementById('photoBadge');
+      var tilt  = document.getElementById('tiltWrap');
+      var back  = document.getElementById('quoteFace');
       if(!badge || !tilt || !back) return;
 
       // Quotes — first is Hardy
-      const quotes = [
+      var quotes = [
         { t: "A mathematician, like a painter or a poet, is a maker of patterns.", a: "G. H. Hardy" },
         { t: "Mathematics is the art of giving the same name to different things.", a: "Henri Poincaré" },
         { t: "All models are wrong, but some are useful.", a: "George E. P. Box" },
@@ -989,9 +1030,9 @@
         { t: "We can only see a short distance ahead, but we can see plenty there that needs to be done.", a: "Alan Turing" }
       ];
 
-      let showingBack = false;
-      let idx = 0;
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var showingBack = false;
+      var idx = 0;
+      var reduceMotion = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
       function setTilt(rxDeg, ryDeg){
         tilt.style.setProperty('--rx', rxDeg + 'deg');
@@ -999,34 +1040,31 @@
       }
       function onPointerMove(e){
         if(e.pointerType && e.pointerType !== 'mouse') return; // avoid jitter on touch
-        const r = badge.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width;
-        const py = (e.clientY - r.top)  / r.height;
-        const TILT = 10; // degrees
-        const rx = (0.5 - py) * TILT;
-        const ry = (px - 0.5) * TILT;
+        var r = badge.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;
+        var py = (e.clientY - r.top)  / r.height;
+        var TILT = 10; // degrees
+        var rx = (0.5 - py) * TILT;
+        var ry = (px - 0.5) * TILT;
         setTilt(rx, ry);
       }
       function onLeave(){ setTilt(0,0); }
 
       function injectQuote(){
-        const q = quotes[idx % quotes.length];
-        back.innerHTML = `<div class="quote">${q.t}</div><div class="byline">— ${q.a}</div>`;
+        var q = quotes[idx % quotes.length];
+        back.innerHTML = '<div class="quote">'+q.t+'</div><div class="byline">— '+q.a+'</div>';
         idx++;
       }
 
       function flip(){
-        if(showingBack){
-          // Back -> Front
-          tilt.style.setProperty('--flip', '0turn');
-          badge.setAttribute('aria-pressed','false');
-          showingBack = false;
-        }else{
-          // Front -> Back (next quote)
+        showingBack = !showingBack;
+        if (showingBack){
           injectQuote();
-          tilt.style.setProperty('--flip', '.5turn');
+          badge.classList.add('is-flipped');
           badge.setAttribute('aria-pressed','true');
-          showingBack = true;
+        }else{
+          badge.classList.remove('is-flipped');
+          badge.setAttribute('aria-pressed','false');
         }
       }
 
@@ -1034,7 +1072,7 @@
       badge.addEventListener('pointermove', onPointerMove);
       badge.addEventListener('pointerleave', onLeave);
       badge.addEventListener('click', flip);
-      badge.addEventListener('keydown', (e)=>{
+      badge.addEventListener('keydown', function(e){
         if(e.key === 'Enter' || e.key === ' '){
           e.preventDefault();
           flip();
