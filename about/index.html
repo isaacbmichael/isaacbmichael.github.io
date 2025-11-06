@@ -11,7 +11,8 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://isaacbmichael.com/about/">
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+  <!-- Light theme color now matches Home/page background -->
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F7F8">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B3F47">
   <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
   <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
@@ -143,7 +144,7 @@
     @media (max-width:960px){
       :root{ --avatar-size:72px }
     }
-    
+
     /* Desktop nav */
     nav.primary-nav{ display: flex }
     nav.primary-nav ul{ list-style: none; display: flex; gap: 18px; margin: 0; padding: 0 }
@@ -203,37 +204,57 @@
     .scroll-arrow:hover{ text-decoration: none; transform: translateY(-2px) }
     @keyframes floaty{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
 
-    /* Modal */
+    /* ===== CONTACT MODAL (match Home exactly) ===== */
     dialog#contactDialog{
-      width: min(760px,94vw); border: 0; padding: 0; border-radius: 20px; background: #fff;
-      box-shadow: 0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
-      animation: modal-in .22s cubic-bezier(.2,.8,.2,1)
+      width:min(840px, 94vw);
+      border:0;
+      padding:0;
+      border-radius:20px;
+      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+      background:#fff;
+      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
     }
-    dialog#contactDialog::backdrop{ background: rgba(17,24,39,.55); backdrop-filter: saturate(120%) blur(3px); animation: backdrop-in .22s ease }
+    dialog#contactDialog::backdrop{
+      background:rgba(17,24,39,.55);
+      backdrop-filter:saturate(120%) blur(3px);
+      animation:backdrop-in .22s ease;
+    }
     @keyframes modal-in{ from{transform:translateY(14px) scale(.985); opacity:0} to{transform:none; opacity:1} }
     @keyframes backdrop-in{ from{opacity:0} to{opacity:1} }
-    .modal-header{ display: flex; align-items: center; justify-content: space-between; padding: 18px 18px 6px; border-bottom: 0; position: relative }
-    .modal-header::after{
-      content:"";
-      position:absolute;
-      left:18px; right:18px; bottom:0;
-      height:1px;
-      border-radius:999px;
-      background: linear-gradient(
-        90deg,
-        rgba(15,91,102,var(--divider-edge-alpha)) 0%,
-        rgba(15,91,102,var(--divider-center-alpha)) 50%,
-        rgba(15,91,102,var(--divider-edge-alpha)) 100%
-      );
+
+    .modal-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 18px 6px;
+      border-bottom:1px solid #e5e7eb;   /* same as Home */
+      position:static;                   /* reset to default */
     }
-    .modal-title{ margin: 0; font-weight: 900; font-size: 1.05rem; color: #0f172a }
+    /* remove the gradient rule line that About had */
+    .modal-header::after{ content:none; }
+
+    .modal-title{ margin:0; font-weight:900; font-size:1.15rem; color:#0f172a }
+
     .modal-close{
-      width: 38px; height: 38px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; color: #0f172a;
-      cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-shadow: var(--shadow);
-      transition: transform .16s ease, box-shadow .16s ease, background .16s ease
+      width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+      box-shadow:var(--shadow);
+      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
     }
-    .modal-close:hover{ transform: translateY(-2px); box-shadow: var(--shadow-hover) }
-    .modal-body{ padding: 14px 18px 18px }
+    .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+
+    .modal-body{ padding:14px 18px 18px }
+
+    .contact-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+    .contact-actions .btn{ border-radius:999px }              /* pill buttons like Home */
+    .contact-actions .btn-primary{ filter:saturate(115%) }    /* same pop as Home */
+
+    /* The shared divider element used on Home */
+    .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
+
+    /* Ensure the “3D” button shadow parity inside the modal (Home behavior) */
+    .contact-actions .btn,
+    .form-actions .btn{ box-shadow:var(--shadow) }
+    .contact-actions .btn:hover,
+    .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
 
     /* ===== About-specific visuals: interactive photo badge ===== */
 
@@ -833,11 +854,11 @@
     </div>
     <div class="modal-body">
       <div class="contact-actions" aria-label="Quick links">
-        <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule time on Calendly</a>
-        <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule time on Calendly</a>
+        <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
-      <div class="divider" aria-hidden="true" style="height:1px;background:#e5e7eb;margin:8px 0 14px"></div>
+      <div class="divider" aria-hidden="true"></div>
       <form id="quickForm" class="form-grid">
         <label for="qName">Name</label>
         <input id="qName" name="name" autocomplete="name" placeholder="Your name" />
