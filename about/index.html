@@ -256,6 +256,53 @@
     }
     .photo-badge img{ width: 100%; height: 100%; object-fit: cover; display: block }
 
+    /* === Interactive 3D coin + quotes (added) === */
+    .photo-badge{ perspective: 1100px; cursor: pointer; }
+    .photo-badge .coin{
+      position: relative;
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      will-change: transform, filter;
+      transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+      --rx: 0deg;           /* tilt X toward pointer */
+      --ry: 0deg;           /* tilt Y toward pointer */
+      --flip: 0turn;        /* 0turn front, .5turn back */
+      transform: rotateX(var(--rx)) rotateY(calc(var(--ry) + var(--flip)));
+    }
+    .photo-badge .face{
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      backface-visibility: hidden;
+    }
+    .photo-badge .face.back{
+      display: grid; place-items: center;
+      padding: 16px 18px;
+      text-align: center;
+      transform: rotateY(180deg);
+      color: var(--brand-blue-900);
+      background:
+        radial-gradient(ellipse at 30% 25%, rgba(255,255,255,.96) 0%, rgba(255,255,255,.90) 55%, rgba(255,255,255,.86) 100%),
+        linear-gradient(180deg, rgba(15,91,102,.10), rgba(15,91,102,.06));
+    }
+    .photo-badge .quote{
+      font-weight: 900;
+      font-size: clamp(14px, 1.6vw, 18px);
+      line-height: 1.25;
+    }
+    .photo-badge .byline{
+      margin-top: 8px;
+      font-weight: 800;
+      color: var(--brand-blue-700);
+      font-size: .95em;
+    }
+    @media (hover:hover){
+      .photo-badge:hover .coin{ filter: drop-shadow(0 18px 36px rgba(17,24,39,.24)); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .photo-badge .coin{ transition: none; }
+    }
+
     .bio p{ margin: 0 0 10px }
 
     /* Cards */
@@ -337,16 +384,16 @@
     }
     .mobile-dock .dock{ max-width: var(--w); margin: 0 auto; display: flex; justify-content: center; gap: 14px }
     .mobile-dock .icon-btn{
-      display: inline-flex;                   /* NEW: center like homepage */
-      align-items: center;                    /* NEW */
-      justify-content: center;                /* NEW */
-      -webkit-tap-highlight-color: transparent; /* NEW */
-      touch-action: manipulation;             /* NEW */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       width: 46px; height: 46px; border-radius: 999px; color: #fff;
       background: rgba(255,255,255,.10);
       border: 1px solid rgba(255,255,255,.22);
     }
-    .mobile-dock .icon{                       /* NEW: robust SVG sizing */
+    .mobile-dock .icon{
       display: block;
       width: 18px;
       height: 18px;
@@ -357,7 +404,7 @@
     .mobile-dock .icon rect,
     .mobile-dock .icon circle,
     .mobile-dock .icon polygon,
-    .mobile-dock .icon line{                  /* NEW: ensure fill on iOS */
+    .mobile-dock .icon line{
       fill: currentColor;
       stroke: none;
     }
@@ -529,8 +576,14 @@
             </p>
           </article>
 
-          <figure class="photo-badge" aria-label="Portrait">
-            <img src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael">
+          <!-- Revised interactive photo badge -->
+          <figure class="photo-badge" id="photoBadge" role="button" aria-pressed="false" tabindex="0" aria-label="Portrait badge (click to flip)">
+            <div class="coin" aria-hidden="true">
+              <div class="face front">
+                <img src="/assets/img/portrait.jpeg" alt="Portrait of Isaac B. Michael">
+              </div>
+              <div class="face back" id="quoteFace" aria-live="polite" aria-atomic="true"></div>
+            </div>
           </figure>
         </div>
 
@@ -875,6 +928,86 @@
         if(here===path) a.setAttribute('aria-current','page');
       }catch(_){ }
     });
+
+    // === PHOTO BADGE: 3D tilt + flip + rotating quotes ===
+    (function(){
+      const badge = document.getElementById('photoBadge');
+      if(!badge) return;
+      const coin  = badge.querySelector('.coin');
+      const back  = document.getElementById('quoteFace');
+
+      // Quotes — first is Hardy (as requested)
+      const quotes = [
+        { t: "A mathematician, like a painter or a poet, is a maker of patterns.", a: "G. H. Hardy" },
+        { t: "Mathematics is the art of giving the same name to different things.", a: "Henri Poincaré" },
+        { t: "All models are wrong, but some are useful.", a: "George E. P. Box" },
+        { t: "A wise man proportions his belief to the evidence.", a: "David Hume" },
+        { t: "If I have seen further it is by standing on the shoulders of giants.", a: "Isaac Newton" },
+        { t: "God does not play dice with the universe.", a: "Albert Einstein" },
+        { t: "The first principle is that you must not fool yourself—and you are the easiest person to fool.", a: "Richard P. Feynman" },
+        { t: "Nothing is too wonderful to be true, if it be consistent with the laws of nature.", a: "Michael Faraday" },
+        { t: "The Analytical Engine weaves algebraic patterns just as the Jacquard loom weaves flowers and leaves.", a: "Ada Lovelace" },
+        { t: "We can only see a short distance ahead, but we can see plenty there that needs to be done.", a: "Alan Turing" }
+      ];
+
+      let showingBack = false;
+      let idx = 0;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function setTilt(rxDeg, ryDeg){
+        coin.style.setProperty('--rx', rxDeg + 'deg');
+        coin.style.setProperty('--ry', ryDeg + 'deg');
+      }
+      function onPointerMove(e){
+        if(e.pointerType && e.pointerType !== 'mouse') return; // avoid jitter on touch
+        const r = badge.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top)  / r.height;
+        const TILT = 10; // degrees
+        const rx = (0.5 - py) * TILT;
+        const ry = (px - 0.5) * TILT;
+        setTilt(rx, ry);
+      }
+      function onLeave(){ setTilt(0,0); }
+
+      function injectQuote(){
+        const q = quotes[idx % quotes.length];
+        back.innerHTML = `<div class="quote">${q.t}</div><div class="byline">— ${q.a}</div>`;
+        idx++;
+      }
+
+      function flip(){
+        if(showingBack){
+          // Back -> Front
+          coin.style.setProperty('--flip', '0turn');
+          badge.setAttribute('aria-pressed','false');
+          showingBack = false;
+        }else{
+          // Front -> Back (next quote)
+          injectQuote();
+          coin.style.setProperty('--flip', '.5turn');
+          badge.setAttribute('aria-pressed','true');
+          showingBack = true;
+        }
+      }
+
+      // Interactions
+      badge.addEventListener('pointermove', onPointerMove);
+      badge.addEventListener('pointerleave', onLeave);
+      badge.addEventListener('click', flip);
+      badge.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          flip();
+        }
+      });
+
+      if(reduceMotion){
+        badge.removeEventListener('pointermove', onPointerMove);
+        badge.removeEventListener('pointerleave', onLeave);
+        setTilt(0,0);
+      }
+    })();
   </script>
 </body>
 </html>
