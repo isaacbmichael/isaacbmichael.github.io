@@ -44,6 +44,12 @@
 
       --drawer-bg: #ffffff;
       --drawer-fg: #111827;
+
+      /* === Shared spacing & divider tokens === */
+      --band-space: 28px;              /* section vertical padding */
+      --divider-gap: 2px;              /* equal space above/below dividers */
+      --divider-edge-alpha: .14;       /* gradient edge intensity */
+      --divider-center-alpha: .28;     /* gradient center intensity */
     }
     @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -78,7 +84,7 @@
     .sr-only{ position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0 }
 
     /* ===== Bands (spacing) ===== */
-    section.band{ position: relative; padding: 28px 0 }
+    section.band{ position: relative; padding: var(--band-space) 0 }
 
     h2{ margin: 0 0 14px; font-size: clamp(20px,2.6vw,28px) }
 
@@ -154,7 +160,7 @@
 
     /* ===== Hero (Executive bio + photo) ===== */
     .hero{ padding: 6px 0 0 }
-    .hero-section.band{ padding-top: 22px; padding-bottom: 18px }
+    .hero-section.band{ padding-top: 22px; padding-bottom: var(--band-space) }
 
     .hero-grid{
       display: grid;
@@ -265,11 +271,11 @@
     .btn-primary{ background: var(--brand-blue-700); color: #fff; border-color: transparent; box-shadow: var(--shadow) }
     .btn-primary:hover{ box-shadow: var(--shadow-hover) }
 
-    /* Divider line */
+    /* Divider line — uniform color and spacing everywhere */
     .section-divider{
       position: relative;
       height: 4px;
-      margin: 2px 0;
+      margin: var(--divider-gap) 0;  /* equal space above and below */
       border: 0;
       isolation: isolate;
     }
@@ -292,16 +298,15 @@
       background: linear-gradient(
         90deg,
         rgba(15,91,102,0) 0%,
-        rgba(15,91,102,.10) 18%,
-        rgba(15,91,102,.18) 50%,
-        rgba(15,91,102,.10) 82%,
+        rgba(15,91,102,var(--divider-edge-alpha)) 18%,
+        rgba(15,91,102,var(--divider-center-alpha)) 50%,
+        rgba(15,91,102,var(--divider-edge-alpha)) 82%,
         rgba(15,91,102,0) 100%
       );
       box-shadow:
-        0 1px 3px rgba(15,91,102,.08),
-        0 -1px 3px rgba(15,91,102,.08);
+        0 1px 4px rgba(15,91,102,.10),
+        0 -1px 4px rgba(15,91,102,.10);
     }
-    .band > .section-divider { margin-top: 0 }
 
     /* Footer — teal always */
     footer{
