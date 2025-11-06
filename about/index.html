@@ -258,7 +258,7 @@
       z-index: 0;
     }
 
-    /* TILTING, FLIPPING WRAP — this carries the teal ring + the content */
+    /* TILTING WRAP — carries the teal ring + lighting (no flip here) */
     .photo-badge .tilt{
       position: absolute; inset: 0;
       border-radius: 50%;
@@ -278,16 +278,25 @@
       /* control via CSS variables */
       --rx: 0deg;
       --ry: 0deg;
-      --flip: 0turn;
-      /* split rotations for cross-browser reliability */
-      transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateY(var(--flip));
+
+      /* only tilt here */
+      transform: rotateX(var(--rx)) rotateY(var(--ry));
     }
 
-    /* Flip state via class (most reliable everywhere) */
-    .photo-badge.is-flipped .tilt { --flip: 180deg; }
+    /* coin = faces stack — carries the FLIP */
+    .photo-badge .coin{
+      position: absolute; inset: 0;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      will-change: transform;
+      --flip: 0turn;
+      transform: rotateY(var(--flip));
+      transition: transform .72s cubic-bezier(.2,.8,.2,1);
+      z-index: 1;
+    }
 
     /* subtle top vignette that flips with the badge */
-    .photo-badge .tilt::before{
+    .photo-badge .coin::before{
       content: "";
       position: absolute; inset: 0;
       background: radial-gradient(ellipse at 30% 25%, rgba(0,0,0,.0) 55%, rgba(0,0,0,.14) 100%);
@@ -295,13 +304,8 @@
       z-index: 2; /* above faces */
     }
 
-    /* coin = faces stack (no transform here; transform is on .tilt) */
-    .photo-badge .coin{
-      position: absolute; inset: 0;
-      -webkit-transform-style: preserve-3d;
-      transform-style: preserve-3d;
-      z-index: 1;
-    }
+    /* Flip state via class */
+    .photo-badge.is-flipped .coin { --flip: 180deg; }
 
     .photo-badge .face{
       position: absolute; inset: 0;
@@ -326,6 +330,7 @@
     }
     .photo-badge .face.front img{
       width: 100%; height: 100%; object-fit: cover; display: block;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
     }
     .photo-badge .quote{
       font-weight: 900;
@@ -344,6 +349,7 @@
     }
     @media (prefers-reduced-motion: reduce){
       .photo-badge .tilt{ transition: none; }
+      .photo-badge .coin{ transition: none; }
     }
 
     .bio p{ margin: 0 0 10px }
@@ -778,7 +784,7 @@
         <span class="sr-only">Calendly</span>
       </a>
       <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0  4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0  0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0  4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
         <span class="sr-only">LinkedIn</span>
       </a>
       <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
