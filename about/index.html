@@ -201,10 +201,18 @@
     @keyframes backdrop-in{ from{opacity:0} to{opacity:1} }
     .modal-header{ display: flex; align-items: center; justify-content: space-between; padding: 18px 18px 6px; border-bottom: 0; position: relative }
     .modal-header::after{
-      content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 2px; border-radius: 999px;
-      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(15,91,102,.22) 10%, rgba(15,91,102,.35) 50%, rgba(15,91,102,.22) 90%, rgba(0,0,0,0) 100%);
-      box-shadow: 0 6px 10px rgba(15,91,102,.20), 0 -6px 10px rgba(15,91,102,.20);
-    }
+      content:"";
+      position:absolute;
+      left:18px; right:18px; bottom:0;
+      height:1px;
+      border-radius:999px;
+      background: linear-gradient(
+        90deg,
+        rgba(15,91,102,var(--divider-edge-alpha)) 0%,
+        rgba(15,91,102,var(--divider-center-alpha)) 50%,
+        rgba(15,91,102,var(--divider-edge-alpha)) 100%
+      );
+   }
     .modal-title{ margin: 0; font-weight: 900; font-size: 1.05rem; color: #0f172a }
     .modal-close{
       width: 38px; height: 38px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; color: #0f172a;
@@ -273,41 +281,34 @@
 
     /* Divider line — uniform color and spacing everywhere */
     .section-divider{
-      position: relative;
-      height: 4px;
-      margin: var(--divider-gap) 0;  /* equal space above and below */
-      border: 0;
-      isolation: isolate;
-    }
-    .section-divider::after{
-      content: "";
-      position: absolute;
-      left: 50%; top: -2px; bottom: -2px;
-      width: 100vw;
-      transform: translateX(-50%);
-      background: var(--page-bg);  /* match page background */
-      opacity: 1;
-      z-index: -1;
-    }
-    .section-divider::before{
-      content: "";
-      position: absolute;
-      left: 0; right: 0; top: 50%;
-      transform: translateY(-50%);
-      height: 1px; border-radius: 999px;
-      background: linear-gradient(
-        90deg,
-        rgba(15,91,102,0) 0%,
-        rgba(15,91,102,var(--divider-edge-alpha)) 18%,
-        rgba(15,91,102,var(--divider-center-alpha)) 50%,
-        rgba(15,91,102,var(--divider-edge-alpha)) 82%,
-        rgba(15,91,102,0) 100%
-      );
-      box-shadow:
-        0 1px 4px rgba(15,91,102,.10),
-        0 -1px 4px rgba(15,91,102,.10);
-    }
-
+      position:relative;
+      height:4px;                 /* exact total height */
+      margin: var(--divider-gap) 0; /* equal margins */
+      border:0;
+   }
+   .section-divider::after{
+     content:"";
+     position:absolute;
+     inset:0;
+     /* keep using the page background you chose for About */
+     background: var(--page-bg);
+     z-index:0;
+   }
+   .section-divider::before{
+     content:"";
+     position:absolute;
+     left:0; right:0; top:50%;
+     transform:translateY(-50%);
+     height:1px;                 /* exact line thickness */
+     border-radius:999px;
+     background:linear-gradient(
+       90deg,
+       rgba(15,91,102,var(--divider-edge-alpha)) 0%,
+       rgba(15,91,102,var(--divider-center-alpha)) 50%,
+       rgba(15,91,102,var(--divider-edge-alpha)) 100%
+     );
+     z-index:1;
+   }
     /* Footer — teal always */
     footer{
       background: var(--brand-blue-900) !important;
@@ -426,7 +427,7 @@
   <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
     <header>
       <h3>Menu</h3>
-      <button class="menu-toggle" id="menuClose" aria-label="Close menu" aria-expanded="true">
+      <button class="menu-toggle" id="menuClose" aria-label="Close menu">
         <span class="bars"></span>
       </button>
     </header>
