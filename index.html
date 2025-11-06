@@ -11,7 +11,8 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://isaacbmichael.com/">
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+  <!-- Light mode now matches solid page bg -->
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F7F8">
   <!-- Updated to new dark brand color -->
   <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#0B3F47">
   <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
@@ -32,8 +33,8 @@
     --bar-fg:var(--brand-blue-900);
     --bar-border:#e5e7eb;
 
-    /* Slightly cooler page gradient */
-    --page-gradient:linear-gradient(180deg,#F2F7F8 0%, #EDF5F6 40%, #F7FBFC 100%);
+    /* Solid page background (very light teal) — match About */
+    --page-bg:#F2F7F8;
 
     /* Ring tinted to new accent */
     --ring:rgba(15,91,102,.35);
@@ -68,12 +69,12 @@
   /* ===== Base / Layout ===== */
   *{box-sizing:border-box}
   html,body{height:100%}
-  html{background:#fff}
+  html{background:var(--page-bg)}
   body{
     margin:0;
     font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
     color:var(--ink);
-    background:var(--page-gradient);
+    background:var(--page-bg);
     min-height:100svh;display:flex;flex-direction:column;
     scroll-behavior:smooth;
     padding-top: env(safe-area-inset-top);
@@ -390,24 +391,29 @@
   .tile h3{margin:0 0 8px}
   .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
-  /* ===== Footer ===== */
+  /* ===== Footer — teal always (match About) ===== */
   footer{
-    background:var(--bar-bg); color:var(--bar-fg); padding:18px 0; text-align:center;
-    border-top:1px solid var(--bar-border);
-    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
+    background: var(--brand-blue-900) !important;
+    color: #ffffff !important;
+    padding: 18px 0;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,.18);
   }
   footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
   .social{display:flex;align-items:center;gap:10px}
-  .icon-btn{
+  footer .icon-btn{
     display:inline-flex;align-items:center;justify-content:center;
     width:38px;height:38px;border-radius:999px;
-    background:color-mix(in srgb, var(--bar-fg) 12%, transparent);
-    border:1px solid color-mix(in srgb, var(--bar-fg) 22%, transparent);
-    color:var(--bar-fg);
+    background: rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.22);
+    color:#fff;
     transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
   }
-  .icon-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.12);background:color-mix(in srgb, var(--bar-fg) 22%, transparent)}
-  .icon-btn:focus-visible{outline:none;box-shadow:0 0 0 6px var(--ring)}
+  footer .icon-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(0,0,0,.25);
+    background: rgba(255,255,255,.18);
+  }
   .icon{width:18px;height:18px;fill:currentColor}
 
   /* ===== Buttons (shadow consistency across variants & contexts) ===== */
@@ -437,18 +443,28 @@
   .contact-actions .btn:hover,
   .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
 
-  /* ===== Mobile dock (quick contact) ===== */
+  /* ===== Mobile dock (quick contact) — teal always (match About) ===== */
   .mobile-dock{
     position:fixed; left:0; right:0; bottom:0; z-index:980;
-    background:var(--bar-bg); color:var(--bar-fg);
-    border-top:1px solid var(--bar-border);
+    background: var(--brand-blue-900); color: #ffffff;
+    border-top:1px solid rgba(255,255,255,.18);
     padding:6px 10px calc(6px + env(safe-area-inset-bottom));
     display:none; /* shown on <= 960px */
   }
   .mobile-dock .dock{
     max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px;
   }
-  .mobile-dock .icon-btn{ width:46px; height:46px }
+  .mobile-dock .icon-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+    width:46px; height:46px; border-radius:999px; color:#fff;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.22);
+  }
+  .mobile-dock .icon{
+    display:block; width:18px; height:18px; flex:0 0 auto;
+  }
   .mobile-dock .icon *,
   .mobile-dock .icon path,
   .mobile-dock .icon rect,
@@ -458,6 +474,7 @@
     fill: currentColor;
     stroke: none;
   }
+
   /* ===== CONTACT MODAL (polished) ===== */
   dialog#contactDialog{
     width:min(840px, 94vw);
@@ -583,7 +600,7 @@
     background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
   }
 
-  /* ===== Gradient divider (exact implementation) ===== */
+  /* ===== Gradient divider (exact implementation, using solid page bg) ===== */
   .section-divider{
     position:relative;
     height:4px;                 /* exact total height */
@@ -595,7 +612,7 @@
     content:"";
     position:absolute;
     inset:0;
-    background: var(--page-gradient);
+    background: var(--page-bg);
     z-index:0;
   }
   /* 1px gradient line, thin edges & darker center */
@@ -783,7 +800,7 @@
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
+  <!-- ===== Footer (teal, persistent) ===== -->
   <footer>
     <div class="wrap">
       <div class="social" aria-label="External profiles">
@@ -792,7 +809,7 @@
           <span class="sr-only">Email</span>
         </a>
         <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Schedule with Calendly">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
           <span class="sr-only">Calendly</span>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
@@ -808,7 +825,7 @@
     </div>
   </footer>
 
-  <!-- ===== Bottom quick-contact dock (mobile) ===== -->
+  <!-- ===== Bottom quick-contact dock (mobile, teal) ===== -->
   <div class="mobile-dock">
     <div class="dock">
       <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
@@ -816,7 +833,7 @@
         <span class="sr-only">Email</span>
       </a>
       <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Calendly">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0  0 0 1-1V8Z"/></svg>
         <span class="sr-only">Calendly</span>
       </a>
       <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
@@ -824,7 +841,7 @@
         <span class="sr-only">LinkedIn</span>
       </a>
       <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
         <span class="sr-only">GitHub</span>
       </a>
     </div>
@@ -1188,4 +1205,3 @@
   </script>
 </body>
 </html>
-
