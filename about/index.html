@@ -345,22 +345,8 @@
     @media (prefers-reduced-motion: reduce){
       .photo-badge .tilt{ transition: none; }
     }
-    .bio p{ margin: 0 0 10px }
 
-    /* Ensure the photo's backside never shows on flip (Safari/Chrome fix) */
-    .photo-badge .face,
-    .photo-badge .face *{
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-    .photo-badge .face.front{
-      transform: rotateY(0deg) translateZ(0.01px);        /* create a 3D plane */
-      -webkit-transform: rotateY(0deg) translateZ(0.01px);
-    }
-    .photo-badge .face.back{
-      transform: rotateY(180deg) translateZ(0.01px);      /* face the other way */
-      -webkit-transform: rotateY(180deg) translateZ(0.01px);
-    }
+    .bio p{ margin: 0 0 10px }
 
     /* Cards */
     .tiles{ display: grid; grid-template-columns: repeat(3,1fr); gap: 18px }
@@ -1044,13 +1030,6 @@
         { t: "We can only see a short distance ahead, but we can see plenty there that needs to be done.", a: "Alan Turing" }
       ];
 
-      // Render the first quote so it's ready on the first flip
-     (function(){ 
-       var q0 = quotes[0];
-       var back = document.getElementById('quoteFace');
-       if (back) back.innerHTML = '<div class="quote">'+q0.t+'</div><div class="byline">— '+q0.a+'</div>';
-     })();
-      
       var showingBack = false;
       var idx = 0;
       var reduceMotion = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
