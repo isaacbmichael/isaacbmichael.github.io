@@ -1,293 +1,993 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Isaac B. Michael, PhD, MS, MApSt – Portfolio</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f9f9f9;
-      color: #333;
-      line-height: 1.6;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio — Isaac B. Michael</title>
+    <meta
+      name="description"
+      content="Technical portfolio of Isaac B. Michael: selected projects across analytics automation, survey methodology, and decision reporting."
+    />
+    <meta property="og:title" content="Portfolio — Isaac B. Michael" />
+    <meta
+      property="og:description"
+      content="Selected projects demonstrating data strategy, survey methods, automation, and executive reporting."
+    />
+    <meta property="og:url" content="https://isaacbmichael.com/portfolio/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://isaacbmichael.com/portfolio/" />
+    <!-- Light theme color matches solid page bg -->
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#F2F7F8"
+    />
+    <!-- Dark brand color -->
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0B3F47"
+    />
+    <meta
+      property="og:image"
+      content="https://isaacbmichael.com/assets/og/home.png"
+    />
+    <meta
+      name="twitter:image"
+      content="https://isaacbmichael.com/assets/og/home.png"
+    />
 
-    /* ===== Header (Two-column) ===== */
-    header {
-      background:#2c3e50; color:#fff;
-      padding: 28px 20px 24px;
-    }
-    .header-wrap{
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;  /* left:wide / right:narrow */
-      gap: 32px;
-      align-items: center;
-    }
-    /* Left column */
-    .identity{
-      display: grid;
-      grid-template-columns: auto 1fr;      /* photo | text */
-      gap: 18px 24px;
-      align-items: center;
-    }
-    .profile-photo{
-      width: 170px; height: 170px; border-radius:50%; object-fit:cover;
-      border:4px solid #ecf0f1; box-shadow: 0 8px 18px rgba(0,0,0,.28);
-      grid-row: span 3;
-    }
-    .name{
-      margin: 2px 0 4px;
-      font-size: clamp(28px, 3.6vw, 48px);
-      line-height: 1.05;
-      letter-spacing: .1px;
-      text-align: left;
-    }
-    .subtitle{
-      margin: 6px 0 12px;
-      font-size: clamp(14px, 1.6vw, 20px);
-      color:#d7dee4;
-      text-align: left;
-    }
-    .tagline{
-      margin: 0;
-      font-size: clamp(16px, 1.45vw, 22px);
-      line-height: 1.3;
-      letter-spacing: .1px;
-      color:#e8eef2;
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      text-align: left;
-      max-width: 1000px;
-    }
+    <!-- Preload logo variants for faster first paint -->
+    <link
+      rel="preload"
+      href="/assets/brands/logo-tealroyal.svg"
+      as="image"
+      type="image/svg+xml"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/assets/brands/logo-white.svg"
+      as="image"
+      type="image/svg+xml"
+    />
 
-    /* Right column card */
-    .header-card{
-      margin-top: 6px;
-      max-width: 560px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 16px;
-      padding: 16px 18px;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
-    }
-    .header-card p{ margin: 0; color: #e6edf3; font-size: clamp(14px, 1.25vw, 17px); line-height: 1.45; }
-    .header-card .quote{ margin-top: 10px; font-style: italic; opacity: .95; }
-    .header-card .byline{ margin-top: 6px; font-size: .95em; color: #cfd9e2; }
-
-    /* ===== Main ===== */
-    main { max-width: 100%; margin: 18px auto; padding: 0 40px; }
-    .intro { max-width: 1200px; margin: 0 auto 18px; padding: 0 25px; }
-
-    .section {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px 25px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      max-width: 1200px;
-      margin-left: auto; margin-right: auto;
-    }
-    .project-card { margin-bottom: 20px; }
-    .project-card h3 { margin: 0 0 5px; }
-    .project-card p { margin: 5px 0 10px; }
-    .project-card ul { list-style: none; padding-left: 0; }
-    .project-card li { margin: 6px 0; }
-
-    /* Meta row + badges */
-    .meta {
-      margin-top: 6px;
-      color: #6b7280;
-      font-size: 0.95em;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      background: #eef2ff;
-      color: #1f2a44;
-      padding: 2px 8px;
-      border-radius: 9999px;
-      font-weight: 700;
-      font-size: .75rem;
-      letter-spacing: .02em;
-    }
-    .badge--new { background: #d1fae5; color: #065f46; }
-
-    a { color: #0066cc; text-decoration: none; font-weight: bold; }
-    a:hover { text-decoration: underline; }
-
-    /* ===== Footer ===== */
-    footer {
-      background: #2c3e50; color: #fff; margin-top: 40px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 110px; padding: 0 20px;
-    }
-    footer p { margin: 6px 0; }
-
-    .footer-socials { text-align: center; }
-    .socials {
-      display: flex; justify-content: center; align-items: center;
-      gap: 28px; margin-top: 10px;
-    }
-    .social-link {
-      display: inline-flex; align-items: center; gap: 10px;
-      color: #ecf0f1; font-weight: 700; text-decoration: none; line-height: 1;
-      border-radius: 6px;
-    }
-    .social-link:hover .label,
-    .social-link:focus-visible .label { text-decoration: underline; }
-    .social-link:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
-
-    .social-link .label { letter-spacing: .05em; font-size: 1em; }
-
-    /* Icons: keep email SVG as-is; nudge PNGs up slightly for optical baseline alignment */
-    .icon-img { height: 1em; width: auto; display: block; object-fit: contain; transform: translateY(-0.06em); }
-    @supports not (transform: translateY(0)) {
-      .icon-img { position: relative; top: -1px; }
-    }
-    .icon-svg { height: 1em; width: auto; display: block; object-fit: contain; fill: currentColor; }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 840px){
-      .header-wrap{ grid-template-columns: 1fr; gap: 18px; }
-      .identity{ grid-template-columns: 1fr; text-align: center; }
-      .profile-photo{ margin: 0 auto; width: 160px; height: 160px; grid-row:auto; }
-      .name, .subtitle, .tagline{ text-align: center; white-space: normal; }
-      .header-card{ max-width: 100%; }
-    }
-    @media (max-width: 480px) {
-      .social-link .label {
-        position: absolute; width:1px; height:1px; padding:0; margin:-1px;
-        overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    <style>
+      /* ===== Royal Teal Design Tokens ===== */
+      :root {
+        --brand-blue-900: #0B3F47;
+        --brand-blue-700: #0F5B66;
+        --accent: var(--brand-blue-700);
+        --ink: #111827;
+        --muted: #5b6470;
+        --bar-bg: #ffffff;
+        --bar-fg: var(--brand-blue-900);
+        --bar-border: #e5e7eb;
+        /* Solid page background (very light teal) */
+        --page-bg: #F2F7F8;
+        --ring: rgba(15, 91, 102, 0.35);
+        --surface: #ffffff;
+        --radius: 14px;
+        --w: 1360px;
+        --wrap-pad: clamp(12px, 2vw, 20px);
+        --shadow: 0 10px 20px rgba(17, 24, 39, 0.08),
+          0 2px 6px rgba(17, 24, 39, 0.04);
+        --shadow-hover: 0 16px 28px rgba(17, 24, 39, 0.12),
+          0 4px 12px rgba(17, 24, 39, 0.06);
+        --avatar-size: 96px;
+        --drawer-bg: #ffffff;
+        --drawer-fg: #111827;
+        /* Shared spacing & divider tokens */
+        --band-space: 28px;
+        --divider-gap: 2px;
+        --divider-edge-alpha: 0.12;
+        --divider-center-alpha: 0.68;
       }
-      .socials { gap: 16px; }
-      header { padding: 22px 16px 18px; }
-    }
-  </style>
-</head>
-<body>
-  <!-- ===== Header ===== -->
-  <header>
-    <div class="header-wrap">
-      <!-- Left: Identity -->
-      <div class="identity">
-        <img src="/assets/brands/logo-color-wbg.svg" alt="Isaac B. Michael" class="profile-photo">
-        <h1 class="name">Isaac B. Michael</h1>
-        <p class="subtitle">PhD • MS • MApSt</p>
-        <p class="tagline">Executive Data & Research Leader | Mathematical Statistician | Driving Strategy Through Analytics</p>
-      </div>
+      @media (min-width: 1600px) {
+        :root { --w: 1440px; }
+      }
 
-      <!-- Right: Bio / Quote -->
-      <aside class="header-card" aria-label="About">
-        <p> Executive leader blending analytics, automation, and operational strategy to deliver measurable impact. Proven record in modernizing national data systems, shaping policy, and guiding C-suite decision-making. </p>
-        <p class="quote">“In God we trust; all others must bring data.”</p>
-        <p class="byline">— W. Edwards Deming</p>
-      </aside>
-    </div>
-  </header>
+      /* Bars DARK at top; switch to light after hero exits */
+      body.bars-dark {
+        --bar-bg: var(--brand-blue-900);
+        --bar-fg: #ffffff;
+        --bar-border: rgba(255, 255, 255, 0.16);
+        --drawer-bg: #0e2a39;
+        --drawer-fg: #eaf2f6;
+      }
 
-  <!-- ===== Main ===== -->
-  <main>
-    <div class="intro">
-      <p>
-        Welcome to my technical portfolio. This site highlights selected projects demonstrating
-        <strong>data analysis, survey methodology, automation, investment strategy, and executive-level reporting</strong>.
-      </p>
-    </div>
+      /* ===== Base / Layout ===== */
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      html { background: var(--page-bg); }
+      body {
+        margin: 0;
+        font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+        color: var(--ink);
+        background: var(--page-bg);
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        scroll-behavior: smooth;
+        padding-top: env(safe-area-inset-top);
+      }
+      :focus-visible { outline: none; box-shadow: 0 0 0 6px var(--ring); }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .wrap { max-width: var(--w); margin: 0 auto; padding: 0 var(--wrap-pad); }
+      .sr-only {
+        position: absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+        overflow:hidden; clip: rect(0,0,0,0); white-space:nowrap; border:0;
+      }
 
-    <!-- Newest first -->
-    <div class="section project-card">
-      <h3><b>ATS-Ready altacv Resume Template</b></h3>
-      <div class="meta">
-        <span class="badge badge--new">NEW</span>
-        <span>Updated Oct 2025</span>
-        <span>LaTeX • GitHub Actions</span>
-      </div>
-      <p>
-        ATS-ready, single-column <b>LaTeX</b> resume that <em>looks</em> like two columns while remaining parser-safe.
-        Built on <b>AltaCV</b>; adds an <b>ATS mode</b>, icon-silent <code>ActualText</code>, dash normalization,
-        and CI that publishes both PDFs.
-      </p>
-      <ul>
-        <li>📄 <a href="/assets/pdfs/template.pdf" download>Download Showcase PDF</a></li>
-        <li>📄 <a href="/assets/pdfs/resume-ats.pdf" download>Download ATS PDF</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/ats-ready-altacv-template" target="_blank" rel="noopener noreferrer">View Repository</a></li>
-      </ul> 
-    </div>
+      /* Bands */
+      section.band { position: relative; padding: var(--band-space) 0; }
+      h2 { margin: 0 0 14px; font-size: clamp(20px, 2.6vw, 28px); }
+      [id] { scroll-margin-top: 84px; } /* Preserve anchor visibility under sticky header */
 
-    <div class="section project-card">
-      <h3><b>Academic Program Site Template</b></h3>
-      <div class="meta">
-        <span>Updated Oct 2025</span>
-        <span>HTML/CSS • Vanilla JS</span>
-      </div>
-      <p>
-        Lightweight, static microsite template for academic programs—accessible UI (hero/CTAs, proposal cards, accordions, badges),
-        responsive spacing, and print-friendly styles.
-      </p>
-      <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/academic-program-site-template/" target="_blank" rel="noopener noreferrer">View Live Demo</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/academic-program-site-template" target="_blank" rel="noopener noreferrer">View Repository</a></li>
-      </ul>
-    </div>
-    
-    <div class="section project-card">
-      <h3><b>Capital Allocation Monte Carlo Simulation</b></h3>
-      <div class="meta">
-        <span>Updated Oct 2025</span>
-        <span>Python • NumPy • Matplotlib • yFinance</span>
-      </div>
-      <p>
-        Risk/return simulation using real market data and Monte Carlo methods; executive-level outputs for allocation decisions.
-      </p>
-      <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/capital-allocation-report/capital_allocation_report.html" target="_blank" rel="noopener noreferrer">View Interactive HTML Report</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/capital-allocation-report/blob/main/capital_allocation_montecarlo.py" target="_blank" rel="noopener noreferrer">View Python Source Code</a></li>
-      </ul>
-    </div>
-    
-    <div class="section project-card">
-      <h3><b>Exploratory Applicant Data Report</b></h3>
-      <div class="meta">
-        <span>Updated Sep 2025</span>
-        <span>R • RMarkdown • ggplot2</span>
-      </div>
-      <p>
-        Interactive analysis of applicant demographics, cleaning pipelines, and SES enrichment.
-      </p>
-      <ul>
-        <li>🌐 <a href="https://isaacbmichael.github.io/eda-applicant-report/eda_report.html" target="_blank" rel="noopener noreferrer">View Interactive HTML Report</a></li>
-        <li>🔗 <a href="https://github.com/isaacbmichael/eda-applicant-report/blob/main/eda_report.Rmd" target="_blank" rel="noopener noreferrer">View R Markdown Source Code</a></li>
-      </ul>
-    </div>
-  </main>
+      /* ===== Header (same as About/Home) ===== */
+      header.site-header {
+        position: sticky; top: 0; z-index: 1000;
+        background: var(--bar-bg); color: var(--bar-fg);
+        border-bottom: 1px solid var(--bar-border);
+        backdrop-filter: saturate(120%) blur(2px);
+        transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+      }
+      .site-header .wrap { max-width: none; padding-left: 0; padding-right: 0; }
+      .topbar {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        padding: 10px 0;
+      }
+      @media (min-width: 961px) {
+        :root { --nav-gutter: var(--wrap-pad); }
+        .topbar > .brand { margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left)); }
+        .topbar > nav.primary-nav { margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right)); }
+      }
+      @media (max-width: 960px) {
+        .topbar {
+          padding-left: calc(16px + env(safe-area-inset-left));
+          padding-right: calc(16px + env(safe-area-inset-right));
+        }
+      }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .brand-link--wide {
+        display: flex; align-items: center; gap: 12px; color: var(--bar-fg);
+        text-decoration: none; border-radius: 0; padding: 0; outline: none;
+      }
+      .brand-link--wide:hover { text-decoration: none; }
+      .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+      .brand-name {
+        font-weight: 900; letter-spacing: .2px; font-size: clamp(18px, 1.8vw, 24px);
+        color: var(--bar-fg);
+        transition: transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+      }
+      .brand-creds {
+        color: color-mix(in srgb, var(--bar-fg) 70%, #cfd8e3);
+        font-weight: 400; letter-spacing: .2px; font-size: clamp(12px, 1.2vw, 14px);
+        transition: transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+      }
+      @supports not (color-mix: in srgb, white 50%, black 50%) {
+        .brand-creds { color: #c3c9d2; }
+      }
 
-  <!-- ===== Footer ===== -->
-  <footer>
-    <div class="footer-socials">
-      <p>Connect with me:</p>
-      <div class="socials">
-        <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer"
-           class="social-link" aria-label="LinkedIn">
-          <img class="icon-img" src="assets/icons/linkedin-white.png" alt="" aria-hidden="true">
-          <span class="label">LinkedIn</span>
-        </a>
-        <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer"
-           class="social-link" aria-label="GitHub">
-          <img class="icon-img" src="assets/icons/github-white.png" alt="" aria-hidden="true">
-          <span class="label">GitHub</span>
-        </a>
-        <a href="mailto:isaac.b.michael@gmail.com" class="social-link" aria-label="Email">
-          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M2 5h20a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm10 7L3.4 7.6a.5.5 0 0 0-.4.9L12 14l9-5.5a.5.5 0 1 0-.5-.87L12 12z"/>
+      /* Avatar flip */
+      .avatar { width: var(--avatar-size); height: var(--avatar-size); perspective: 1100px; }
+      .avatar-badge { display:block; width:100%; height:100%; border-radius:50%; outline: none; user-select:none; -webkit-tap-highlight-color:transparent; cursor:pointer; }
+      .avatar-inner {
+        position: relative; width:100%; height:100%; transform-style: preserve-3d; will-change: transform;
+        --ry: 0turn; --spin: 0turn; transform: rotateY(calc(var(--ry) + var(--spin)));
+        transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+      }
+      .avatar-face { position:absolute; inset:0; border-radius:50%; overflow:hidden; backface-visibility:hidden; border:none; box-shadow:none; }
+      .avatar-face.back { transform: rotateY(180deg); }
+      .avatar-face img { width:100%; height:100%; object-fit: contain; padding: 8px; background: transparent; }
+      .avatar-face.back img { transform: scaleX(-1); }
+      @media (hover:hover) and (pointer:fine) {
+        .brand-link--wide:hover .avatar-inner { --ry: .5turn; transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px); }
+      }
+      @media (max-width:960px) { :root { --avatar-size: 72px; } }
+
+      /* Desktop nav */
+      nav.primary-nav { display:flex; }
+      nav.primary-nav ul { list-style:none; display:flex; gap:18px; margin:0; padding:0; }
+      nav.primary-nav a { color: var(--bar-fg); font-weight: 700; position: relative; }
+      nav.primary-nav a::after {
+        content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+        background: color-mix(in srgb, var(--bar-fg) 25%, transparent);
+        transform: scaleX(0); transform-origin: left; transition: transform .22s ease;
+      }
+      nav.primary-nav a:hover { color: var(--bar-fg); text-decoration: none; }
+      nav.primary-nav a:hover::after { transform: scaleX(1); }
+      nav.primary-nav a[aria-current="page"] { font-weight: 900; }
+      nav.primary-nav a[aria-current="page"]::after { transform: scaleX(1); }
+      body.bars-dark nav.primary-nav a[aria-current="page"]::after { transform: scaleX(0); } /* hide underline while bars are dark */
+
+      /* Mobile menu */
+      .menu-toggle {
+        display:none; background:transparent; border:none; color:var(--bar-fg);
+        width:44px; height:44px; border-radius:10px; cursor:pointer; -webkit-tap-highlight-color:transparent;
+      }
+      .menu-toggle .bars, .menu-toggle .bars::before, .menu-toggle .bars::after {
+        display:block; width:22px; height:2px; background: currentColor; border-radius:2px; position:relative; margin:0 auto;
+        transition: transform .2s ease, opacity .2s ease;
+      }
+      .menu-toggle .bars::before, .menu-toggle .bars::after { content:""; position:absolute; left:0; }
+      .menu-toggle .bars::before { transform: translateY(-7px); }
+      .menu-toggle .bars::after  { transform: translateY(7px); }
+
+      .drawer-backdrop {
+        position: fixed; inset:0; background: rgba(0,0,0,.45);
+        backdrop-filter: saturate(120%) blur(2px);
+        opacity:0; pointer-events:none; transition: opacity .18s ease; z-index:1090;
+      }
+      .mobile-drawer {
+        position: fixed; inset:0 0 0 auto; width: min(420px, 92vw);
+        background: var(--drawer-bg); color: var(--drawer-fg);
+        transform: translateX(100%); transition: transform .22s cubic-bezier(.2,.8,.2,1);
+        box-shadow: -20px 0 40px rgba(0,0,0,.2); z-index:1100;
+        display:flex; flex-direction:column; gap:10px; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+      }
+      .mobile-drawer header { display:flex; align-items:center; justify-content:space-between; }
+      .mobile-drawer h3 { margin:0; font-size:1.05rem; font-weight:900; }
+      .mobile-drawer nav ul { list-style:none; margin:10px 0; padding:0; display:grid; gap:8px; }
+      .mobile-drawer nav a {
+        display:block; padding:12px 10px; border-radius:12px; color:inherit;
+        background: rgba(255,255,255,.06); font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06);
+      }
+      .mobile-drawer nav a:hover { background: rgba(255,255,255,.12); }
+      .mobile-drawer .quick { display:grid; gap:10px; margin-top:4px; }
+      .mobile-drawer .quick .btn { width:100%; justify-content:center; }
+
+      body.drawer-open .drawer-backdrop { opacity:1; pointer-events:auto; }
+      body.drawer-open .mobile-drawer { transform:none; }
+      body.drawer-open { overflow:hidden; }
+
+      /* ===== Hero (Portfolio) ===== */
+      .hero { padding: 6px 0 0; }
+      .hero-section.band { padding-top: 22px; padding-bottom: var(--band-space); }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: clamp(18px, 2.2vw, 24px);
+        align-items: start;
+      }
+      .h1 {
+        margin: 0;
+        font-weight: 900; letter-spacing: .2px;
+        font-size: clamp(28px, 6vw, 56px);
+        line-height: 1.08; color: var(--ink);
+      }
+      .lead { margin: 0; max-width: 80ch; color: var(--muted); }
+
+      /* Scroll cue */
+      .scroll-cue { display:flex; justify-content:center; margin-top: 6px; }
+      .scroll-arrow {
+        display:inline-grid; place-items:center; width:38px; height:38px; border-radius:999px;
+        background:#fff; border:1px solid rgba(15,91,102,.25); color: var(--brand-blue-700);
+        box-shadow: 0 8px 18px rgba(17,24,39,.18); text-decoration:none; animation: floaty 2.4s ease-in-out infinite;
+      }
+      .scroll-arrow:hover { text-decoration:none; transform: translateY(-2px); }
+      @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+
+      /* Tiles / cards */
+      .tiles { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
+      .tile {
+        position:relative; background: var(--surface); border-radius: var(--radius);
+        padding: 18px 20px; box-shadow: var(--shadow);
+        transition: transform .18s ease, box-shadow .18s ease;
+      }
+      .tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+      .tile h3 { margin: 0 0 8px; }
+      .tile p  { margin: 0 0 10px; }
+      .tile small.meta { display:block; color: var(--muted); margin-bottom: 8px; }
+      .tile ul { margin: 6px 0 0; padding-left: 18px; }
+      .tile a.card-link {
+        position:absolute; inset:0; border-radius: var(--radius);
+        text-indent:-9999px; overflow:hidden;
+      }
+
+      .cta-row { display:flex; gap:10px; flex-wrap:wrap; }
+      .btn {
+        display:inline-flex; align-items:center; gap:8px; padding:.7rem 1rem;
+        border-radius: 999px; font-weight:800; border:1px solid rgba(0,0,0,.04);
+        background:#fff; color: var(--brand-blue-900);
+        box-shadow: var(--shadow);
+        transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+        text-decoration:none; cursor:pointer;
+      }
+      .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); text-decoration:none; }
+      .btn:active { transform: translateY(-1px); }
+      .btn-outline { background: transparent; color: var(--ink); border: 1px solid #e5e7eb; }
+      .btn-primary { background: var(--brand-blue-700); color:#fff; border-color: transparent; box-shadow: var(--shadow); }
+      .btn-primary:hover { box-shadow: var(--shadow-hover); }
+
+      /* Divider */
+      .section-divider {
+        position: relative; height: 4px; margin: var(--divider-gap) 0; border:0;
+      }
+      .section-divider::after {
+        content:""; position:absolute; inset:0; background: var(--page-bg); z-index:0;
+      }
+      .section-divider::before {
+        content:""; position:absolute; left:0; right:0; top:50%; transform: translateY(-50%);
+        height:1px; border-radius:999px;
+        background: linear-gradient(90deg,
+          rgba(15,91,102,var(--divider-edge-alpha)) 0%,
+          rgba(15,91,102,var(--divider-center-alpha)) 50%,
+          rgba(15,91,102,var(--divider-edge-alpha)) 100%);
+        z-index:1;
+      }
+
+      /* Footer — teal */
+      footer {
+        background: var(--brand-blue-900) !important; color:#ffffff !important;
+        padding: 18px 0; text-align:center; border-top: 1px solid rgba(255,255,255,.18);
+      }
+      footer .wrap { opacity:.95; display:flex; flex-direction:column; gap:14px; align-items:center; }
+      .social { display:flex; align-items:center; gap:10px; }
+      footer .icon-btn {
+        display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px;
+        border-radius:999px; background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.22); color:#fff;
+        transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      }
+      footer .icon-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18); }
+      .icon { width:18px; height:18px; fill: currentColor; }
+
+      /* Mobile quick-contact dock — teal always */
+      .mobile-dock {
+        position: fixed; left:0; right:0; bottom:0; z-index:980;
+        background: var(--brand-blue-900); color:#ffffff; border-top:1px solid rgba(255,255,255,.18);
+        padding: 6px 10px calc(6px + env(safe-area-inset-bottom)); display:none;
+      }
+      .mobile-dock .dock {
+        max-width: var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px;
+      }
+      .mobile-dock .icon-btn {
+        display:inline-flex; align-items:center; justify-content:center; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+        width:46px; height:46px; border-radius:999px; color:#fff; background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.22);
+      }
+      .mobile-dock .icon { display:block; width:18px; height:18px; flex:0 0 auto; }
+      .mobile-dock .icon *, .mobile-dock .icon path, .mobile-dock .icon rect, .mobile-dock .icon circle,
+      .mobile-dock .icon polygon, .mobile-dock .icon line { fill: currentColor; stroke: none; }
+      .mobile-dock .icon-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18); }
+
+      /* Responsive */
+      @media (max-width: 1120px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 960px) {
+        nav.primary-nav { display:none; }
+        .menu-toggle { display:inline-flex; align-items:center; justify-content:center; }
+        .tiles { grid-template-columns: 1fr; }
+        main { padding-bottom: 90px; }
+        .mobile-dock { display:block; }
+        footer .social { display: none !important; }
+      }
+
+      /* Header/nav hover tint */
+      .brand-link--wide:hover .brand-name,
+      .brand-link--wide:focus-visible .brand-name {
+        color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+      }
+      .brand-link--wide:hover .brand-creds,
+      .brand-link--wide:focus-visible .brand-creds {
+        color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%);
+      }
+      nav.primary-nav a:hover, nav.primary-nav a:focus-visible {
+        color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+      }
+
+      /* Skip link */
+      .skip-link {
+        position: absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;
+      }
+      .skip-link:focus {
+        left:16px; top:12px; width:auto; height:auto; padding:.5rem .75rem; border-radius:10px; background:#fff; box-shadow: 0 0 0 6px var(--ring); z-index:2000;
+      }
+
+      .hero-section .wrap {
+        padding-left: calc(var(--wrap-pad) + env(safe-area-inset-left));
+        padding-right: calc(var(--wrap-pad) + env(safe-area-inset-right));
+      }
+
+      /* ===== CONTACT MODAL (parity with About/Home) ===== */
+      dialog#contactDialog {
+        width: min(840px, 94vw);
+        border: 0; padding: 0; border-radius: 20px;
+        box-shadow: 0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+        background: #fff; animation: modal-in .22s cubic-bezier(.2,.8,.2,1);
+      }
+      dialog#contactDialog::backdrop {
+        background: rgba(17,24,39,.55); backdrop-filter: saturate(120%) blur(3px); animation: backdrop-in .22s ease;
+      }
+      @keyframes modal-in { from { transform: translateY(14px) scale(.985); opacity:0 } to { transform:none; opacity:1 } }
+      @keyframes backdrop-in { from { opacity:0 } to { opacity:1 } }
+      .modal-header {
+        display:flex; align-items:center; justify-content:space-between;
+        padding: 18px 18px 6px; border-bottom: 1px solid #e5e7eb; position: static;
+      }
+      .modal-header::after { content:none; }
+      .modal-title { margin:0; font-weight:900; font-size:1.15rem; color:#0f172a; }
+      .modal-close {
+        width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a;
+        cursor:pointer; display:inline-flex; align-items:center; justify-content:center;
+        box-shadow: var(--shadow);
+        transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+      }
+      .modal-close:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+      .modal-body { padding: 14px 18px 18px; }
+      .contact-actions { display:flex; gap:12px; flex-wrap:wrap; }
+      .contact-actions .btn { border-radius:999px; }
+      .contact-actions .btn-primary { filter:saturate(115%); } /* match Home's pop */
+      .divider { height:1px; background:#e5e7eb; margin:8px 0 14px; }
+      .form-grid {
+        display:grid; grid-template-columns: 120px 1fr; gap:10px 12px; align-items:center;
+      }
+      .form-grid label { font-weight:700; color:#0f172a; }
+      .form-grid input, .form-grid textarea {
+        width:100%; font:inherit; padding:12px 14px; border-radius:14px; border:1px solid #e5e7eb; background:#f8fafc;
+        transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.6);
+      }
+      .form-grid textarea { min-height:160px; resize: vertical; }
+      .form-grid input:focus, .form-grid textarea:focus {
+        outline:none; border-color:#c5d6e2; background:#fff; box-shadow: 0 0 0 6px var(--ring);
+      }
+      .form-actions {
+        grid-column: 2 / -1; display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
+      }
+      .form-hint { grid-column: 2 / -1; margin-top:4px; font-size:.9rem; color: var(--muted); }
+      @media (max-width:640px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .form-actions, .form-hint { grid-column: 1 / -1; }
+      }
+    </style>
+
+    <!-- Inert polyfill -->
+    <script>
+      if (!("inert" in HTMLElement.prototype)) {
+        var s = document.createElement("script");
+        s.src = "https://unpkg.com/wicg-inert@3.1.2/dist/inert.min.js";
+        s.defer = true;
+        document.head.appendChild(s);
+      }
+    </script>
+
+    <!-- Person schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Isaac B. Michael",
+        "jobTitle": "Research Scientist; Program Director",
+        "url": "https://isaacbmichael.com/",
+        "sameAs": [
+          "mailto:isaac.b.michael@gmail.com",
+          "https://www.linkedin.com/in/isaacbmichael",
+          "https://github.com/isaacbmichael"
+        ]
+      }
+    </script>
+  </head>
+
+  <body class="bars-dark">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- Mobile drawer -->
+    <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+    <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+      <header>
+        <h3>Menu</h3>
+        <button class="menu-toggle" id="menuClose" aria-label="Close menu">
+          <span class="bars"></span>
+        </button>
+      </header>
+      <nav aria-label="Mobile">
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/portfolio/">Portfolio</a></li>
+          <li><a href="/writing/">Writing</a></li>
+          <li><a href="/speaking/">Speaking</a></li>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/cv/">Résumé</a></li>
+        </ul>
+      </nav>
+      <div class="quick" aria-label="Quick actions">
+        <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email me</a>
+        <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
+        <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </aside>
+
+    <!-- Header -->
+    <header class="site-header">
+      <div class="wrap topbar">
+        <div class="brand">
+          <a href="/" rel="home" aria-label="Home" class="brand-link--wide" id="brandLink">
+            <div class="avatar" aria-hidden="true">
+              <div class="avatar-badge">
+                <div class="avatar-inner">
+                  <div class="avatar-face front">
+                    <img
+                      id="logoFront"
+                      src="/assets/brands/logo-white.svg"
+                      data-logo-light="/assets/brands/logo-tealroyal.svg"
+                      data-logo-dark="/assets/brands/logo-white.svg"
+                      alt="Isaac B. Michael logo (front)"
+                      decoding="async"
+                      width="96"
+                      height="96"
+                      loading="eager"
+                      fetchpriority="high"
+                    />
+                  </div>
+                  <div class="avatar-face back">
+                    <img
+                      id="logoBack"
+                      src="/assets/brands/logo-white.svg"
+                      data-logo-light="/assets/brands/logo-tealroyal.svg"
+                      data-logo-dark="/assets/brands/logo-white.svg"
+                      alt="Isaac B. Michael logo (mirrored)"
+                      decoding="async"
+                      width="96"
+                      height="96"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="brand-text" aria-label="Site owner">
+              <span class="brand-name">Isaac B. Michael</span>
+              <div class="brand-creds">PhD · MS · MApSt</div>
+            </div>
+          </a>
+        </div>
+
+        <nav class="primary-nav" aria-label="Primary">
+          <ul>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/portfolio/">Portfolio</a></li>
+            <li><a href="/writing/">Writing</a></li>
+            <li><a href="/speaking/">Speaking</a></li>
+            <li><a href="/services/">Services</a></li>
+            <li><a href="/cv/">Résumé</a></li>
+            <li>
+              <a
+                href="/contact/"
+                id="contactOpen"
+                aria-label="Open contact dialog"
+                aria-controls="contactDialog"
+                aria-haspopup="dialog"
+              >Contact</a>
+            </li>
+          </ul>
+        </nav>
+
+        <button
+          class="menu-toggle"
+          id="menuToggle"
+          aria-label="Open menu"
+          aria-controls="mobileDrawer"
+          aria-expanded="false"
+        >
+          <span class="bars"></span>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Hero -->
+      <section class="hero-section band">
+        <div class="wrap hero">
+          <div class="hero-grid">
+            <h1 class="h1">Technical portfolio</h1>
+            <p class="lead">
+              Selected projects demonstrating <strong>survey methodology</strong>, <strong>analytics automation</strong>, and
+              <strong>decision-ready reporting</strong>. Work examples emphasize reproducibility, QA gates, and clear executive communication.
+            </p>
+            <div class="cta-row" aria-label="Quick navigation" style="margin-top:6px">
+              <a class="btn btn-primary" href="#projects">Browse projects</a>
+              <a class="btn" href="/cv/">Résumé</a>
+              <a class="btn" href="/services/">Services</a>
+              <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule time</a>
+            </div>
+          </div>
+
+          <!-- Scroll cue -->
+          <div class="scroll-cue">
+            <a class="scroll-arrow" href="#projects" aria-label="Scroll to projects">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 15.5 5.8 9.3l1.4-1.4L12 12.7l4.8-4.8 1.4 1.4z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true"></div>
+
+      <!-- Projects -->
+      <section class="band" aria-labelledby="projects">
+        <div class="wrap">
+          <h2 id="projects">Featured projects</h2>
+
+          <div class="tiles">
+            <!-- ATS-Ready AltaCV -->
+            <article class="tile">
+              <h3>ATS-Ready AltaCV Résumé Template</h3>
+              <small class="meta">Updated Oct 2025 · LaTeX · GitHub Actions</small>
+              <p>
+                Single-column resume that <em>looks</em> like two columns while staying parser-safe.
+                Adds an <strong>ATS mode</strong>, icon-silent <code>ActualText</code>, dash normalization,
+                and CI publishing for dual PDFs.
+              </p>
+              <ul>
+                <li>📄 <a href="/assets/pdfs/template.pdf" download>Download Showcase PDF</a></li>
+                <li>📄 <a href="/assets/pdfs/resume-ats.pdf" download>Download ATS PDF</a></li>
+                <li>🔗 <a href="https://github.com/isaacbmichael/ats-ready-altacv-template" target="_blank" rel="noopener noreferrer">Repository</a></li>
+              </ul>
+            </article>
+
+            <!-- Academic Program Site Template -->
+            <article class="tile">
+              <h3>Academic Program Site Template</h3>
+              <small class="meta">Updated Oct 2025 · HTML/CSS · Vanilla JS</small>
+              <p>
+                Lightweight static microsite for academic programs—accessible UI (hero/CTAs, proposal cards,
+                accordions, badges), responsive spacing, and print-friendly styles.
+              </p>
+              <ul>
+                <li>🌐 <a href="https://isaacbmichael.github.io/academic-program-site-template/" target="_blank" rel="noopener noreferrer">Live demo</a></li>
+                <li>🔗 <a href="https://github.com/isaacbmichael/academic-program-site-template" target="_blank" rel="noopener noreferrer">Repository</a></li>
+              </ul>
+            </article>
+
+            <!-- Capital Allocation Monte Carlo -->
+            <article class="tile">
+              <h3>Capital Allocation Monte Carlo Simulation</h3>
+              <small class="meta">Updated Oct 2025 · Python · NumPy · Matplotlib · yfinance</small>
+              <p>
+                Risk/return simulation using real market data and Monte Carlo methods; executive-level outputs for allocation decisions.
+              </p>
+              <ul>
+                <li>🌐 <a href="https://isaacbmichael.github.io/capital-allocation-report/capital_allocation_report.html" target="_blank" rel="noopener noreferrer">Interactive HTML report</a></li>
+                <li>🔗 <a href="https://github.com/isaacbmichael/capital-allocation-report/blob/main/capital_allocation_montecarlo.py" target="_blank" rel="noopener noreferrer">Python source</a></li>
+              </ul>
+            </article>
+
+            <!-- Exploratory Applicant Data Report -->
+            <article class="tile">
+              <h3>Exploratory Applicant Data Report</h3>
+              <small class="meta">Updated Sep 2025 · R · RMarkdown · ggplot2</small>
+              <p>
+                Interactive analysis of applicant demographics, cleaning pipelines, and SES enrichment with
+                reproducible RMarkdown.
+              </p>
+              <ul>
+                <li>🌐 <a href="https://isaacbmichael.github.io/eda-applicant-report/eda_report.html" target="_blank" rel="noopener noreferrer">Interactive HTML report</a></li>
+                <li>🔗 <a href="https://github.com/isaacbmichael/eda-applicant-report/blob/main/eda_report.Rmd" target="_blank" rel="noopener noreferrer">R Markdown source</a></li>
+              </ul>
+            </article>
+
+            <!-- Public-health analytics (general) -->
+            <article class="tile">
+              <h3>Independent Public-Health Analytics</h3>
+              <small class="meta">Client-confidential · SAS · SQL · QA automation</small>
+              <p>
+                Multi-program weighting system and automated SAS reporting engine: end-to-end QA gates, exception handling,
+                sampling-verification templates, and standard outputs to shorten cycles and improve consistency.
+              </p>
+              <a class="card-link" href="/services/" aria-label="Learn about services">Services</a>
+            </article>
+
+            <!-- VDH CHR -->
+            <article class="tile">
+              <h3>Virginia Dept. of Health — CHR</h3>
+              <small class="meta">SAS · Automated survey processing</small>
+              <p>
+                Built Totals3/4 workflows to automate survey processing and visualization; delivered focused 29- and 71-page reports
+                to inform program decisions.
+              </p>
+              <a class="card-link" href="/portfolio/" aria-label="See more items">View more</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true"></div>
+
+      <!-- CTA -->
+      <section class="band" aria-labelledby="next">
+        <div class="wrap">
+          <h2 id="next">What would you like to explore?</h2>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="/services/">Work with me</a>
+            <a class="btn" href="/cv/">Résumé</a>
+            <a class="btn" href="/writing/">Writing</a>
+            <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule time</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer (teal, persistent) -->
+    <footer>
+      <div class="wrap">
+        <div class="social" aria-label="External profiles">
+          <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/>
+            </svg>
+            <span class="sr-only">Email</span>
+          </a>
+          <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Schedule with Calendly">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/>
+            </svg>
+            <span class="sr-only">Calendly</span>
+          </a>
+          <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/>
+            </svg>
+            <span class="sr-only">LinkedIn</span>
+          </a>
+          <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/>
+            </svg>
+            <span class="sr-only">GitHub</span>
+          </a>
+        </div>
+
+        <div>© <span id="y"></span> Isaac B. Michael · All rights reserved.</div>
+      </div>
+    </footer>
+
+    <!-- Mobile quick-contact dock -->
+    <div class="mobile-dock" role="region" aria-label="Quick contact">
+      <div class="dock">
+        <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/>
           </svg>
-          <span class="label">Email</span>
+          <span class="sr-only">Email</span>
+        </a>
+        <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Calendly">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/>
+          </svg>
+          <span class="sr-only">Calendly</span>
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/>
+          </svg>
+          <span class="sr-only">LinkedIn</span>
+        </a>
+        <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/>
+          </svg>
+          <span class="sr-only">GitHub</span>
         </a>
       </div>
     </div>
-  </footer>
-</body>
+
+    <!-- Contact Modal -->
+    <dialog id="contactDialog" aria-labelledby="contactTitle">
+      <div class="modal-header">
+        <h3 id="contactTitle" class="modal-title">Contact</h3>
+        <button class="modal-close" id="contactClose" aria-label="Close contact dialog">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="contact-actions" aria-label="Quick links">
+          <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule time on Calendly</a>
+          <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <form id="quickForm" class="form-grid">
+          <label for="qName">Name</label>
+          <input id="qName" name="name" autocomplete="name" placeholder="Your name" />
+
+          <label for="qEmail">Email</label>
+          <input id="qEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+
+          <label for="qMsg">Message</label>
+          <textarea id="qMsg" name="message" placeholder="Tell me a little about your project or request…"></textarea>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="contactCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Send via Email</button>
+          </div>
+
+          <small class="form-hint">Submitting opens your email client with your message pre-filled (no data is stored on this site).</small>
+        </form>
+      </div>
+    </dialog>
+
+    <script>
+      /* ========== Util helpers ========== */
+      function $(sel){ return document.querySelector(sel); }
+      function $all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+      // Current year
+      (function(){ var yEl = document.getElementById("y"); if (yEl) yEl.textContent = new Date().getFullYear(); })();
+
+      // Preload logos (already linked in <head>, keep JS warm cache too)
+      var logoFront = document.getElementById("logoFront");
+      var logoBack  = document.getElementById("logoBack");
+      function preload(src){ return new Promise(function(res){ var i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
+      if (logoFront && logoFront.dataset && logoFront.dataset.logoLight && logoFront.dataset.logoDark) {
+        Promise.all([logoFront.dataset.logoLight, logoFront.dataset.logoDark].map(preload));
+      }
+
+      // Contact modal
+      var dialog = document.getElementById("contactDialog");
+      var contactOpen = document.getElementById("contactOpen");
+      var contactClose = document.getElementById("contactClose");
+      var contactCancel = document.getElementById("contactCancel");
+      var quickForm = document.getElementById("quickForm");
+
+      function openDialog(e){
+        if (e) e.preventDefault();
+        if (dialog && !dialog.open){
+          window.__lastFocused = document.activeElement;
+          if (typeof dialog.showModal === "function") dialog.showModal();
+          var mainEl = $("main"); var headerEl = $("header.site-header"); var dockEl = $(".mobile-dock");
+          if (mainEl) mainEl.setAttribute("inert","");
+          if (headerEl) headerEl.setAttribute("inert","");
+          if (dockEl) dockEl.setAttribute("inert","");
+          var nameEl = document.getElementById("qName"); if (nameEl) nameEl.focus();
+        }
+      }
+      function closeDialog(e){
+        if (e) e.preventDefault();
+        if (dialog && dialog.open){
+          dialog.close();
+          var mainEl = $("main"); var headerEl = $("header.site-header"); var dockEl = $(".mobile-dock");
+          if (mainEl) mainEl.removeAttribute("inert");
+          if (headerEl) headerEl.removeAttribute("inert");
+          if (dockEl) dockEl.removeAttribute("inert");
+          var backTo = window.__lastFocused || document.getElementById("contactOpen");
+          if (backTo && backTo.focus) backTo.focus();
+        }
+      }
+      if (contactOpen) contactOpen.addEventListener("click", function(e){ if (dialog && typeof dialog.showModal === "function"){ e.preventDefault(); openDialog(e); } });
+      if (contactClose) contactClose.addEventListener("click", closeDialog);
+      if (contactCancel) contactCancel.addEventListener("click", closeDialog);
+      if (dialog){
+        dialog.addEventListener("click", function(e){ if (e.target === dialog) closeDialog(); });
+        dialog.addEventListener("keydown", function(e){ if (e.key === "Escape") closeDialog(); });
+      }
+      if (quickForm){
+        var qName = document.getElementById("qName");
+        var qEmail = document.getElementById("qEmail");
+        var qMsg = document.getElementById("qMsg");
+        quickForm.addEventListener("submit", function(e){
+          e.preventDefault();
+          var name = ((qName && qName.value) || "").trim();
+          var email = ((qEmail && qEmail.value) || "").trim();
+          var msg = ((qMsg && qMsg.value) || "").trim();
+          var subject = encodeURIComponent("Website inquiry");
+          var body = encodeURIComponent(msg + "\n\n— " + name + (email ? " <" + email + ">" : ""));
+          window.location.href = "mailto:isaac.b.michael@gmail.com?subject=" + subject + "&body=" + body;
+          closeDialog();
+        });
+      }
+
+      // Mobile drawer
+      var drawer = document.getElementById("mobileDrawer");
+      var backdrop = document.getElementById("drawerBackdrop");
+      var menuBtn = document.getElementById("menuToggle");
+      var menuClose = document.getElementById("menuClose");
+
+      function setAppInert(on){
+        ["main", "header.site-header", ".hero-section", "footer", ".mobile-dock"].forEach(function(sel){
+          var el = $(sel); if (!el) return; if (on) el.setAttribute("inert",""); else el.removeAttribute("inert");
+        });
+      }
+      function trapFocusWithin(el){
+        if (!el || el.__trapBound) return; el.__trapBound = true;
+        el.addEventListener("keydown", function(e){
+          if (e.key !== "Tab") return;
+          var f = el.querySelectorAll("a,button,[tabindex]:not([tabindex='-1'])"); if (!f.length) return;
+          var first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        });
+      }
+      function openDrawer(e){
+        if (e) e.preventDefault();
+        if (backdrop) backdrop.hidden = false;
+        document.body.classList.add("drawer-open");
+        if (drawer) drawer.setAttribute("aria-hidden","false");
+        if (menuBtn) menuBtn.setAttribute("aria-expanded","true");
+        setAppInert(true);
+        if (drawer){ var firstLink = drawer.querySelector("a"); if (firstLink) firstLink.focus(); }
+        trapFocusWithin(drawer);
+      }
+      function closeDrawer(e){
+        if (e) e.preventDefault();
+        document.body.classList.remove("drawer-open");
+        if (drawer) drawer.setAttribute("aria-hidden","true");
+        if (menuBtn) menuBtn.setAttribute("aria-expanded","false");
+        setTimeout(function(){ if (backdrop) backdrop.hidden = true; }, 220);
+        setAppInert(false);
+        if (menuBtn && menuBtn.focus) menuBtn.focus();
+      }
+      if (menuBtn)   menuBtn.addEventListener("click", openDrawer);
+      if (menuClose) menuClose.addEventListener("click", closeDrawer);
+      if (backdrop)  backdrop.addEventListener("click", closeDrawer);
+      if (drawer) $all("#mobileDrawer a").forEach(function(a){ a.addEventListener("click", function(){ closeDrawer(); }); });
+      document.addEventListener("keydown", function(e){ if (e.key === "Escape" && document.body.classList.contains("drawer-open")) closeDrawer(); });
+
+      // Brand link spin → home
+      var brandLink = document.getElementById("brandLink");
+      if (brandLink){
+        brandLink.addEventListener("click", function(e){
+          e.preventDefault();
+          var inner = brandLink.querySelector(".avatar-inner");
+          if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+            window.location.href = "/";
+            return;
+          }
+          if (inner){
+            inner.style.setProperty("--spin","1turn");
+            var go = function(){ window.location.href = "/"; };
+            var done = false;
+            inner.addEventListener("transitionend", function(evt){ if (!done && evt.propertyName === "transform"){ done = true; go(); } });
+            setTimeout(go, 800);
+          } else { window.location.href = "/"; }
+        });
+      }
+
+      // Bars: dark while hero in view
+      var hero = document.querySelector(".hero-section");
+      function setBarsDark(isDark){
+        document.body.classList.toggle("bars-dark", isDark);
+        if (logoFront && logoBack && logoFront.dataset){
+          var src = isDark ? logoFront.dataset.logoDark : logoFront.dataset.logoLight;
+          if (src){ logoFront.src = src; logoBack.src = src; }
+        }
+      }
+      setBarsDark(true);
+      if ("IntersectionObserver" in window && hero){
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){ setBarsDark(entry.isIntersecting); });
+        }, { threshold: 0 });
+        io.observe(hero);
+      } else {
+        window.addEventListener("scroll", function(){ setBarsDark(window.scrollY < 60); });
+      }
+
+      // Smooth glide on the scroll arrow
+      $all("a.scroll-arrow").forEach(function(a){
+        a.addEventListener("click", function(e){
+          var href = a.getAttribute("href") || "";
+          if (href.indexOf("#") === 0){
+            e.preventDefault();
+            var id = href.slice(1);
+            var target = document.getElementById(id);
+            if (target && target.scrollIntoView) target.scrollIntoView({ behavior:"smooth", block:"start" });
+          }
+        });
+      });
+
+      // Mark current page in nav
+      $all("nav.primary-nav a").forEach(function(a){
+        try {
+          var here = new URL(a.href, location.origin).pathname.replace(/\/+$/, "") || "/";
+          var path = location.pathname.replace(/\/+$/, "") || "/";
+          if (here === path) a.setAttribute("aria-current","page");
+        } catch(_) {}
+      });
+    </script>
+  </body>
 </html>
