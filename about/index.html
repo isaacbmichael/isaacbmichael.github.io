@@ -148,6 +148,9 @@
     nav.primary-nav a::after{ content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; background: color-mix(in srgb, var(--bar-fg) 25%, transparent); transform: scaleX(0); transform-origin: left; transition: transform .22s ease }
     nav.primary-nav a:hover{ color: var(--bar-fg); text-decoration: none }
     nav.primary-nav a:hover::after{ transform: scaleX(1) }
+    /* Active page styling (parity with Home) */
+    nav.primary-nav a[aria-current="page"]{ font-weight: 900 }
+    nav.primary-nav a[aria-current="page"]::after{ transform: scaleX(1) }
 
     /* Mobile menu */
     .menu-toggle{ display: none; background: transparent; border: none; color: var(--bar-fg); width: 44px; height: 44px; border-radius: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent }
@@ -439,6 +442,8 @@
     }
     .tile:hover{ transform: translateY(-4px); box-shadow: var(--shadow-hover) }
     .tile h3{ margin: 0 0 8px }
+    /* Parity with Home: make entire card clickable when .card-link is present */
+    .tile a.card-link{ position: absolute; inset: 0; border-radius: var(--radius); text-indent: -9999px; overflow: hidden }
 
     .cta-row{ display: flex; gap: 10px; flex-wrap: wrap }
     .btn{
