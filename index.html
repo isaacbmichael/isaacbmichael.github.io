@@ -18,6 +18,10 @@
   <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
   <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
 
+  <!-- Preload logo variants for faster first paint -->
+  <link rel="preload" href="/assets/brands/logo-tealroyal.svg" as="image" type="image/svg+xml" fetchpriority="high">
+  <link rel="preload" href="/assets/brands/logo-white.svg" as="image" type="image/svg+xml">
+
   <style>
   /* ===== Design Tokens (Royal Teal) ===== */
   :root{
@@ -193,6 +197,13 @@
   }
   nav.primary-nav a:hover{color:var(--bar-fg);text-decoration:none}
   nav.primary-nav a:hover::after{transform:scaleX(1)}
+  /* Active page styling */
+  nav.primary-nav a[aria-current="page"]{
+    font-weight:900;
+  }
+  nav.primary-nav a[aria-current="page"]::after{
+    transform:scaleX(1);
+  }
 
   /* ===== Mobile hamburger (hidden on desktop) ===== */
   .menu-toggle{
