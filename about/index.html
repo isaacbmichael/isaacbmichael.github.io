@@ -151,8 +151,6 @@
     /* Active page styling (parity with Home) */
     nav.primary-nav a[aria-current="page"]{ font-weight: 900 }
     nav.primary-nav a[aria-current="page"]::after{ transform: scaleX(1) }
-    /* Hide the active underline while the header bars are dark */
-    body.bars-dark nav.primary-nav a[aria-current="page"]::after{ transform: scaleX(0) }
 
     /* Mobile menu */
     .menu-toggle{ display: none; background: transparent; border: none; color: var(--bar-fg); width: 44px; height: 44px; border-radius: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent }
