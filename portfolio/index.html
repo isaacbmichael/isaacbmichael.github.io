@@ -39,6 +39,7 @@
         --shadow-hover:0 16px 28px rgba(17,24,39,.12),0 4px 12px rgba(17,24,39,.06);
         --avatar-size:96px; --drawer-bg:#ffffff; --drawer-fg:#111827;
         --band-space:28px; --divider-gap:2px; --divider-edge-alpha:.12; --divider-center-alpha:.68;
+        --nav-underline-alpha:25%;
       }
       @media (min-width:1600px){:root{--w:1440px}}
       body.bars-dark{--bar-bg:var(--brand-blue-900);--bar-fg:#fff;--bar-border:rgba(255,255,255,.16);--drawer-bg:#0e2a39;--drawer-fg:#eaf2f6}
@@ -101,11 +102,11 @@
       nav.primary-nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0}
       nav.primary-nav a{color:var(--bar-fg); font-weight:700; position:relative}
       nav.primary-nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
-        background:color-mix(in srgb,var(--bar-fg) 25%, transparent); transform:scaleX(0); transform-origin:left; transition:transform .22s}
+        background:color-mix(in srgb,var(--bar-fg) var(--nav-underline-alpha), transparent); transform:scaleX(0); transform-origin:left; transition:transform .22s}
       nav.primary-nav a:hover{color:var(--bar-fg); text-decoration:none}
       nav.primary-nav a:hover::after{transform:scaleX(1)}
       nav.primary-nav a[aria-current="page"]{font-weight:900}
-      nav.primary-nav a[aria-current="page"]::after{transform:scaleX(1); background:color-mix(in srgb,var(--bar-fg) 65%, transparent)}
+      nav.primary-nav a[aria-current="page"]::after{transform:scaleX(1)}
 
       /* Mobile menu */
       .menu-toggle{display:none; background:transparent; border:none; color:var(--bar-fg); width:44px; height:44px; border-radius:10px; cursor:pointer; -webkit-tap-highlight-color:transparent}
@@ -134,8 +135,8 @@
       .hero-section.band{padding-top:22px; padding-bottom:var(--band-space)}
       .hero-grid{display:grid; grid-template-columns:1fr; gap:clamp(18px,2.2vw,24px); align-items:start}
       .h1{margin:0; font-weight:900; letter-spacing:.2px; font-size:clamp(28px,6vw,56px); line-height:1.08; color:var(--ink)}
-      .lead{margin:0; color:var(--muted)}
-      .chip-row{display:flex; gap:8px; flex-wrap:wrap}
+      .lead{margin:0; color:var(--muted); grid-column:1 / -1; max-width:none}
+      .chip-row{display:flex; gap:8px; flex-wrap:wrap; grid-column:1 / -1}
       .chip{display:inline-flex; align-items:center; gap:8px; padding:.45rem .8rem; border:1px solid #e5e7eb; border-radius:999px; background:#fff; color:var(--ink); font-weight:800; box-shadow:var(--shadow)}
       .chip:hover{text-decoration:none; transform:translateY(-1px); box-shadow:var(--shadow-hover)}
 
@@ -333,8 +334,8 @@
               A selection of my most meaningful work—national public-health delivery at CDC, program building at LSU, independent client projects, and a few technical demos. Each card includes a short summary, and the larger ones expand to show how the work actually got done.
             </p>
             <nav aria-label="Section shortcuts" class="chip-row">
-              <a class="chip" href="#cdc">CDC</a>
-              <a class="chip" href="#lsu">LSU</a>
+              <a class="chip" href="#cdc" aria-label="Centers for Disease Control and Prevention (CDC)" title="Centers for Disease Control and Prevention">CDC</a>
+              <a class="chip" href="#lsu" aria-label="Louisiana State University (LSU)" title="Louisiana State University">LSU</a>
               <a class="chip" href="#consulting">Independent Consulting</a>
               <a class="chip" href="#demos">Technical Demos</a>
             </nav>
@@ -359,9 +360,9 @@
 
           <div class="tiles">
             <!-- PRAMS Weighting Season -->
-            <article class="tile" data-kind="cdc" data-start="2023-10" data-end="2024-03">
+            <article class="tile" data-kind="cdc" data-start="2024-10" data-end="2025-03">
               <h3>PRAMS Data Weighting — National Delivery & Automation</h3>
-              <small class="meta">Oct 2023 – Mar 2024 (season) · Mathematical Statistician</small>
+              <small class="meta">Oct 2024 – Mar 2025 (season) · Mathematical Statistician</small>
               <p>
                 Co-led the national PRAMS weighting season—standing up reliable workflows, resolving tricky sampling issues with states, and getting clean, audit-ready outputs out the door on time.
               </p>
@@ -373,15 +374,6 @@
                   <li>Closed the loop with sites when stratification or file issues appeared, and kept a paper trail so the next person didn’t have to rediscover the same fix.</li>
                 </ul>
               </details>
-            </article>
-
-            <!-- National Grantee Meeting -->
-            <article class="tile" data-kind="cdc" data-date="2024-09">
-              <h3>PRAMS National Grantee Meeting — On-Site Statistical Consulting</h3>
-              <small class="meta">Sep 2024 · Seattle, WA</small>
-              <p>
-                Served on site to field live questions from grantees, walk through stratification and sampling checks, and help teams get unstuck in real time.
-              </p>
             </article>
 
             <!-- Nonresponse Bias Study -->
@@ -480,10 +472,7 @@
               <p>
                 Pulled together multiple years of applicant spreadsheets, matched them to school and census data, and produced a clean analysis with interactive visuals to guide outreach and hiring.
               </p>
-              <ul>
-                <li>🌐 <a href="https://isaacbmichael.github.io/eda-applicant-report/eda_report.html" target="_blank" rel="noopener noreferrer">Interactive HTML report</a></li>
-                <li>🔗 <a href="https://github.com/isaacbmichael/eda-applicant-report/blob/main/eda_report.Rmd" target="_blank" rel="noopener noreferrer">R Markdown source</a></li>
-              </ul>
+              <!-- links removed (covered in Technical Demos) -->
             </article>
           </div>
         </div>
@@ -498,6 +487,24 @@
           <h2 id="consulting">Independent Consulting</h2>
 
           <div class="tiles">
+            <!-- NDA client weighting + reporting system -->
+            <article class="tile" data-kind="consulting" data-start="2025-06" data-end="2025-09">
+              <h3>Three-Program Census-Style Weighting & Automated Reporting (NDA client)</h3>
+              <small class="meta">Jun – Sep 2025 · Lead Architect (Independent Consultant)</small>
+              <p>
+                Designed and shipped a multi-program weighting system with end-to-end QA and a one-click reporting engine. The pipeline ingested raw survey files, validated eligibility and IDs, computed two-level weights, and exported audit-ready tables and visuals.
+              </p>
+              <details>
+                <summary>What this looked like day-to-day</summary>
+                <ul>
+                  <li><strong>Program 01 — Setup & QA:</strong> standardized inputs, eligibility flags, duplicate-ID checks, suffix logic, and diagnostic summaries.</li>
+                  <li><strong>Program 02 — Weighting:</strong> two-level census-style weighting with consistency checks (% selection, strata alignment, coverage/noncoverage diagnostics).</li>
+                  <li><strong>Program 03 — Reporting:</strong> reproducible exports (Excel/PDF) with ready-to-share tables, charts, and run logs.</li>
+                  <li>Built synthetic datasets for validation; added guardrails and “stop-on-fail” QA gates; documented flowchart, runbook, and revision history.</li>
+                </ul>
+              </details>
+            </article>
+
             <!-- VDH CHR -->
             <article class="tile" data-kind="consulting" data-date="2024-10">
               <h3>Virginia Department of Health — Comprehensive Harm Reduction (CHR)</h3>
