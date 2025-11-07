@@ -329,6 +329,12 @@
     fill: currentColor;
     stroke: none;
   }
+  /* Hover lift for dock icons (parity with Speaking) */
+  .mobile-dock .icon-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,.25);
+    background: rgba(255,255,255,.18);
+  }
 
   /* ===== CONTACT MODAL (polished) ===== */
   dialog#contactDialog{
@@ -418,6 +424,7 @@
   @media (max-width:960px){
     nav.primary-nav{ display:none }
     .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
+    main{ padding-bottom:90px } /* make room for the mobile dock */
     .mobile-dock{ display:block }
     footer .social{ display:none !important; }
   }
@@ -500,7 +507,6 @@
   <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
     <header>
       <h3>Menu</h3>
-      <!-- FIX: remove incorrect aria-expanded on close button -->
       <button class="menu-toggle" id="menuClose" aria-label="Close menu">
         <span class="bars"></span>
       </button>
@@ -579,8 +585,11 @@
     </div>
   </header>
 
-  <!-- ===== Only the center divider ===== -->
-  <div class="section-divider" aria-hidden="true"></div>
+  <!-- ===== Main ===== -->
+  <main id="main">
+    <!-- Only the center divider -->
+    <div class="section-divider" aria-hidden="true"></div>
+  </main>
 
   <!-- ===== Footer (teal, persistent) ===== -->
   <footer>
@@ -595,7 +604,7 @@
           <span class="sr-only">Calendly</span>
         </a>
         <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0  0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
@@ -615,7 +624,7 @@
         <span class="sr-only">Email</span>
       </a>
       <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Calendly">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0  0 0 1-1V8Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0  0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0  0 0 1-1V8Z"/></svg>
         <span class="sr-only">Calendly</span>
       </a>
       <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
@@ -782,20 +791,20 @@
       if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer();
     });
 
-    // Brand link: spin once, then go home
+    // Brand link: spin once, then go home (site-relative)
     const brandLink = document.getElementById('brandLink');
     brandLink?.addEventListener('click', (e)=>{
       e.preventDefault();
       const inner = brandLink.querySelector('.avatar-inner');
 
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-        window.location.href = 'https://isaacbmichael.com/';
+        window.location.href = '/';
         return;
       }
 
       inner.style.setProperty('--spin', '1turn');
 
-      const goHome = () => { window.location.href = 'https://isaacbmichael.com/'; };
+      const goHome = () => { window.location.href = '/'; };
 
       let done = false;
       const onEnd = (evt) => {
@@ -809,6 +818,25 @@
       setTimeout(goHome, 800); // fallback
     });
 
+    // Bars: dark while hero in view (keeps code identical across pages)
+    const hero = document.querySelector('.hero-section');
+    function setBarsDark(isDark){
+      document.body.classList.toggle('bars-dark', isDark);
+      if (logoFront?.dataset && logoBack){
+        const src = isDark ? logoFront.dataset.logoDark : logoFront.dataset.logoLight;
+        if (src){ logoFront.src = src; logoBack.src = src; }
+      }
+    }
+    setBarsDark(true);
+    if ('IntersectionObserver' in window && hero){
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry => setBarsDark(entry.isIntersecting));
+      }, { threshold: 0 });
+      io.observe(hero);
+    }else{
+      window.addEventListener('scroll', ()=>{ setBarsDark(window.scrollY < 60); });
+    }
+
     // Mark current page in desktop nav
     document.querySelectorAll('nav.primary-nav a').forEach(a=>{
       try{
@@ -820,4 +848,3 @@
   </script>
 </body>
 </html>
-
