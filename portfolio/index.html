@@ -200,8 +200,11 @@
       nav.primary-nav a:hover { color: var(--bar-fg); text-decoration: none; }
       nav.primary-nav a:hover::after { transform: scaleX(1); }
       nav.primary-nav a[aria-current="page"] { font-weight: 900; }
-      nav.primary-nav a[aria-current="page"]::after { transform: scaleX(1); }
-      body.bars-dark nav.primary-nav a[aria-current="page"]::after { transform: scaleX(0); } /* hide underline while bars are dark */
+      /* keep underline visible even when bars are dark */
+      nav.primary-nav a[aria-current="page"]::after {
+        transform: scaleX(1);
+        background: color-mix(in srgb, var(--bar-fg) 65%, transparent);
+      }
 
       /* Mobile menu */
       .menu-toggle {
@@ -236,6 +239,10 @@
         background: rgba(255,255,255,.06); font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06);
       }
       .mobile-drawer nav a:hover { background: rgba(255,255,255,.12); }
+      .mobile-drawer nav a[aria-current="page"] {
+        background: rgba(255,255,255,.18);
+        border-color: rgba(0,0,0,.18);
+      }
       .mobile-drawer .quick { display:grid; gap:10px; margin-top:4px; }
       .mobile-drawer .quick .btn { width:100%; justify-content:center; }
 
@@ -584,12 +591,7 @@
               Selected projects demonstrating <strong>survey methodology</strong>, <strong>analytics automation</strong>, and
               <strong>decision-ready reporting</strong>. Work examples emphasize reproducibility, QA gates, and clear executive communication.
             </p>
-            <div class="cta-row" aria-label="Quick navigation" style="margin-top:6px">
-              <a class="btn btn-primary" href="#projects">Browse projects</a>
-              <a class="btn" href="/cv/">Résumé</a>
-              <a class="btn" href="/services/">Services</a>
-              <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule time</a>
-            </div>
+            <!-- Removed top CTA row for consistency with About page -->
           </div>
 
           <!-- Scroll cue -->
@@ -612,7 +614,7 @@
 
           <div class="tiles">
             <!-- ATS-Ready AltaCV -->
-            <article class="tile">
+            <article class="tile" data-kind="technical" data-updated="2025-10-28">
               <h3>ATS-Ready AltaCV Résumé Template</h3>
               <small class="meta">Updated Oct 2025 · LaTeX · GitHub Actions</small>
               <p>
@@ -628,7 +630,7 @@
             </article>
 
             <!-- Academic Program Site Template -->
-            <article class="tile">
+            <article class="tile" data-kind="technical" data-updated="2025-10-20">
               <h3>Academic Program Site Template</h3>
               <small class="meta">Updated Oct 2025 · HTML/CSS · Vanilla JS</small>
               <p>
@@ -642,7 +644,7 @@
             </article>
 
             <!-- Capital Allocation Monte Carlo -->
-            <article class="tile">
+            <article class="tile" data-kind="technical" data-updated="2025-10-10">
               <h3>Capital Allocation Monte Carlo Simulation</h3>
               <small class="meta">Updated Oct 2025 · Python · NumPy · Matplotlib · yfinance</small>
               <p>
@@ -655,7 +657,7 @@
             </article>
 
             <!-- Exploratory Applicant Data Report -->
-            <article class="tile">
+            <article class="tile" data-kind="technical" data-updated="2025-09-15">
               <h3>Exploratory Applicant Data Report</h3>
               <small class="meta">Updated Sep 2025 · R · RMarkdown · ggplot2</small>
               <p>
@@ -669,7 +671,7 @@
             </article>
 
             <!-- Public-health analytics (general) -->
-            <article class="tile">
+            <article class="tile" data-kind="professional">
               <h3>Independent Public-Health Analytics</h3>
               <small class="meta">Client-confidential · SAS · SQL · QA automation</small>
               <p>
@@ -680,7 +682,7 @@
             </article>
 
             <!-- VDH CHR -->
-            <article class="tile">
+            <article class="tile" data-kind="professional">
               <h3>Virginia Dept. of Health — CHR</h3>
               <small class="meta">SAS · Automated survey processing</small>
               <p>
@@ -695,7 +697,7 @@
 
       <div class="section-divider" aria-hidden="true"></div>
 
-      <!-- CTA -->
+      <!-- CTA (keep only bottom band for consistency) -->
       <section class="band" aria-labelledby="next">
         <div class="wrap">
           <h2 id="next">What would you like to explore?</h2>
@@ -876,7 +878,7 @@
           var email = ((qEmail && qEmail.value) || "").trim();
           var msg = ((qMsg && qMsg.value) || "").trim();
           var subject = encodeURIComponent("Website inquiry");
-          var body = encodeURIComponent(msg + "\n\n— " + name + (email ? " <" + email + ">" : ""));
+          var body = encodeURIComponent(msg + "\n\n— " + name + (email ? " <" + email + ">" : "")); 
           window.location.href = "mailto:isaac.b.michael@gmail.com?subject=" + subject + "&body=" + body;
           closeDialog();
         });
@@ -980,8 +982,8 @@
         });
       });
 
-      // Mark current page in nav
-      $all("nav.primary-nav a").forEach(function(a){
+      // Mark current page in *all* navs (desktop + mobile)
+      $all("nav a").forEach(function(a){
         try {
           var here = new URL(a.href, location.origin).pathname.replace(/\/+$/, "") || "/";
           var path = location.pathname.replace(/\/+$/, "") || "/";
