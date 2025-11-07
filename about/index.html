@@ -11,11 +11,15 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://isaacbmichael.com/about/">
-  <!-- Light theme color now matches Home/page background -->
+  <!-- Light theme color matches solid page bg -->
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F7F8">
+  <!-- Dark brand color -->
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B3F47">
   <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
   <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
+  <!-- Preload logo variants for faster first paint -->
+  <link rel="preload" href="/assets/brands/logo-tealroyal.svg" as="image" type="image/svg+xml" fetchpriority="high">
+  <link rel="preload" href="/assets/brands/logo-white.svg" as="image" type="image/svg+xml">
 
   <style>
     /* ===== Royal Teal Design Tokens ===== */
@@ -46,11 +50,11 @@
       --drawer-bg: #ffffff;
       --drawer-fg: #111827;
 
-      /* === Shared spacing & divider tokens === */
-      --band-space: 28px;              /* section vertical padding */
-      --divider-gap: 2px;              /* equal space above/below dividers */
-      --divider-edge-alpha: .12;       /* gradient edge intensity */
-      --divider-center-alpha: .68;     /* darker middle for stronger emphasis */
+      /* Shared spacing & divider tokens */
+      --band-space: 28px;
+      --divider-gap: 2px;
+      --divider-edge-alpha: .12;
+      --divider-center-alpha: .68;
     }
     @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -92,7 +96,7 @@
     /* Preserve anchor visibility under sticky header */
     [id]{ scroll-margin-top: 84px }
 
-    /* ===== Header (same as home) ===== */
+    /* ===== Header (same as Home) ===== */
     header.site-header{
       position: sticky; top: 0; z-index: 1000;
       background: var(--bar-bg); color: var(--bar-fg);
@@ -131,14 +135,6 @@
       .brand-link--wide:hover .avatar-inner{
         --ry:.5turn;
         transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
-      }
-    }
-
-    /* Hover tilt for the large photo badge */
-    @media (hover:hover) and (pointer:fine){
-      .photo-badge:hover .tilt{
-        --rx: -3deg;
-        --ry:  3deg;
       }
     }
     @media (max-width:960px){
@@ -228,8 +224,7 @@
       border-bottom:1px solid #e5e7eb;   /* same as Home */
       position:static;                   /* reset to default */
     }
-    /* remove the gradient rule line that About had */
-    .modal-header::after{ content:none; }
+    .modal-header::after{ content:none; } /* (About’s old gradient removed) */
 
     .modal-title{ margin:0; font-weight:900; font-size:1.15rem; color:#0f172a }
 
@@ -247,10 +242,9 @@
     .contact-actions .btn{ border-radius:999px }              /* pill buttons like Home */
     .contact-actions .btn-primary{ filter:saturate(115%) }    /* same pop as Home */
 
-    /* The shared divider element used on Home */
     .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
 
-    /* Ensure the “3D” button shadow parity inside the modal (Home behavior) */
+    /* Parity: 3D button shadows inside modal */
     .contact-actions .btn,
     .form-actions .btn{ box-shadow:var(--shadow) }
     .contact-actions .btn:hover,
@@ -267,7 +261,7 @@
     .form-grid input,
     .form-grid textarea{
       width:100%;
-      font:inherit;                 /* critical: otherwise inputs look smaller */
+      font:inherit;
       padding:12px 14px;
       border-radius:14px;
       border:1px solid #e5e7eb;
@@ -306,23 +300,22 @@
       perspective: 1100px;
       cursor: pointer;
       touch-action: manipulation;
-      isolation: isolate; /* ensure ::after stays behind content */
+      isolation: isolate;
       --flip: 0turn;      /* shared flip state */
     }
-    /* flipped state toggles the shared variable */
     .photo-badge.is-flipped{ --flip: 180deg; }
 
-    /* Shadow under the badge (stays “on the ground”, behind) */
+    /* Shadow under the badge (remains on “ground”) */
     .photo-badge::after{
       content: "";
       position: absolute; left: 6%; right: 6%; bottom: -26px;
       height: 48px; border-radius: 999px;
       background: rgba(0,0,0,.55);
       filter: blur(26px);
-      z-index: -1; /* behind everything inside the badge */
+      z-index: -1;
     }
 
-    /* TILTING WRAP — tilt only (no flip here) */
+    /* TILTING WRAP — tilt only */
     .photo-badge .tilt{
       position: absolute; inset: 0;
       border-radius: 50%;
@@ -332,7 +325,6 @@
       will-change: transform, filter;
       transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
 
-      /* control via CSS variables */
       --rx: 0deg;
       --ry: 0deg;
 
@@ -361,7 +353,7 @@
       position: absolute; inset: 0;
       background: radial-gradient(ellipse at 30% 25%, rgba(0,0,0,.0) 55%, rgba(0,0,0,.14) 100%);
       pointer-events: none;
-      z-index: 2; /* above faces */
+      z-index: 2;
       transform: translateZ(0.01px) rotateY(var(--flip));
       transition: transform .72s cubic-bezier(.2,.8,.2,1);
       -webkit-backface-visibility: hidden;
@@ -381,11 +373,11 @@
       backface-visibility: hidden;
     }
 
-    /* IMPORTANT: keep the circular mask on .tilt, not on the rotating faces (iOS flicker fix) */
+    /* Keep the circular mask on .tilt, not on rotating faces (iOS flicker fix) */
     .photo-badge .face{
       position: absolute; inset: 0;
-      border-radius: 0;         /* was 50% */
-      overflow: visible;        /* was hidden */
+      border-radius: 0;
+      overflow: visible;
       display: grid;
       place-items: center;
       -webkit-backface-visibility: hidden;
@@ -393,34 +385,25 @@
       will-change: transform;
       transform: translateZ(0.01px);
     }
-    .photo-badge .face.front{
-      background: #fff;
-    }
+    .photo-badge .face.front{ background: #fff; }
     .photo-badge .face.back{
-      transform: rotateY(180.001deg); /* tiny nudge to avoid z-fighting */
+      transform: rotateY(180.001deg);
       text-align: center;
-      padding: clamp(24px, 7%, 30px) 24px; /* more inner space */
+      padding: clamp(24px, 7%, 30px) 24px;
       color: var(--brand-blue-900);
       background:
         radial-gradient(ellipse at 30% 25%, rgba(255,255,255,.96) 0%, rgba(255,255,255,.90) 55%, rgba(255,255,255,.86) 100%),
         linear-gradient(180deg, rgba(15,91,102,.10), rgba(15,91,102,.06));
-      display: grid;
-      place-content: center;
+      display: grid; place-content: center;
     }
     .photo-badge .face.front img{
       width: 100%; height: 100%; object-fit: cover; display: block;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      will-change: transform;
-      transform: translateZ(0.01px);
+      -webkit-backface-visibility: hidden; backface-visibility: hidden;
+      will-change: transform; transform: translateZ(0.01px);
     }
 
     /* Quote layout: safe width inside the circle */
-    .photo-badge .quote-wrap{
-      width: 82%;
-      max-width: 82%;
-      margin: 0 auto;
-    }
+    .photo-badge .quote-wrap{ width: 82%; max-width: 82%; margin: 0 auto; }
     .photo-badge .quote{
       font-weight: 900;
       font-size: clamp(14px, 1.6vw, 18px);
@@ -472,8 +455,8 @@
     /* Divider line — uniform color and spacing everywhere */
     .section-divider{
       position:relative;
-      height:4px;                 /* exact total height */
-      margin: var(--divider-gap) 0; /* equal margins */
+      height:4px;
+      margin: var(--divider-gap) 0;
       border:0;
     }
     .section-divider::after{
@@ -488,7 +471,7 @@
       position:absolute;
       left:0; right:0; top:50%;
       transform:translateY(-50%);
-      height:1px;                 /* exact line thickness */
+      height:1px;
       border-radius:999px;
       background:linear-gradient(
         90deg,
@@ -664,7 +647,7 @@
               </div>
             </div>
           </div>
-          <div class="brand-text">
+          <div class="brand-text" aria-label="Site owner">
             <span class="brand-name">Isaac B. Michael</span>
             <div class="brand-creds">PhD · MS · MApSt</div>
           </div>
@@ -830,7 +813,7 @@
           <a class="btn" href="/portfolio/">Technical portfolio</a>
           <a class="btn" href="/cv/">Résumé</a>
           <a class="btn" href="/writing/">Writing</a>
-          <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener">Schedule time</a>
+          <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule time</a>
         </div>
       </div>
     </section>
@@ -844,15 +827,15 @@
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
           <span class="sr-only">Email</span>
         </a>
-        <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Schedule with Calendly">
+        <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Schedule with Calendly">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
           <span class="sr-only">Calendly</span>
         </a>
-        <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
+        <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0  4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
           <span class="sr-only">LinkedIn</span>
         </a>
-        <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
+        <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0  0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0  4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
@@ -868,15 +851,15 @@
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0  0 0 2 2h16a2 2 0  0 0 2-2V6a2 2 0  0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
         <span class="sr-only">Email</span>
       </a>
-      <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener" title="Calendly">
+      <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Calendly">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0  1 1 2 0v2h6V2a1 1 0  1 1 2 0v2h1a3 3 0  0 1 3 3v12a3 3 0  0 1-3 3H5a3 3 0  0 1-3-3V7a3 3 0  0 1 3-3h1V2a1 1 0  1 1 2 0v2Zm12 6H5v11a1 1 0  0 0 1 1h12a1 1 0  0 0 1-1V8Z"/></svg>
         <span class="sr-only">Calendly</span>
       </a>
-      <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" title="LinkedIn">
+      <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0  1 1 5 8.5a2.5 2.5 0  0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0  4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
         <span class="sr-only">LinkedIn</span>
       </a>
-      <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener" title="GitHub">
+      <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0  0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0  0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0  4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
         <span class="sr-only">GitHub</span>
       </a>
@@ -919,13 +902,13 @@
     function $(sel){ return document.querySelector(sel); }
     function $all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
 
-    // Current year (no optional chaining / nullish coalescing)
+    // Current year
     (function(){
       var yEl = document.getElementById('y');
       if (yEl) yEl.textContent = new Date().getFullYear();
     })();
 
-    // Preload logos
+    // Preload logos (already linked in <head>, keep JS warm cache too)
     var logoFront = document.getElementById('logoFront');
     var logoBack  = document.getElementById('logoBack');
     function preload(src){
@@ -982,11 +965,14 @@
       dialog.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDialog(); });
     }
     if (quickForm){
+      var qName = document.getElementById('qName');
+      var qEmail = document.getElementById('qEmail');
+      var qMsg = document.getElementById('qMsg');
       quickForm.addEventListener('submit', function(e){
         e.preventDefault();
-        var name  = (qName.value||'').trim();
-        var email = (qEmail.value||'').trim();
-        var msg   = (qMsg.value||'').trim();
+        var name  = (qName && qName.value || '').trim();
+        var email = (qEmail && qEmail.value || '').trim();
+        var msg   = (qMsg && qMsg.value || '').trim();
         var subject = encodeURIComponent('Website inquiry');
         var body = encodeURIComponent(msg + "\n\n— " + name + (email ? ' <'+email+'>' : ''));
         window.location.href = 'mailto:isaac.b.michael@gmail.com?subject=' + subject + '&body=' + body;
@@ -1111,7 +1097,6 @@
       var back  = document.getElementById('quoteFace');
       if(!badge || !tilt || !back) return;
 
-      // Quotes — first is Hardy
       var quotes = [
         { t: "A mathematician, like a painter or a poet, is a maker of patterns.", a: "G. H. Hardy" },
         { t: "Mathematics is the art of giving the same name to different things.", a: "Henri Poincaré" },
@@ -1127,7 +1112,7 @@
         { t: "Probability theory is nothing but common sense reduced to calculation.", a: "Pierre-Simon Laplace" },
         { t: "An approximate answer to the right question is worth far more than the exact answer to the wrong one.", a: "John W. Tukey" },
         { t: "The purpose of computing is insight, not numbers.", a: "Richard Hamming" },
-        { t: "We must know — we will know!", a: "David Hilbert" },
+        { t: "We must know — we will know!", a: "David Hilbert" }
       ];
 
       var showingBack = false;
@@ -1139,11 +1124,11 @@
         tilt.style.setProperty('--ry', ryDeg + 'deg');
       }
       function onPointerMove(e){
-        if(e.pointerType && e.pointerType !== 'mouse') return; // avoid jitter on touch
+        if(e.pointerType && e.pointerType !== 'mouse') return;
         var r = badge.getBoundingClientRect();
         var px = (e.clientX - r.left) / r.width;
         var py = (e.clientY - r.top)  / r.height;
-        var TILT = 10; // degrees
+        var TILT = 10;
         var rx = (0.5 - py) * TILT;
         var ry = (px - 0.5) * TILT;
         setTilt(rx, ry);
@@ -1190,8 +1175,7 @@
       }
     })();
 
-    /* NOTE: Removed previous Safari/iOS repaint helper that wrote an inline transform
-       to .coin (it froze the CSS-variable-driven flip and caused the badge to stay on quotes). */
+    /* Removed prior Safari/iOS repaint helper that froze CSS-variable flip */
   </script>
 </body>
 </html>
