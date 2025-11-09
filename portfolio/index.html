@@ -507,26 +507,30 @@
 
             <!-- VDH CHR -->
             <article class="tile" data-kind="consulting" data-updated="2025-11-08">
-              <h3>Virginia Department of Health - Comprehensive Harm Reduction (CHR)</h3>
+              <h3>Virginia Department of Health – Comprehensive Harm Reduction (CHR)</h3>
               <small class="meta">Updated Nov 2025 · Statistical Consultant · Public Example Package</small>
               <p>
-                This is a simple, public version of the CHR evaluation. It uses made-up (synthetic) data, one SAS program, and a sample PDF.
-                It follows the same steps as the original project while protecting privacy. No PHI or PII is included.
+                Led end-to-end survey analysis for Virginia’s CHR program. I started with intensive data preparation
+                (cleaning, recoding, and formatting REDCap/Excel exports), then built SAS pipelines that produced
+                two deliverables: (1) an overall totals report (counts/KPIs) and (2) a demographic-subgroups report
+                with clear charts and tables. I later modernized the code into a single, public program and ran it on a
+                privacy-safe synthetic dataset.
               </p>
               <details>
-                <summary>What this example includes</summary>
+                <summary>What this work involved</summary>
                 <ul>
-                  <li><code>data/synthetic/vdh_chr_survey_synthetic.csv</code> - a synthetic dataset that matches the client survey layout and typical patterns.</li>
-                  <li><code>code/sas/vdh_chr_totals.sas</code> - one repeatable SAS/GRAPH program that creates an easy-to-read PDF with demographics, how people heard about the program, and 20 question charts by group.</li>
-                 <li><code>reports/vdh_chr_survey_totals.pdf</code> - a sample PDF produced from the synthetic data.</li>
+                  <li><strong>Data prep & cleaning:</strong> standardized fields, converted checkbox/“checked vs. unchecked” values into analysis categories, and aligned site/region mappings.</li>
+                  <li><strong>Reporting in SAS:</strong> reliable routines for totals and subgroup breakouts; SAS/GRAPH visuals for the survey’s core questions and demographics; exports suitable for sharing.</li>
+                  <li><strong>Deliverables:</strong> two reports (overall totals + demographic subgroups), plus CSV/Excel files for handoff and archival.</li>
+                  <li><strong>Public, privacy-safe example:</strong> one modernized SAS program, a synthetic dataset, and a sample PDF so others can see the process without any PHI/PII.</li>
                 </ul>
-                <p><strong>Licensing:</strong> MIT for code, and CC BY 4.0 for reports and documentation. <strong>Privacy:</strong> synthetic data only; no PHI or PII.</p>
                 <p><strong>Links:</strong>
                   🔗 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation" target="_blank" rel="noopener">View the repository</a> ·
                   📄 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation/blob/main/reports/vdh_chr_survey_totals.pdf" target="_blank" rel="noopener">See the sample PDF</a> ·
                   📊 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation/blob/main/data/vdh_chr_survey_synthetic.csv" target="_blank" rel="noopener">Download the synthetic CSV</a> ·
                   🧩 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation/blob/main/code/sas/vdh_chr_totals.sas" target="_blank" rel="noopener">Open the SAS program</a>
                 </p>
+                <p><strong>Licensing:</strong> MIT for code; CC BY 4.0 for reports/docs. <strong>Privacy:</strong> synthetic data only (no PHI/PII).</p>
               </details>
             </article>
           </div>
