@@ -1,61 +1,794 @@
-<!doctype html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CV & Résumé – Isaac B. Michael</title>
-<style>
-  body{font-family:Arial,sans-serif;margin:0;background:#f9f9f9;color:#111}
-  a{color:#0066cc;text-decoration:none;font-weight:700}
-  header,footer{background:#2c3e50;color:#fff}
-  .wrap{max-width:1100px;margin:0 auto;padding:18px 20px}
-  .btn{display:inline-block;padding:.7rem 1rem;border-radius:999px;border:1px solid rgba(0,0,0,.08);background:#fff}
-  .grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}
-  .card{background:#fff;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.06);padding:16px 18px}
-  @media(max-width:900px){.grid{grid-template-columns:1fr}}
-  iframe,object{width:100%;height:75vh;border:0;border-radius:10px}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Résumé & CV — Isaac B. Michael</title>
+  <meta name="description" content="Download Isaac B. Michael’s two-page résumé (default) and full CV. ATS-friendly version included." />
+  <meta property="og:title" content="Résumé & CV — Isaac B. Michael" />
+  <meta property="og:description" content="Two-page résumé, ATS version, and full CV — in the Royal Teal site style." />
+  <meta property="og:url" content="https://isaacbmichael.com/cv/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://isaacbmichael.com/cv/" />
+  <!-- Theme colors match site -->
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F7F8">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#0B3F47">
+  <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
+  <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
 
-<header>
-  <div class="wrap">
-    <a href="/" style="color:#e6edf3">← Home</a>
-    <h1 style="margin:8px 0 0">CV & Résumé</h1>
-    <p style="margin:6px 0 0;opacity:.9">Download the version you need; the two-page résumé is the default.</p>
-  </div>
-</header>
+  <!-- Preload logo variants -->
+  <link rel="preload" href="/assets/brands/logo-tealroyal.svg" as="image" type="image/svg+xml" fetchpriority="high">
+  <link rel="preload" href="/assets/brands/logo-white.svg" as="image" type="image/svg+xml">
 
-<main class="wrap" style="padding:20px 20px 28px">
-  <div class="grid">
-    <div class="card">
-      <h2 style="margin:6px 0 12px">Résumé (2 pages)</h2>
-      <p><a class="btn" href="/assets/pdfs/resume.pdf" download>⬇️ Download résumé (PDF)</a>
-         &nbsp; <a href="/assets/pdfs/resume-ats.pdf" class="btn" download>⬇️ ATS résumé</a></p>
-      <!-- Quick inline preview of the 2-page résumé -->
-      <object data="/assets/pdfs/resume.pdf" type="application/pdf">
-        <iframe src="/assets/pdfs/resume.pdf" title="Résumé PDF preview"></iframe>
-      </object>
-      <p style="margin-top:10px;color:#555">Tip: Use the ATS version for job portals that parse PDFs.</p>
-    </div>
+  <style>
+  /* ===== Design Tokens (Royal Teal) ===== */
+  :root{
+    --brand-blue-900:#0B3F47;  /* dark bar bg */
+    --brand-blue-700:#0F5B66;  /* primary accents */
+    --accent:var(--brand-blue-700);
 
-    <div class="card">
-      <h2 style="margin:6px 0 12px">Full CV</h2>
-      <p><a class="btn" href="/assets/pdfs/cv.pdf" download>⬇️ Download full CV (PDF)</a></p>
-      <ul style="margin:8px 0 0 18px;color:#333">
-        <li>Comprehensive roles, projects, teaching, publications, service.</li>
-        <li>Best for academic/consulting inquiries.</li>
+    --ink:#111827;
+    --muted:#5b6470;
+
+    --bar-bg:#ffffff;
+    --bar-fg:var(--brand-blue-900);
+    --bar-border:#e5e7eb;
+
+    --page-bg:#F2F7F8;
+    --ring:rgba(15,91,102,.35);
+
+    --surface:#ffffff;
+    --radius:14px;
+    --w:1360px;
+    --wrap-pad:clamp(12px,2vw,20px);
+    --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
+    --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
+    --avatar-size:96px;
+
+    --drawer-bg:#ffffff;
+    --drawer-fg:#111827;
+
+    /* Section divider tokens (exact) */
+    --divider-gap: 2px;
+    --divider-edge-alpha: .12;
+    --divider-center-alpha: .68;
+
+    /* Anchor offset for sticky header */
+    --anchor-offset: 76px;
+  }
+  @media (min-width:1600px){ :root{ --w:1440px } }
+
+  /* Bars DARK variant (toggled while hero is intersecting) */
+  body.bars-dark{
+    --bar-bg:var(--brand-blue-900);
+    --bar-fg:#ffffff;
+    --bar-border:rgba(255,255,255,.16);
+    --drawer-bg:#0e2a39;
+    --drawer-fg:#eaf2f6;
+  }
+
+  /* ===== Base / Layout ===== */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  html{background:var(--page-bg)}
+  body{
+    margin:0;
+    font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--page-bg);
+    min-height:100svh;display:flex;flex-direction:column;
+    scroll-behavior:smooth;
+    padding-top: env(safe-area-inset-top);
+  }
+  :focus-visible{ outline:none; box-shadow:0 0 0 6px var(--ring) }
+  :where([id]){ scroll-margin-top: calc(var(--anchor-offset) + 10px) }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
+  .sr-only{
+    position:absolute !important;
+    width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+
+  /* ===== Sticky Header ===== */
+  header.site-header{
+    position:sticky; top:0; z-index:1000;
+    background:var(--bar-bg); color:var(--bar-fg);
+    border-bottom:1px solid var(--bar-border);
+    backdrop-filter:saturate(120%) blur(2px);
+    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .site-header .wrap{ max-width:none; padding-left:0; padding-right:0 }
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px 0;
+  }
+  @media (min-width:961px){
+    :root{ --nav-gutter: var(--wrap-pad); }
+    .topbar > .brand{ margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left)); }
+    .topbar > nav.primary-nav{ margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right)); }
+  }
+  @media (max-width:960px){
+    .topbar{
+      padding-left: calc(16px + env(safe-area-inset-left));
+      padding-right: calc(16px + env(safe-area-inset-right));
+    }
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+
+  .brand-link--wide{
+    display:flex;align-items:center;gap:12px;
+    color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
+  }
+  .brand-link--wide:hover{ text-decoration:none }
+  .brand-text{display:flex;flex-direction:column;line-height:1.1}
+  .brand-name{
+    font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:var(--bar-fg);
+    transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+  }
+  .brand-creds{
+    color:color-mix(in srgb, var(--bar-fg) 70%, #cfd8e3);
+    font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
+  }
+  @supports not (color-mix: in srgb, white 50%, black 50%){
+    .brand-creds{ color:#c3c9d2 }
+  }
+
+  /* Avatar with mirrored flip */
+  .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
+  .avatar-badge{display:block;width:100%;height:100%;border-radius:50%;outline:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+  .avatar-inner{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;will-change:transform;
+    --ry: 0turn;
+    --spin: 0turn;
+    transform: rotateY(calc(var(--ry) + var(--spin)));
+    transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+  }
+  .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden;border:none}
+  .avatar-face.back{transform:rotateY(180deg)}
+  .avatar-face img{width:100%;height:100%;object-fit:contain;padding:8px;background:transparent}
+  .avatar-face.back img{ transform: scaleX(-1); }
+  @media (hover:hover) and (pointer:fine){
+    .brand-link--wide:hover .avatar-inner{
+      --ry: .5turn;
+      transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
+    }
+  }
+  @media (max-width:960px){ :root{ --avatar-size:72px } }
+
+  /* Desktop nav */
+  nav.primary-nav{ display:flex }
+  nav.primary-nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
+  nav.primary-nav a{color:var(--bar-fg);font-weight:700;position:relative}
+  nav.primary-nav a::after{
+    content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:color-mix(in srgb, var(--bar-fg) 25%, transparent);transform:scaleX(0);
+    transform-origin:left;transition:transform .22s ease;
+  }
+  nav.primary-nav a:hover{color:var(--bar-fg);text-decoration:none}
+  nav.primary-nav a:hover::after{transform:scaleX(1)}
+  nav.primary-nav a[aria-current="page"]{font-weight:900}
+  nav.primary-nav a[aria-current="page"]::after{transform:scaleX(1)}
+
+  /* Mobile hamburger / drawer */
+  .menu-toggle{
+    display:none;
+    background:transparent;border:none;color:var(--bar-fg);
+    width:44px;height:44px;border-radius:10px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .menu-toggle .bars,
+  .menu-toggle .bars::before,
+  .menu-toggle .bars::after{
+    display:block;width:22px;height:2px;background:currentColor;border-radius:2px;position:relative;margin:0 auto;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .menu-toggle .bars::before,
+  .menu-toggle .bars::after{ content:""; position:absolute; left:0 }
+  .menu-toggle .bars::before{ transform:translateY(-7px) }
+  .menu-toggle .bars::after{ transform:translateY(7px) }
+
+  .drawer-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:saturate(120%) blur(2px);
+    opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:1090;
+  }
+  .mobile-drawer{
+    position:fixed; inset:0 0 0 auto; width:min(420px, 92vw);
+    background:var(--drawer-bg); color:var(--drawer-fg);
+    transform:translateX(100%); transition:transform .22s cubic-bezier(.2,.8,.2,1);
+    box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1100;
+    display:flex; flex-direction:column; gap:10px; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+  }
+  .mobile-drawer header{ display:flex; align-items:center; justify-content:space-between; }
+  .mobile-drawer h3{ margin:0; font-size:1.05rem; font-weight:900 }
+  .mobile-drawer nav ul{ list-style:none; margin:10px 0; padding:0; display:grid; gap:8px }
+  .mobile-drawer nav a{
+    display:block; padding:12px 10px; border-radius:12px; color:inherit; background:rgba(255,255,255,.06);
+    font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06)
+  }
+  .mobile-drawer nav a:hover{ background:rgba(255,255,255,.12) }
+  .mobile-drawer nav a[aria-current="page"]{ background: rgba(255,255,255,.18); border-color: rgba(0,0,0,.18); }
+  .mobile-drawer .quick{ display:grid; gap:10px; margin-top:4px }
+  .mobile-drawer .quick .btn{ width:100%; justify-content:center }
+
+  body.drawer-open .drawer-backdrop{ opacity:1; pointer-events:auto }
+  body.drawer-open .mobile-drawer{ transform:none }
+  body.drawer-open{ overflow:hidden }
+
+  /* ===== HERO ===== */
+  .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
+  .hero{padding:28px 0 12px}
+  .hero-grid{
+    display:grid;grid-template-columns:1fr;row-gap:8px;align-items:start
+  }
+  .h1{
+    margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);
+  }
+  .lead{
+    margin:6px 0 0;color:var(--muted);font-weight:700;letter-spacing:.15px;
+    font-size:clamp(14px,1.6vw,18px);line-height:1.4;
+  }
+
+  /* ===== Sections, Tiles, Buttons ===== */
+  main{padding:10px 0 40px;flex:1 0 auto}
+  section.band{padding:24px 0}
+  h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
+
+  .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media (max-width:1120px){ .tiles{ grid-template-columns:repeat(2,1fr) } }
+  @media (max-width:960px){ .tiles{ grid-template-columns:1fr } }
+
+  .tile{position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
+  .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+  .tile h3{margin:0 0 8px}
+  .tile p{margin:0 0 10px}
+  .tile small.meta{display:block;color:var(--muted);margin-bottom:8px}
+  .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
+
+  .cta-row{display:flex;gap:10px;flex-wrap:wrap;margin:2px 0 10px}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:.7rem 1rem;border-radius:999px;font-weight:800;
+    border:1px solid rgba(0,0,0,.04);
+    background:#fff;color:var(--brand-blue-900);
+    box-shadow:var(--shadow);
+    transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
+    text-decoration:none;cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
+  .btn:active{transform:translateY(-1px)}
+  .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
+  .btn-primary{background:var(--brand-blue-700);color:#fff;border-color:transparent;box-shadow:var(--shadow)}
+  .btn-primary:hover{ box-shadow:var(--shadow-hover) }
+
+  /* PDF preview panel */
+  .preview{
+    margin-top:10px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:var(--shadow);overflow:hidden
+  }
+  .preview object,.preview iframe{width:100%;height:72vh;border:0;display:block}
+
+  /* ===== Gradient section divider ===== */
+  .section-divider{
+    position:relative;
+    height:4px;
+    margin: var(--divider-gap) 0;
+    border:0;
+  }
+  .section-divider::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: var(--page-bg);
+    z-index:0;
+  }
+  .section-divider::before{
+    content:"";
+    position:absolute;
+    left:0; right:0; top:50%;
+    transform:translateY(-50%);
+    height:1px;
+    border-radius:999px;
+    background:linear-gradient(
+      90deg,
+      rgba(15,91,102,var(--divider-edge-alpha)) 0%,
+      rgba(15,91,102,var(--divider-center-alpha)) 50%,
+      rgba(15,91,102,var(--divider-edge-alpha)) 100%
+    );
+    z-index:1;
+  }
+
+  /* ===== Footer — teal always ===== */
+  footer{
+    background: var(--brand-blue-900) !important;
+    color: #ffffff !important;
+    padding: 18px 0;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,.18);
+  }
+  footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
+  .social{display:flex;align-items:center;gap:10px}
+  footer .icon-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:38px;height:38px;border-radius:999px;
+    background: rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.22);
+    color:#fff;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  footer .icon-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(0,0,0,.25);
+    background: rgba(255,255,255,.18);
+  }
+  .icon{width:18px;height:18px;fill:currentColor}
+
+  /* ===== Mobile quick-contact dock (teal) ===== */
+  .mobile-dock{
+    position:fixed; left:0; right:0; bottom:0; z-index:980;
+    background: var(--brand-blue-900); color: #ffffff;
+    border-top:1px solid rgba(255,255,255,.18);
+    padding:6px 10px calc(6px + env(safe-area-inset-bottom));
+    display:none;
+  }
+  .mobile-dock .dock{
+    max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px;
+  }
+  .mobile-dock .icon-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+    width:46px; height:46px; border-radius:999px; color:#fff;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.22);
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .mobile-dock .icon{
+    display:block; width:18px; height:18px; flex:0 0 auto;
+  }
+  .mobile-dock .icon *, .mobile-dock .icon path, .mobile-dock .icon rect,
+  .mobile-dock .icon circle, .mobile-dock .icon polygon, .mobile-dock .icon line{
+    fill: currentColor; stroke: none;
+  }
+  .mobile-dock .icon-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,.25);
+    background: rgba(255,255,255,.18);
+  }
+
+  /* Hover tints + skip link (parity) */
+  .brand-link--wide:hover .brand-name,
+  .brand-link--wide:focus-visible .brand-name{
+    color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+  }
+  .brand-link--wide:hover .brand-creds,
+  .brand-link--wide:focus-visible .brand-creds{
+    color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%);
+  }
+  nav.primary-nav a:hover,
+  nav.primary-nav a:focus-visible{
+    color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+  }
+  @supports not (color-mix: in srgb, white 50%, black 50%){
+    .brand-link--wide:hover .brand-name,
+    .brand-link--wide:hover .brand-creds,
+    nav.primary-nav a:hover{ opacity:.92 }
+  }
+
+  .skip-link{
+    position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;
+  }
+  .skip-link:focus{
+    left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
+    background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
+  }
+
+  .hero-section .wrap {
+    padding-left: calc(var(--wrap-pad) + env(safe-area-inset-left));
+    padding-right: calc(var(--wrap-pad) + env(safe-area-inset-right));
+  }
+  </style>
+
+  <!-- Inert polyfill -->
+  <script>
+    if (!('inert' in HTMLElement.prototype)) {
+      const s = document.createElement('script');
+      s.src = 'https://unpkg.com/wicg-inert@3.1.2/dist/inert.min.js';
+      s.defer = true;
+      document.head.appendChild(s);
+    }
+  </script>
+
+  <!-- Person schema -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Isaac B. Michael",
+    "jobTitle":"Research Scientist; Program Director",
+    "url":"https://isaacbmichael.com/",
+    "sameAs":[
+      "mailto:isaac.b.michael@gmail.com",
+      "https://www.linkedin.com/in/isaacbmichael",
+      "https://github.com/isaacbmichael"
+    ]
+  }
+  </script>
+</head>
+<body class="bars-dark">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Mobile drawer & backdrop -->
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <header>
+      <h3>Menu</h3>
+      <button class="menu-toggle" id="menuClose" aria-label="Close menu">
+        <span class="bars"></span>
+      </button>
+    </header>
+    <nav aria-label="Mobile">
+      <ul>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/portfolio/">Portfolio</a></li>
+        <li><a href="/writing/">Writing</a></li>
+        <li><a href="/speaking/">Speaking</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/cv/">Résumé</a></li>
       </ul>
-      <hr style="margin:16px 0;border:none;border-top:1px solid #eee">
-      <h3 style="margin:0 0 8px;font-size:1rem">Other variants</h3>
-      <p style="margin:0">
-        <a href="/assets/pdfs/resume-usajobs.pdf" download>USAJobs résumé</a> (optional)
-      </p>
+    </nav>
+    <div class="quick" aria-label="Quick actions">
+      <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email me</a>
+      <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
+      <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="wrap topbar">
+      <div class="brand">
+        <a href="/" rel="home" aria-label="Home" class="brand-link--wide" id="brandLink">
+          <!-- Avatar: logo on both sides; mirrored on hover -->
+          <div class="avatar" aria-hidden="true">
+            <div class="avatar-badge">
+              <div class="avatar-inner">
+                <div class="avatar-face front">
+                  <img id="logoFront"
+                       src="/assets/brands/logo-white.svg"
+                       data-logo-light="/assets/brands/logo-tealroyal.svg"
+                       data-logo-dark="/assets/brands/logo-white.svg"
+                       alt="Isaac B. Michael logo (front)"
+                       decoding="async" width="96" height="96"
+                       loading="eager" fetchpriority="high" />
+                </div>
+                <div class="avatar-face back">
+                  <img id="logoBack"
+                       src="/assets/brands/logo-white.svg"
+                       data-logo-light="/assets/brands/logo-tealroyal.svg"
+                       data-logo-dark="/assets/brands/logo-white.svg"
+                       alt="Isaac B. Michael logo (mirrored)"
+                       decoding="async" width="96" height="96" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="brand-text" aria-label="Site owner">
+            <span class="brand-name">Isaac B. Michael</span>
+            <div class="brand-creds">PhD · MS · MApSt</div>
+          </div>
+        </a>
+      </div>
+
+      <nav class="primary-nav" aria-label="Primary">
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/portfolio/">Portfolio</a></li>
+          <li><a href="/writing/">Writing</a></li>
+          <li><a href="/speaking/">Speaking</a></li>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/cv/">Résumé</a></li>
+          <li><a href="/contact/" id="contactOpen" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-controls="mobileDrawer" aria-expanded="false">
+        <span class="bars"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="wrap hero">
+      <div class="hero-grid">
+        <h1 class="h1">Résumé &amp; CV</h1>
+        <p class="lead">Download the version you need. The two-page résumé is the default; an ATS-ready PDF is included.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider" aria-hidden="true"></div>
+
+  <!-- CONTENT -->
+  <main class="wrap" id="main">
+    <section class="band">
+      <h2>Downloads & Preview</h2>
+      <div class="tiles">
+        <!-- Résumé -->
+        <article class="tile">
+          <h3>Résumé (2 pages)</h3>
+          <small class="meta">Executive summary — best for most roles</small>
+          <div class="cta-row" role="group" aria-label="Résumé downloads">
+            <a class="btn btn-primary" href="/assets/pdfs/resume.pdf" download>⬇️ Download résumé (PDF)</a>
+            <a class="btn btn-outline" href="/assets/pdfs/resume-ats.pdf" download>⬇️ ATS résumé</a>
+          </div>
+          <div class="preview" aria-label="Résumé preview">
+            <object data="/assets/pdfs/resume.pdf" type="application/pdf">
+              <iframe src="/assets/pdfs/resume.pdf" title="Résumé PDF preview"></iframe>
+            </object>
+          </div>
+          <p class="muted" style="margin-top:10px;color:var(--muted)">Tip: Use the ATS version for job portals that parse PDFs.</p>
+        </article>
+
+        <!-- Full CV -->
+        <article class="tile">
+          <h3>Full CV</h3>
+          <small class="meta">Comprehensive roles, projects, teaching, publications, and service</small>
+          <div class="cta-row" role="group" aria-label="CV downloads">
+            <a class="btn btn-primary" href="/assets/pdfs/cv.pdf" download>⬇️ Download full CV (PDF)</a>
+          </div>
+          <ul style="margin:6px 0 0 18px">
+            <li>Best for academic and consulting inquiries.</li>
+          </ul>
+          <hr style="margin:16px 0;border:none;border-top:1px dashed #e5e7eb">
+          <h4 style="margin:0 0 8px;font-size:1rem">Other variants</h4>
+          <p style="margin:0">
+            <a href="/assets/pdfs/resume-usajobs.pdf" download>USAJobs résumé</a> (optional)
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="social" aria-label="External profiles">
+        <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+          <span class="sr-only">Email</span>
+        </a>
+        <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Schedule with Calendly">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+          <span class="sr-only">Calendly</span>
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+          <span class="sr-only">LinkedIn</span>
+        </a>
+        <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <span class="sr-only">GitHub</span>
+        </a>
+      </div>
+      <div>© <span id="y"></span> Isaac B. Michael · All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Mobile quick-contact dock -->
+  <div class="mobile-dock" role="region" aria-label="Quick contact">
+    <div class="dock">
+      <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+        <span class="sr-only">Email</span>
+      </a>
+      <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Calendly">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+        <span class="sr-only">Calendly</span>
+      </a>
+      <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+        <span class="sr-only">LinkedIn</span>
+      </a>
+      <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+        <span class="sr-only">GitHub</span>
+      </a>
     </div>
   </div>
-</main>
 
-<footer>
-  <div class="wrap">
-    © <script>document.write(new Date().getFullYear())</script> Isaac B. Michael ·
-    <a href="mailto:isaac.b.michael@gmail.com" style="color:#e6edf3">Email</a> ·
-    <a href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener" style="color:#e6edf3">LinkedIn</a> ·
-    <a href="https://github.com/isaacbmichael" target="_blank" rel="noopener" style="color:#e6edf3">GitHub</a>
-  </div>
-</footer>
+  <!-- Contact Modal -->
+  <dialog id="contactDialog" aria-labelledby="contactTitle">
+    <div class="modal-header">
+      <h3 id="contactTitle" class="modal-title">Contact</h3>
+      <button class="modal-close" id="contactClose" aria-label="Close contact dialog">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="contact-actions" aria-label="Quick links" style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule time on Calendly</a>
+        <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+      <div class="divider" aria-hidden="true" style="height:1px;background:#e5e7eb;margin:8px 0 14px"></div>
+      <form id="quickForm" class="form-grid" style="display:grid;grid-template-columns:120px 1fr;gap:10px 12px;align-items:center">
+        <label for="qName">Name</label>
+        <input id="qName" name="name" autocomplete="name" placeholder="Your name" />
+        <label for="qEmail">Email</label>
+        <input id="qEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+        <label for="qMsg">Message</label>
+        <textarea id="qMsg" name="message" placeholder="Tell me a little about your project or request…"></textarea>
+        <div class="form-actions" style="grid-column:2 / -1;display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:6px">
+          <button type="button" class="btn btn-outline" id="contactCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send via Email</button>
+        </div>
+        <small class="form-hint" style="grid-column:2 / -1;margin-top:4px;font-size:.9rem;color:var(--muted)">
+          Submitting opens your email client with your message pre-filled (no data is stored on this site).
+        </small>
+      </form>
+    </div>
+  </dialog>
+
+  <script>
+    // Current year
+    document.getElementById('y')?.textContent = new Date().getFullYear();
+
+    // Preload logos (both variants)
+    const logoFront = document.getElementById('logoFront');
+    const logoBack  = document.getElementById('logoBack');
+    function preload(src){ return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
+    if (logoFront?.dataset?.logoLight && logoFront?.dataset?.logoDark){
+      Promise.all([ logoFront.dataset.logoLight, logoFront.dataset.logoDark ].map(preload));
+    }
+
+    // Contact modal
+    const dialog = document.getElementById('contactDialog');
+    const contactOpen  = document.getElementById('contactOpen');
+    const contactClose = document.getElementById('contactClose');
+    const contactCancel= document.getElementById('contactCancel');
+    const quickForm    = document.getElementById('quickForm');
+
+    function openDialog(e){
+      if (e) e.preventDefault();
+      if (dialog && !dialog.open){
+        window.__lastFocused = document.activeElement;
+        dialog.showModal?.();
+        ['main','header.site-header','.mobile-dock'].forEach(sel => document.querySelector(sel)?.setAttribute('inert',''));
+        document.getElementById('qName')?.focus();
+      }
+    }
+    function closeDialog(e){
+      if (e) e.preventDefault();
+      if (dialog?.open){
+        dialog.close();
+        ['main','header.site-header','.mobile-dock'].forEach(sel => document.querySelector(sel)?.removeAttribute('inert'));
+        (window.__lastFocused || document.getElementById('contactOpen'))?.focus?.();
+      }
+    }
+    contactOpen?.addEventListener('click', (e) => {
+      if (typeof dialog?.showModal === 'function') {
+        e.preventDefault();
+        openDialog(e);
+      }
+    });
+    contactClose?.addEventListener('click', closeDialog);
+    contactCancel?.addEventListener('click', closeDialog);
+    dialog?.addEventListener('click', (e)=>{ if (e.target === dialog) closeDialog(); });
+    dialog?.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeDialog(); });
+
+    quickForm?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name  = (document.getElementById('qName').value || '').trim();
+      const email = (document.getElementById('qEmail').value || '').trim();
+      const msg   = (document.getElementById('qMsg').value || '').trim();
+      const subject = encodeURIComponent('Website inquiry');
+      const body    = encodeURIComponent(`${msg}\n\n— ${name}${email ? ' <'+email+'>' : ''}`);
+      window.location.href = `mailto:isaac.b.michael@gmail.com?subject=${subject}&body=${body}`;
+      closeDialog();
+    });
+
+    // Mobile drawer
+    const drawer    = document.getElementById('mobileDrawer');
+    const backdrop  = document.getElementById('drawerBackdrop');
+    const menuBtn   = document.getElementById('menuToggle');
+    const menuClose = document.getElementById('menuClose');
+
+    function setAppInert(on){
+      ['main','header.site-header','.hero-section','footer','.mobile-dock'].forEach(sel=>{
+        const el = document.querySelector(sel);
+        if (!el) return;
+        on ? el.setAttribute('inert','') : el.removeAttribute('inert');
+      });
+    }
+    function trapFocusWithin(el){
+      if (el.__trapBound) return;
+      el.__trapBound = true;
+      el.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const focusables = el.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
+        if (!focusables.length) return;
+        const first = focusables[0], last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      });
+    }
+    function openDrawer(e){
+      if (e) e.preventDefault();
+      if (backdrop) backdrop.hidden = false;
+      document.body.classList.add('drawer-open');
+      drawer?.setAttribute('aria-hidden','false');
+      menuBtn?.setAttribute('aria-expanded','true');
+      setAppInert(true);
+      drawer?.querySelector('a')?.focus();
+      trapFocusWithin(drawer);
+    }
+    function closeDrawer(e){
+      if (e) e.preventDefault();
+      document.body.classList.remove('drawer-open');
+      drawer?.setAttribute('aria-hidden','true');
+      menuBtn?.setAttribute('aria-expanded','false');
+      setTimeout(()=>{ if (backdrop) backdrop.hidden = true; }, 220);
+      setAppInert(false);
+      menuBtn?.focus();
+    }
+    menuBtn?.addEventListener('click', openDrawer);
+    menuClose?.addEventListener('click', closeDrawer);
+    backdrop?.addEventListener('click', closeDrawer);
+    drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeDrawer()));
+    document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer(); });
+
+    // Brand link: spin once, then go home
+    const brandLink = document.getElementById('brandLink');
+    brandLink?.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const inner = brandLink.querySelector('.avatar-inner');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        window.location.href = '/';
+        return;
+      }
+      inner?.style.setProperty('--spin', '1turn');
+      const goHome = () => { window.location.href = '/'; };
+      let done = false;
+      const onEnd = (evt) => {
+        if (!done && evt.propertyName === 'transform'){
+          done = true;
+          inner.removeEventListener('transitionend', onEnd);
+          goHome();
+        }
+      };
+      inner?.addEventListener('transitionend', onEnd);
+      setTimeout(goHome, 800);
+    });
+
+    // Adaptive bars: dark at top, switch to light after hero exits viewport
+    const hero = document.querySelector('.hero-section');
+    function setBarsDark(isDark){
+      document.body.classList.toggle('bars-dark', isDark);
+      const src = isDark ? logoFront?.dataset?.logoDark : logoFront?.dataset?.logoLight;
+      if (src){ logoFront.src = src; logoBack.src  = src; }
+    }
+    setBarsDark(true);
+
+    if ('IntersectionObserver' in window && hero){
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(entry=> setBarsDark(entry.isIntersecting));
+      }, {threshold: 0});
+      io.observe(hero);
+    } else {
+      window.addEventListener('scroll', ()=> setBarsDark(window.scrollY < 60));
+    }
+
+    // Mark current page in all navs
+    document.querySelectorAll('nav a, .mobile-drawer nav a').forEach(a=>{
+      try{
+        const here = new URL(a.href, location.origin).pathname.replace(/\/+$/,'') || '/';
+        const path = location.pathname.replace(/\/+$/,'') || '/';
+        if (here === path) a.setAttribute('aria-current','page');
+      }catch(_){}
+    });
+  </script>
+</body>
+</html>
