@@ -506,22 +506,27 @@
             </article>
 
             <!-- VDH CHR -->
-            <article class="tile" data-kind="consulting" data-date="2024-10">
+            <article class="tile" data-kind="consulting" data-updated="2025-11-08">
               <h3>Virginia Department of Health — Comprehensive Harm Reduction (CHR)</h3>
-              <small class="meta">Oct 2024 · Statistical Consultant</small>
+              <small class="meta">Updated Nov 2025 · Statistical Consultant · Public Example Package</small>
               <p>
-                Cleaned and standardized client surveys across eight CHR sites, built SAS macros to automate reporting, and co-authored a clear evaluation used by program leadership.
+                Public, privacy-safe example of the CHR evaluation: synthetic dataset, a single SAS program, and a sample vector PDF.
+                Mirrors the structure and analyses used in the original engagement (no PHI/PII).
               </p>
               <details>
-                <summary>Read more</summary>
+                <summary>What this public example includes</summary>
                 <ul>
-                  <li><strong>Data prep:</strong> normalized checkbox fields, harmonized site/region, labeled/typed variables, and added QA checks for missingness and consistency.</li>
-                  <li><strong>Automation:</strong> parameterized SAS programs to generate totals and subgroup charts and export analysis tables for reuse.</li>
-                  <li><strong>Deliverables:</strong> program-wide “Totals” and “Subgroups” reports, cleaned datasets, and a short runbook.</li>
-                  <li><strong>Links:</strong> 📄 <a href="/assets/pdfs/vdh_chr_survey_totals.pdf" target="_blank" rel="noopener">Totals report</a> ·
-                      📄 <a href="/assets/pdfs/vdh_chr_survey_subgroups.pdf" target="_blank" rel="noopener">Subgroups report</a> ·
-                      🔗 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation" target="_blank" rel="noopener">Code on GitHub</a></li>
-                </ul>
+                  <li><code>data/synthetic/vdh_chr_survey_synthetic.csv</code> — synthetic dataset that mimics the client-survey structure and distributions.</li>
+                  <li><code>code/sas/vdh_chr_totals.sas</code> — one reproducible SAS/GRAPH program that generates demographics, program reach, and 20 question-by-demographic charts as a crisp vector PDF.</li>
+                  <li><code>reports/vdh_chr_survey_totals.pdf</code> — example output produced from the synthetic data.</li>
+                 </ul>
+                <p><strong>Licensing:</strong> MIT (code) · CC BY 4.0 (reports & documentation). <strong>Privacy:</strong> synthetic data only; no PHI/PII.</p>
+                <p><strong>Links:</strong>
+                  🔗 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation" target="_blank" rel="noopener">Repository</a> ·
+                  📄 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation/blob/main/reports/vdh_chr_survey_totals.pdf" target="_blank" rel="noopener">Sample PDF</a> ·
+                  📊 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation/blob/main/data/synthetic/vdh_chr_survey_synthetic.csv" target="_blank" rel="noopener">Synthetic CSV</a> ·
+                  🧩 <a href="https://github.com/isaacbmichael/vdh-chr-evaluation/blob/main/code/sas/vdh_chr_totals.sas" target="_blank" rel="noopener">SAS program</a>
+                </p>
               </details>
             </article>
           </div>
