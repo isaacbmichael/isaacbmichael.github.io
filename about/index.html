@@ -424,7 +424,16 @@
       /* Entire card clickable when .card-link present */
       .tile a.card-link{ position:absolute; inset:0; border-radius:var(--radius); text-indent:-9999px; overflow:hidden }
 
-      .cta-row{ display:flex; gap:10px; flex-wrap:wrap }
+      /* ===== CTA row — spacing parity with Home ===== */
+      .cta-row{
+        display:flex;
+        flex-wrap:wrap;
+        gap:12px;              /* equal horizontal & vertical spacing */
+        row-gap:12px;
+        align-items:center;
+        margin-top:6px;        /* small breathing room under the h2 */
+      }
+
       .btn{
         display:inline-flex;align-items:center;gap:8px;
         padding:.7rem 1rem;border-radius:999px;font-weight:800;
@@ -822,7 +831,7 @@
       <section class="band" aria-labelledby="next">
         <div class="wrap">
           <h2 id="next">What would you like to explore?</h2>
-          <div class="cta-row">
+          <div class="cta-row" aria-label="Quick navigation">
             <a class="btn" href="/">Home</a>
             <a class="btn" href="/about/">About</a>
             <a class="btn btn-primary" href="/portfolio/">Portfolio</a>
@@ -1101,8 +1110,8 @@
         });
       });
 
-      /* Mark current page in desktop nav */
-      $all('nav.primary-nav a').forEach(function(a){
+      /* Mark current page in both desktop nav and mobile drawer (parity with Home) */
+      $all('nav.primary-nav a, .mobile-drawer nav a').forEach(function(a){
         try{
           var here = new URL(a.href, location.origin).pathname.replace(/\/+$/,'') || '/';
           var path = location.pathname.replace(/\/+$/,'') || '/';
