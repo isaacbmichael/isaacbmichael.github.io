@@ -15,14 +15,16 @@
     />
     <meta property="og:url" content="https://isaacbmichael.com/portfolio/" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="isaacbmichael.com" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="https://isaacbmichael.com/portfolio/" />
     <!-- Light theme color matches solid page bg -->
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F7F8" />
     <!-- Dark brand color -->
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B3F47" />
-    <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png" />
-    <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png" />
+    <meta property="og:image" content="https://isaacbmichael.com/assets/og/portfolio.png" />
+    <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/portfolio.png" />
+    <meta name="twitter:image:alt" content="Portfolio of Isaac B. Michael — selected work preview" />
 
     <!-- Preload logo variants for faster first paint -->
     <link rel="preload" href="/assets/brands/logo-tealroyal.svg" as="image" type="image/svg+xml" fetchpriority="high" />
@@ -480,6 +482,15 @@
         .form-grid{ grid-template-columns:1fr }
         .form-actions, .form-hint{ grid-column:1 / -1 }
       }
+
+      /* ===== Reduced Motion: respect user preference ===== */
+      @media (prefers-reduced-motion: reduce){
+        * { scroll-behavior:auto !important }
+        .avatar-inner{ transition:none !important; transform:none !important }
+        .scroll-arrow{ animation:none !important }
+        nav.primary-nav a::after{ transition:none !important }
+        .btn, .tile, .brand-name, .brand-creds{ transition:none !important }
+      }
     </style>
 
     <!-- Inert polyfill -->
@@ -524,6 +535,11 @@
           <li><a href="/portfolio/">Portfolio</a></li>
           <li><a href="/services/">Services</a></li>
           <li><a href="/cv/">Résumé</a></li>
+          <li>
+            <a href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">
+              Contact
+            </a>
+          </li>
         </ul>
       </nav>
       <div class="quick" aria-label="Quick actions">
@@ -727,10 +743,12 @@
               <small class="meta">Nov 2025</small>
               <p>
                 Rebuilt the Virtual Math Research Circle website by hand in clean, easy-to-read HTML. The new pages are faster, simpler to navigate, and written in plain language so families, mentors, and search engines can quickly understand what we do.
-                Explore: <a href="https://www.math.lsu.edu/mathcircle/">VMRC home</a> · <a href="https://www.math.lsu.edu/mathcircle/2026">Current projects</a> ·
-                <a href="https://www.math.lsu.edu/mathcircle/#VMRC-past-sessions-heading">Past Sessions</a> ·
-                <a href="https://lsu.app.box.com/folder/191514944105">Public Archives</a> ·
-                <a href="https://www.math.lsu.edu/mathcircle/contact">FAQ &amp; Contact</a>.
+                Explore:
+                <a href="https://www.math.lsu.edu/mathcircle/" target="_blank" rel="noopener noreferrer">VMRC home</a> ·
+                <a href="https://www.math.lsu.edu/mathcircle/2026" target="_blank" rel="noopener noreferrer">Current projects</a> ·
+                <a href="https://www.math.lsu.edu/mathcircle/#VMRC-past-sessions-heading" target="_blank" rel="noopener noreferrer">Past Sessions</a> ·
+                <a href="https://lsu.app.box.com/folder/191514944105" target="_blank" rel="noopener noreferrer">Public Archives</a> ·
+                <a href="https://www.math.lsu.edu/mathcircle/contact" target="_blank" rel="noopener noreferrer">FAQ &amp; Contact</a>.
               </p>
               <details>
                 <summary>Read more</summary>
@@ -746,7 +764,8 @@
               <h3>Virtual Math Research Circle — Year-Round, International Expansion</h3>
               <small class="meta">Oct 2025 – Present</small>
               <p>
-                Grew the program from a summer offering into a year-round effort with international partners. I set up the structure so we can add sessions without losing quality, including a memorandum of understanding with Zhejiang and a smoother day-to-day operation. See an example session: <a href="https://www.math.lsu.edu/mathcircle/2026">2026 projects</a>.
+                Grew the program from a summer offering into a year-round effort with international partners. I set up the structure so we can add sessions without losing quality, including a memorandum of understanding with Zhejiang and a smoother day-to-day operation. See an example session:
+                <a href="https://www.math.lsu.edu/mathcircle/2026" target="_blank" rel="noopener noreferrer">2026 projects</a>.
               </p>
               <details>
                 <summary>Read more</summary>
@@ -761,7 +780,10 @@
               <h3>National Outreach Engine — Lists, Campaigns, and Results</h3>
               <small class="meta">2025 – Present</small>
               <p>
-                Built and ran a steady outreach engine to find mentors and students. I grew a national contact list, wrote the emails, and tracked what worked. I also negotiated a bulk list of high-school contacts so we can reach the right people quickly. For program context, visit the <a href="https://www.math.lsu.edu/mathcircle/">VMRC home</a> or <a href="https://www.math.lsu.edu/mathcircle/contact">FAQ &amp; Contact</a>.
+                Built and ran a steady outreach engine to find mentors and students. I grew a national contact list, wrote the emails, and tracked what worked. I also negotiated a bulk list of high-school contacts so we can reach the right people quickly. For program context, visit the
+                <a href="https://www.math.lsu.edu/mathcircle/" target="_blank" rel="noopener noreferrer">VMRC home</a>
+                or
+                <a href="https://www.math.lsu.edu/mathcircle/contact" target="_blank" rel="noopener noreferrer">FAQ &amp; Contact</a>.
               </p>
               <details>
                 <summary>Read more</summary>
@@ -793,7 +815,8 @@
               <h3>Mentor Application — Reusable, Fast, and Friendly</h3>
               <small class="meta">2025 – Present</small>
               <p>
-                Reworked our mentor application so we don’t rebuild it every year. It now has clear choices for term, year, and session; smart follow-ups only when needed; and a layout that works well on phones. View the live form: <a href="https://lsu.formstack.com/forms/vmrc_mentor_application">VMRC mentor application</a>.
+                Reworked our mentor application so we don’t rebuild it every year. It now has clear choices for term, year, and session; smart follow-ups only when needed; and a layout that works well on phones. View the live form:
+                <a href="https://lsu.formstack.com/forms/vmrc_mentor_application" target="_blank" rel="noopener noreferrer">VMRC mentor application</a>.
               </p>
               <details>
                 <summary>Read more</summary>
@@ -877,7 +900,7 @@
           <p class="section-kicker">Selected Demos &amp; Templates</p>
           <h2 id="demos">Technical Demos</h2>
 
-          <div class="tiles">
+        <div class="tiles">
             <!-- ATS-Ready AltaCV -->
             <article class="tile" data-kind="demo" data-updated="2025-10-28">
               <h3>ATS-Ready AltaCV Résumé Template</h3>
@@ -1066,7 +1089,7 @@
         }
       }
 
-      // Bind ALL contact triggers (top nav + CTAs) using data-contact-open
+      // Bind ALL contact triggers (top nav + CTAs + mobile nav) using data-contact-open
       $all('[data-contact-open]').forEach(function(el){
         el.addEventListener("click", function(e){
           if(dialog && typeof dialog.showModal==="function"){
