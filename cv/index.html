@@ -294,6 +294,9 @@
     .btn-primary{ background:var(--brand-blue-700); color:#fff; border-color:transparent; box-shadow:var(--shadow) }
     .btn-primary:hover{ box-shadow:var(--shadow-hover) }
 
+    /* Simple CTA row (parity) */
+    .cta-row{ display:flex; gap:10px; flex-wrap:wrap }
+
     /* PDF preview */
     .pdfframe, .pdfobj{ width:100%; height:75vh; border:0; border-radius:12px; background:#fff }
 
@@ -377,7 +380,7 @@
       grid-column:2 / -1;
       display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
     }
-    .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted) }
+    .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#muted }
     @media (max-width:640px){
       .form-grid{ grid-template-columns:1fr }
       .form-actions, .form-hint{ grid-column:1 / -1 }
@@ -551,7 +554,7 @@
           <li><a href="/portfolio/">Portfolio</a></li>
           <li><a href="/cv/">Résumé</a></li>
           <li><a href="/services/">Services</a></li>
-          <li><a href="/contact/" id="contactOpen" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a></li>
+          <li><a href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a></li>
         </ul>
       </nav>
 
@@ -618,7 +621,7 @@
             <a class="btn" href="/portfolio/">Portfolio</a>
             <a class="btn" href="/cv/">Résumé</a>
             <a class="btn btn-primary" href="/services/">Services</a>
-            <a class="btn" href="/contact/" id="contactOpen" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
+            <a class="btn" href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
           </div>
         </div>
       </section>
@@ -665,7 +668,7 @@
         <span class="sr-only">LinkedIn</span>
       </a>
       <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0  0 0 12 .5Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
         <span class="sr-only">GitHub</span>
       </a>
     </div>
@@ -723,7 +726,6 @@
 
     /* Contact modal */
     var dialog = document.getElementById('contactDialog');
-    var contactOpen  = document.getElementById('contactOpen');
     var contactClose = document.getElementById('contactClose');
     var contactCancel= document.getElementById('contactCancel');
     var quickForm    = document.getElementById('quickForm');
@@ -733,10 +735,7 @@
       if (dialog && !dialog.open){
         window.__lastFocused = document.activeElement;
         if (typeof dialog.showModal === 'function') dialog.showModal();
-        var main=$('main'), header=$('header.site-header'), dock=$('.mobile-dock');
-        if (main) main.setAttribute('inert','');
-        if (header) header.setAttribute('inert','');
-        if (dock) dock.setAttribute('inert','');
+        ['main','header.site-header','.mobile-dock'].forEach(function(sel){ var el=$(sel); if (el) el.setAttribute('inert',''); });
         var nameEl=document.getElementById('qName'); if (nameEl) nameEl.focus();
       }
     }
@@ -744,16 +743,17 @@
       if (e) e.preventDefault();
       if (dialog && dialog.open){
         dialog.close();
-        var main=$('main'), header=$('header.site-header'), dock=$('.mobile-dock');
-        if (main) main.removeAttribute('inert');
-        if (header) header.removeAttribute('inert');
-        if (dock) dock.removeAttribute('inert');
-        var backTo = window.__lastFocused || document.getElementById('contactOpen');
+        ['main','header.site-header','.mobile-dock'].forEach(function(sel){ var el=$(sel); if (el) el.removeAttribute('inert'); });
+        var triggers = $all('[data-contact-open]');
+        var backTo = window.__lastFocused || (triggers && triggers[0]);
         if (backTo && backTo.focus) backTo.focus();
       }
     }
-    if (contactOpen) contactOpen.addEventListener('click', function(e){
-      if (dialog && typeof dialog.showModal === 'function'){ e.preventDefault(); openDialog(e); }
+    /* Bind ALL "Contact" triggers (top nav + bottom CTA) */
+    $all('[data-contact-open]').forEach(function(el){
+      el.addEventListener('click', function(e){
+        if (dialog && typeof dialog.showModal === 'function'){ e.preventDefault(); openDialog(e); }
+      });
     });
     if (contactClose) contactClose.addEventListener('click', closeDialog);
     if (contactCancel) contactCancel.addEventListener('click', closeDialog);
