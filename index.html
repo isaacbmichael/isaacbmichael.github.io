@@ -662,6 +662,12 @@
     );
     z-index:1;
   }
+  /* make a divider span full viewport width even inside a .wrap container */
+  .section-divider.full-bleed{
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+  }
 
   .hero-section .wrap {
     padding-left: calc(var(--wrap-pad) + env(safe-area-inset-left));
@@ -767,7 +773,8 @@
           <li><a href="/portfolio/">Portfolio</a></li>
           <li><a href="/cv/">Résumé</a></li>
           <li><a href="/services/">Services</a></li>
-          <li><a href="/contact/" id="contactOpen" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a></li>
+          <!-- contact trigger (header) -->
+          <li><a href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a></li>
         </ul>
       </nav>
 
@@ -828,7 +835,8 @@
       </div>
     </section>
 
-    <div class="section-divider" aria-hidden="true"></div>
+    <!-- FULL-BLEED divider to match the top one -->
+    <div class="section-divider full-bleed" aria-hidden="true"></div>
     
       <!-- CTA -->
       <section class="band" aria-labelledby="next">
@@ -840,7 +848,9 @@
             <a class="btn" href="/portfolio/">Portfolio</a>
             <a class="btn" href="/cv/">Résumé</a>
             <a class="btn" href="/services/">Services</a>
-            <a class="btn" href="/contact/" id="contactOpen" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
+            <!-- contact trigger (CTA row) -->
+            <a class="btn" href="/contact/" data-contact-open
+               aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
           </div>
         </div>
       </section>
@@ -954,7 +964,6 @@
 
     // Contact modal
     const dialog = document.getElementById('contactDialog');
-    const contactOpen  = document.getElementById('contactOpen');
     const contactClose = document.getElementById('contactClose');
     const contactCancel= document.getElementById('contactCancel');
     const quickForm    = document.getElementById('quickForm');
@@ -962,7 +971,6 @@
     function openDialog(e){
       if (e) e.preventDefault();
       if (!dialog.open){
-        window.__lastFocused = document.activeElement;
         dialog.showModal();
         document.querySelector('main')?.setAttribute('inert','');
         document.querySelector('header.site-header')?.setAttribute('inert','');
@@ -977,17 +985,21 @@
         document.querySelector('main')?.removeAttribute('inert');
         document.querySelector('header.site-header')?.removeAttribute('inert');
         document.querySelector('.mobile-dock')?.removeAttribute('inert');
-        (window.__lastFocused || document.getElementById('contactOpen'))?.focus?.();
+        (window.__lastFocused || document.querySelector('[data-contact-open]'))?.focus?.();
       }
     }
 
-    // Progressive enhancement: only intercept if <dialog> is supported
-    contactOpen?.addEventListener('click', (e) => {
-      if (typeof dialog?.showModal === 'function') {
-        e.preventDefault();
-        openDialog(e);
-      }
+    // Attach to ALL contact triggers (header + CTA, future-safe)
+    document.querySelectorAll('[data-contact-open]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (typeof dialog?.showModal === 'function') {
+          e.preventDefault();
+          window.__lastFocused = el;
+          openDialog(e);
+        }
+      });
     });
+
     contactClose?.addEventListener('click', closeDialog);
     contactCancel?.addEventListener('click', closeDialog);
     dialog.addEventListener('click', (e)=>{ if (e.target === dialog) closeDialog(); });
@@ -1251,10 +1263,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
