@@ -237,7 +237,7 @@
       .form-grid textarea{min-height:160px; resize:vertical}
       .form-grid input:focus,.form-grid textarea:focus{outline:none; border-color:#c5d6e2; background:#fff; box-shadow:0 0 0 6px var(--ring)}
       .form-actions{grid-column:2 / -1; display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px}
-      .form-hint{grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted)}
+      .form-hint{grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#00000099}
       @media (max-width:640px){.form-grid{grid-template-columns:1fr} .form-actions,.form-hint{grid-column:1 / -1}}
 
     </style>
@@ -312,7 +312,11 @@
             <li><a href="/portfolio/">Portfolio</a></li>
             <li><a href="/cv/">Résumé</a></li>
             <li><a href="/services/">Services</a></li>
-            <li><a href="/contact/" id="contactOpen" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a></li>
+            <li>
+              <a href="/contact/" class="js-contact-open" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">
+                Contact
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -355,7 +359,7 @@
           <h2 id="cdc">CDC</h2>
 
           <div class="tiles">
-            <!-- PRAMS Weighting Season (UNCHANGED) -->
+            <!-- PRAMS Weighting Season -->
             <article class="tile" data-kind="cdc" data-start="2024-10" data-end="2025-03">
               <h3>PRAMS Data Weighting — National Delivery and Automation</h3>
               <small class="meta">Oct 2024 – Mar 2025</small>
@@ -380,7 +384,7 @@
               </details>
             </article>
 
-            <!-- PRAMS Nonresponse Policy (review + recommendation) -->
+            <!-- PRAMS Nonresponse Policy -->
             <article class="tile" data-kind="cdc" data-start="2024-01" data-end="2025-04">
               <h3>PRAMS Nonresponse Policy — Independent Statistical Review and OMB Approval</h3>
               <small class="meta">Jan 2024 – Apr 2025</small>
@@ -398,7 +402,7 @@
               </details>
             </article>
 
-            <!-- SAG Mentorship (UNCHANGED content, no certificate link) -->
+            <!-- SAG Mentorship -->
             <article class="tile" data-kind="cdc" data-start="2023-10" data-end="2024-06">
               <h3>Statistical Advisory Group (SAG) — Mentorship Program</h3>
               <small class="meta">Oct 2023 – Jun 2024 · Research Mentor</small>
@@ -417,7 +421,7 @@
               </details>
             </article>
 
-            <!-- Training & Reusable Templates -->
+            <!-- Training & Templates -->
             <article class="tile" data-kind="cdc" data-start="2023-06" data-end="2025-04">
               <h3>PRAMS Training and Templates — Consistent Analyses at Scale</h3>
               <small class="meta">Jun 2023 – Apr 2025</small>
@@ -435,7 +439,7 @@
               </details>
             </article>
 
-            <!-- Partner Enablement & Quality Operations -->
+            <!-- Partner Enablement -->
             <article class="tile" data-kind="cdc" data-start="2023-01" data-end="2025-04">
               <h3>Partner Enablement and Quality Operations — Reviews, Fixes, and Field Support</h3>
               <small class="meta">Jun 2023 – Apr 2025</small>
@@ -466,7 +470,7 @@
           <h2 id="lsu">LSU</h2>
 
           <div class="tiles">
-            <!-- 1) VMRC Website Overhaul -->
+            <!-- VMRC Website Overhaul -->
             <article class="tile" data-kind="lsu" data-date="2025-11">
               <h3>VMRC Website Overhaul — Design &amp; Code</h3>
               <small class="meta">Nov 2025</small>
@@ -486,7 +490,7 @@
               </details>
             </article>
 
-            <!-- 2) VMC Expansion -->
+            <!-- VMC Expansion -->
             <article class="tile" data-kind="lsu" data-start="2025-10">
               <h3>Virtual Math Research Circle — Year-Round, International Expansion</h3>
               <small class="meta">Oct 2025 – Present</small>
@@ -501,7 +505,7 @@
               </details>
             </article>
 
-            <!-- 3) Outreach Engine -->
+            <!-- Outreach Engine -->
             <article class="tile" data-kind="lsu" data-start="2025-01">
               <h3>National Outreach Engine — Lists, Campaigns, and Results</h3>
               <small class="meta">2025 – Present</small>
@@ -517,7 +521,7 @@
               </details>
             </article>
 
-            <!-- 4) Applicant Analytics -->
+            <!-- Applicant Analytics -->
             <article class="tile" data-kind="lsu" data-date="2025-09">
               <h3>Applicant Data — Clear, Actionable Insights</h3>
               <small class="meta">Oct 2025</small>
@@ -533,7 +537,7 @@
               </details>
             </article>
 
-            <!-- 5) Mentor Application Revamp -->
+            <!-- Mentor Application Revamp -->
             <article class="tile" data-kind="lsu" data-start="2025-06">
               <h3>Mentor Application — Reusable, Fast, and Friendly</h3>
               <small class="meta">2025 – Present</small>
@@ -657,7 +661,7 @@
               </ul>
             </article>
 
-            <!-- EDA Report (linked above in LSU too) -->
+            <!-- EDA Report -->
             <article class="tile" data-kind="demo" data-updated="2025-09-15">
               <h3>Exploratory Applicant Data Report</h3>
               <small class="meta">Sep 2025 · R · RMarkdown</small>
@@ -683,7 +687,7 @@
             <a class="btn" href="/portfolio/">Portfolio</a>
             <a class="btn btn-primary" href="/cv/">Résumé</a>
             <a class="btn" href="/services/">Services</a>
-            <a class="btn" href="/contact/" id="contactOpen" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
+            <a class="btn js-contact-open" href="/contact/" aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
           </div>
         </div>
       </section>
@@ -781,22 +785,60 @@
       }
 
       // Contact modal
-      var dialog=$("#contactDialog"), contactOpen=$("#contactOpen"), contactClose=$("#contactClose"), contactCancel=$("#contactCancel"), quickForm=$("#quickForm");
-      function openDialog(e){ if(e) e.preventDefault(); if(dialog && !dialog.open){ window.__lastFocused=document.activeElement;
-        if(typeof dialog.showModal==="function") dialog.showModal(); ["main","header.site-header",".mobile-dock"].forEach(function(sel){var el=$(sel); if(el) el.setAttribute("inert","")});
-        var nameEl=$("#qName"); if(nameEl) nameEl.focus(); } }
-      function closeDialog(e){ if(e) e.preventDefault(); if(dialog && dialog.open){ dialog.close(); ["main","header.site-header",".mobile-dock"].forEach(function(sel){var el=$(sel); if(el) el.removeAttribute("inert")});
-        var backTo=window.__lastFocused||$("#contactOpen"); if(backTo && backTo.focus) backTo.focus(); } }
-      if(contactOpen) contactOpen.addEventListener("click", function(e){ if(dialog && typeof dialog.showModal==="function"){ e.preventDefault(); openDialog(e) }});
+      var dialog=$("#contactDialog"),
+          contactClose=$("#contactClose"),
+          contactCancel=$("#contactCancel"),
+          quickForm=$("#quickForm");
+
+      function openDialog(e){
+        if(e) e.preventDefault();
+        if(dialog && !dialog.open){
+          window.__lastFocused=document.activeElement;
+          if(typeof dialog.showModal==="function") dialog.showModal();
+          ["main","header.site-header",".mobile-dock"].forEach(function(sel){
+            var el=$(sel); if(el) el.setAttribute("inert","");
+          });
+          var nameEl=$("#qName"); if(nameEl) nameEl.focus();
+        }
+      }
+      function closeDialog(e){
+        if(e) e.preventDefault();
+        if(dialog && dialog.open){
+          dialog.close();
+          ["main","header.site-header",".mobile-dock"].forEach(function(sel){
+            var el=$(sel); if(el) el.removeAttribute("inert");
+          });
+          var backTo=window.__lastFocused || document.querySelector(".js-contact-open");
+          if(backTo && backTo.focus) backTo.focus();
+        }
+      }
+
+      // Bind ALL contact triggers (top nav + bottom CTA or any with dialog attributes)
+      $all('.js-contact-open, a[aria-controls="contactDialog"][aria-haspopup="dialog"]').forEach(function(el){
+        el.addEventListener("click", function(e){
+          if(dialog && typeof dialog.showModal==="function"){
+            e.preventDefault(); openDialog(e);
+          }
+        });
+      });
+
       if(contactClose) contactClose.addEventListener("click", closeDialog);
       if(contactCancel) contactCancel.addEventListener("click", closeDialog);
-      if(dialog){ dialog.addEventListener("click", function(e){ if(e.target===dialog) closeDialog()}); dialog.addEventListener("keydown", function(e){ if(e.key==="Escape") closeDialog()})}
+      if(dialog){
+        dialog.addEventListener("click", function(e){ if(e.target===dialog) closeDialog()});
+        dialog.addEventListener("keydown", function(e){ if(e.key==="Escape") closeDialog()});
+      }
       if(quickForm){
         var qName=$("#qName"), qEmail=$("#qEmail"), qMsg=$("#qMsg");
         quickForm.addEventListener("submit", function(e){
-          e.preventDefault(); var name=(qName && qName.value||"").trim(), email=(qEmail && qEmail.value||"").trim(), msg=(qMsg && qMsg.value||"").trim();
-          var subject=encodeURIComponent("Website inquiry"); var body=encodeURIComponent(msg + "\n\n— " + name + (email ? " <"+email+">" : ""));
-          window.location.href="mailto:isaac.b.michael@gmail.com?subject="+subject+"&body="+body; closeDialog();
+          e.preventDefault();
+          var name=(qName && qName.value||"").trim(),
+              email=(qEmail && qEmail.value||"").trim(),
+              msg=(qMsg && qMsg.value||"").trim();
+          var subject=encodeURIComponent("Website inquiry"),
+              body=encodeURIComponent(msg + "\n\n— " + name + (email ? " <"+email+">" : ""));
+          window.location.href="mailto:isaac.b.michael@gmail.com?subject="+subject+"&body="+body;
+          closeDialog();
         });
       }
 
