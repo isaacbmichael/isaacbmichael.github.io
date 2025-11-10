@@ -304,7 +304,7 @@
   .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
   /* NEW: CTA band spacing (42px top/bottom on desktop; collapse bottom on mobile) */
-  .band--cta{ padding-top: calc(var(--band-space) + 14px); padding-bottom: calc(var(--band-space) + 14px); }
+  .band--cta{ padding-top: calc(var(--band-space) + 14px); padding-bottom: var(--band-space);}
   .cta-row{ display:flex; flex-wrap:wrap; gap:10px; }
   @media (max-width:960px){
     .band--cta{ padding-bottom: 0; } /* let main handle the 14px visible gap above dock */
@@ -944,4 +944,5 @@
   </script>
 </body>
 </html>
+
 
