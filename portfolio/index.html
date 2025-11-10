@@ -72,6 +72,11 @@
 
         /* Header underline tint */
         --nav-underline-alpha:25%;
+
+        /* NEW: CTA spacing + mobile dock handling (match Home) */
+        --cta-desktop-gap:28px;  /* main bottom pad on desktop */
+        --cta-mobile-gap:14px;   /* visible gap above dock on mobile */
+        --dock-h:90px;           /* fallback; script measures actual height */
       }
       @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -101,6 +106,9 @@
       a{ color:var(--accent); text-decoration:none }
       a:hover{ text-decoration:underline }
       .wrap{ max-width:var(--w); margin:0 auto; padding:0 var(--wrap-pad) }
+
+      /* NEW: main bottom spacing for 28+28=56px total before footer (28 from last .band + 28 here) */
+      main{ padding:10px 0 var(--cta-desktop-gap); flex:1 0 auto }
 
       /* Global anchor offset so in-page links don't hide under sticky header */
       :where([id]){ scroll-margin-top: calc(var(--anchor-offset) + 10px) }
@@ -396,7 +404,8 @@
         nav.primary-nav{ display:none }
         .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
         .tiles{ grid-template-columns:1fr }
-        main{ padding-bottom:90px } /* make room for the mobile dock */
+        /* NEW: mobile bottom space = measured dock height + 14px visible gap */
+        main{ padding-bottom: calc(var(--dock-h) + var(--cta-mobile-gap)); }
         .mobile-dock{ display:block }
         footer .social{ display:none !important }
       }
@@ -1214,6 +1223,19 @@
           if(here===path) a.setAttribute('aria-current','page');
         }catch(_){}
       });
+
+      // === Measure mobile dock height and set --dock-h so the visible gap = 14px on mobile (parity with Home) ===
+      (function(){
+        function setDockVars(){
+          var dock = document.querySelector('.mobile-dock');
+          var h = dock ? dock.offsetHeight : 0; // includes env(safe-area-inset-bottom)
+          document.documentElement.style.setProperty('--dock-h', h + 'px');
+        }
+        setDockVars();
+        window.addEventListener('load', setDockVars);
+        window.addEventListener('resize', setDockVars, { passive:true });
+        window.addEventListener('orientationchange', setDockVars);
+      })();
     </script>
   </body>
 </html>
