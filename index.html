@@ -54,7 +54,8 @@
     --drawer-bg:#ffffff;
     --drawer-fg:#111827;
 
-    /* Section divider tokens (exact) */
+    /* About/Shared: Bands + Section divider tokens (exact) */
+    --band-space:28px;
     --divider-gap: 2px;
     --divider-edge-alpha: .12;
     --divider-center-alpha: .68;
@@ -101,6 +102,10 @@
     clip:rect(0,0,0,0);white-space:nowrap;border:0;
   }
 
+  /* ===== Bands (shared with About) ===== */
+  section.band{ position:relative; padding:var(--band-space) 0 }
+  h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
+
   /* ===== Sticky Header ===== */
   header.site-header{
     position:sticky; top:0; z-index:1000;
@@ -121,20 +126,13 @@
   /* Desktop: gutters that match the page wrap */
   @media (min-width:961px){
     :root{ --nav-gutter: var(--wrap-pad); }
-    .topbar > .brand{
-      margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left));
-    }
-    .topbar > nav.primary-nav{
-      margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right));
-    }
+    .topbar > .brand{ margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left)); }
+    .topbar > nav.primary-nav{ margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right)); }
   }
 
   /* Mobile: modest side padding on the bar */
   @media (max-width:960px){
-    .topbar{
-      padding-left: calc(16px + env(safe-area-inset-left));
-      padding-right: calc(16px + env(safe-area-inset-right));
-    }
+    .topbar{ padding-left: calc(16px + env(safe-area-inset-left)); padding-right: calc(16px + env(safe-area-inset-right)); }
   }
 
   .brand{display:flex;align-items:center;gap:12px}
@@ -156,10 +154,7 @@
     font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
     transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
   }
-  @supports not (color-mix: in srgb, white 50%, black 50%){
-    .brand-creds{ color:#c3c9d2 }
-  }
-
+  @supports not (color-mix: in srgb, white 50%, black 50%){ .brand-creds{ color:#c3c9d2 } }
   @media (prefers-reduced-motion:reduce){ .brand-name,.brand-creds{ transition:none } }
 
   /* ===== Avatar with logo flip (no portrait) ===== */
@@ -203,12 +198,8 @@
   nav.primary-nav a:hover{color:var(--bar-fg);text-decoration:none}
   nav.primary-nav a:hover::after{transform:scaleX(1)}
   /* Active page styling */
-  nav.primary-nav a[aria-current="page"]{
-    font-weight:900;
-  }
-  nav.primary-nav a[aria-current="page"]::after{
-    transform:scaleX(1);
-  }
+  nav.primary-nav a[aria-current="page"]{ font-weight:900; }
+  nav.primary-nav a[aria-current="page"]::after{ transform:scaleX(1); }
 
   /* ===== Mobile hamburger (hidden on desktop) ===== */
   .menu-toggle{
@@ -249,11 +240,8 @@
     font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06)
   }
   .mobile-drawer nav a:hover{ background:rgba(255,255,255,.12) }
-  /* NEW: Active page state in mobile drawer */
-  .mobile-drawer nav a[aria-current="page"]{
-    background: rgba(255,255,255,.14);
-    border-color: rgba(0,0,0,.08);
-  }
+  /* Active page state in mobile drawer */
+  .mobile-drawer nav a[aria-current="page"]{ background: rgba(255,255,255,.14); border-color: rgba(0,0,0,.08); }
   .mobile-drawer .quick{ display:grid; gap:10px; margin-top:4px }
   .mobile-drawer .quick .btn{ width:100%; justify-content:center }
 
@@ -263,151 +251,45 @@
 
   /* ===== HERO ===== */
   .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
-  .hero{padding:28px 0 10px}
-  .hero-grid{
-    display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips";
-    row-gap:6px;align-items:start
-  }
-  /* Allow children to shrink and wrap instead of overflowing */
+  /* Match About: band wrapper + inner hero padding */
+  .hero-section.band{ padding-top:22px; padding-bottom:var(--band-space) }
+  .hero{padding:6px 0 0}
+  .hero-grid{ display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips"; row-gap:6px;align-items:start }
   .hero-grid > *{ min-width:0 }
-
-  .h1{
-    margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word;
-    /* optical nudge so the “D” looks flush with the tagline */
-    text-indent:0;
-  }
-
-  .tagline{
-    grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px;
-    font-size:clamp(14px,1.6vw,18px);
-    line-height:1.35;
-    white-space:normal;
-  }
-  @supports (text-wrap: balance){
-    .tagline{ text-wrap:balance }
-  }
+  .h1{ margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word; text-indent:0; }
+  .tagline{ grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px; font-size:clamp(14px,1.6vw,18px); line-height:1.35; white-space:normal; }
+  @supports (text-wrap: balance){ .tagline{ text-wrap:balance } }
 
   /* ===== Chips ===== */
-  .chips{
-    grid-area:chips;
-    display:flex; align-items:center;
-    gap:8px 8px;
-    margin-top:6px;
-    padding-bottom:4px;
-    white-space:normal;
-    overflow:visible;
-    flex-wrap:wrap;
-    /* Fuzziness fix: no constant 3D context */
-    perspective:none;
-  }
-
-  .chip{
-    display:inline-block;
-    flex:0 0 auto;
-    background:rgba(17,24,39,.08);
-    color:var(--ink);
-    padding:6px 10px;
-    border-radius:999px;
-    font-weight:700;
-    font-size:clamp(12px,1.3vw,14px);
-    border:1px solid rgba(17,24,39,.08);
-    white-space:nowrap;
-    cursor:pointer;
-    /* Fuzziness fix: don’t pre-promote layers at rest */
-    will-change:auto;
-    transition:
-      transform .18s cubic-bezier(.2,.8,.2,1),
-      box-shadow .18s ease,
-      background .18s ease,
-      border-color .18s ease;
-  }
-  @media (hover:hover){
-    .chip:hover{
-      transform:translateY(-2px);
-      box-shadow:var(--shadow-hover);
-      background:#fff;
-      border-color:rgba(15,91,102,.22);
-    }
-  }
+  .chips{ grid-area:chips; display:flex; align-items:center; gap:8px 8px; margin-top:6px; padding-bottom:4px; white-space:normal; overflow:visible; flex-wrap:wrap; perspective:none; }
+  .chip{ display:inline-block; flex:0 0 auto; background:rgba(17,24,39,.08); color:var(--ink); padding:6px 10px; border-radius:999px; font-weight:700; font-size:clamp(12px,1.3vw,14px); border:1px solid rgba(17,24,39,.08); white-space:nowrap; cursor:pointer; will-change:auto; transition: transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease, background .18s ease, border-color .18s ease; }
+  @media (hover:hover){ .chip:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); background:#fff; border-color:rgba(15,91,102,.22); } }
   .chip:active{ transform:translateY(-1px) }
-  .chip:is(:hover,:focus-visible){ will-change:transform } /* hint only while animating */
-  .chip[aria-pressed="true"]{
-    background:#fff;
-    border-color:rgba(15,91,102,.35);
-    box-shadow:var(--shadow);
-  }
-  /* Focus lift for keyboard users (polish tip) */
-  .chip:focus-visible{
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover);
-    background: #fff;
-    border-color: rgba(15,91,102,.35);
-  }
+  .chip:is(:hover,:focus-visible){ will-change:transform }
+  .chip[aria-pressed="true"]{ background:#fff; border-color:rgba(15,91,102,.35); box-shadow:var(--shadow); }
+  .chip:focus-visible{ transform: translateY(-2px); box-shadow: var(--shadow-hover); background: #fff; border-color: rgba(15,91,102,.35); }
 
   /* Chips proof dialog */
-  dialog#chipsDialog{
-    width:min(760px,94vw);
-    border:0; padding:0;
-    border-radius:20px;
-    background:#fff;
-    box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
-    animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
-  }
-  dialog#chipsDialog::backdrop{
-    background:rgba(17,24,39,.55);
-    backdrop-filter:saturate(120%) blur(3px);
-    animation:backdrop-in .22s ease;
-  }
-  #chipsDialog .modal-header{
-    position: relative;
-    border-bottom: 0;            /* remove flat rule */
-    padding:18px 18px 10px;      /* space above gradient */
-  }
-  /* === FIX #2: remove focus ring on chips dialog title (Safari/iOS box) === */
-  #chipsDialog .modal-title:focus,
-  #chipsDialog .modal-title:focus-visible{
-    outline:none !important;
-    box-shadow:none !important;
-  }
+  dialog#chipsDialog{ width:min(760px,94vw); border:0; padding:0; border-radius:20px; background:#fff; box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18); animation:modal-in .22s cubic-bezier(.2,.8,.2,1); }
+  dialog#chipsDialog::backdrop{ background:rgba(17,24,39,.55); backdrop-filter:saturate(120%) blur(3px); animation:backdrop-in .22s ease; }
+  #chipsDialog .modal-header{ position: relative; border-bottom: 0; padding:18px 18px 10px; }
+  /* remove focus ring on chips dialog title */
+  #chipsDialog .modal-title:focus, #chipsDialog .modal-title:focus-visible{ outline:none !important; box-shadow:none !important; }
   /* Gradient header rule (matches section divider tokens) */
-  #chipsDialog .modal-header::after{
-    content: "";
-    position: absolute;
-    left: 18px;
-    right: 18px;
-    bottom: 0;
-    height: 1px; /* exact spec */
-    border-radius: 999px;
-    background: linear-gradient(
-      90deg,
-      rgba(15,91,102,var(--divider-edge-alpha)) 0%,
-      rgba(15,91,102,var(--divider-center-alpha)) 50%,
-      rgba(15,91,102,var(--divider-edge-alpha)) 100%
-    );
-  }
+  #chipsDialog .modal-header::after{ content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 1px; border-radius: 999px; background: linear-gradient( 90deg, rgba(15,91,102,var(--divider-edge-alpha)) 0%, rgba(15,91,102,var(--divider-center-alpha)) 50%, rgba(15,91,102,var(--divider-edge-alpha)) 100% ); }
   #chipsDialog .modal-title{ margin:0; font-weight:900; font-size:1.05rem; color:#0f172a }
-  #chipsDialog .modal-close{
-    width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
-    display:inline-flex; align-items:center; justify-content:center;
-    box-shadow:var(--shadow);
-    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
-  }
+  #chipsDialog .modal-close{ width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:transform .16s ease, box-shadow .16s ease, background .16s ease; }
   #chipsDialog .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
   #chipsDialog .modal-body{ padding:14px 18px 18px }
   .chips-content{ opacity:1; transition:opacity .16s ease }
   .chips-content.is-fading{ opacity:0 }
-  /* Minor list polish to match About */
   .proof-list{ margin:8px 0 0; padding-left:18px }
   .proof-list li{ margin:6px 0 }
-
-  @media (prefers-reduced-motion:reduce){
-    .chip, .chips-content{ transition:none }
-  }
+  @media (prefers-reduced-motion:reduce){ .chip, .chips-content{ transition:none } }
 
   /* ===== Sections ===== */
   main{padding:10px 0 40px;flex:1 0 auto}
   section{padding:24px 0}
-  h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
 
   .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .tile{position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
@@ -416,272 +298,74 @@
   .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
   /* ===== Footer — teal always (match About) ===== */
-  footer{
-    background: var(--brand-blue-900) !important;
-    color: #ffffff !important;
-    padding: 18px 0;
-    text-align: center;
-    border-top: 1px solid rgba(255,255,255,.18);
-  }
+  footer{ background: var(--brand-blue-900) !important; color: #ffffff !important; padding: 18px 0; text-align: center; border-top: 1px solid rgba(255,255,255,.18); }
   footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
   .social{display:flex;align-items:center;gap:10px}
-  footer .icon-btn{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:38px;height:38px;border-radius:999px;
-    background: rgba(255,255,255,.10);
-    border:1px solid rgba(255,255,255,.22);
-    color:#fff;
-    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-  }
-  footer .icon-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 18px rgba(0,0,0,.25);
-    background: rgba(255,255,255,.18);
-  }
+  footer .icon-btn{ display:inline-flex;align-items:center;justify-content:center; width:38px;height:38px;border-radius:999px; background: rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.22); color:#fff; transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
+  footer .icon-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18); }
   .icon{width:18px;height:18px;fill:currentColor}
 
   /* ===== Buttons (shadow consistency across variants & contexts) ===== */
-  .btn{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:.7rem 1rem;border-radius:999px;font-weight:800;
-    border:1px solid rgba(0,0,0,.04);
-    background:#fff;color:var(--brand-blue-900);
-    box-shadow:var(--shadow);
-    transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
-    text-decoration:none;
-    cursor:pointer; /* ensure pointer on real <button> elements too */
-  }
+  .btn{ display:inline-flex;align-items:center;gap:8px; padding:.7rem 1rem;border-radius:999px;font-weight:800; border:1px solid rgba(0,0,0,.04); background:#fff;color:var(--brand-blue-900); box-shadow:var(--shadow); transition:transform .16s ease, box-shadow .16s ease, filter .16s ease; text-decoration:none; cursor:pointer; }
   .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
   .btn:active{transform:translateY(-1px)}
   .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
-  .btn-primary{
-    background:var(--brand-blue-700);color:#fff;border-color:transparent;
-    /* Ensure primary CTAs get the same 3D shadow */
-    box-shadow:var(--shadow);
-  }
+  .btn-primary{ background:var(--brand-blue-700);color:#fff;border-color:transparent; box-shadow:var(--shadow); }
   .btn-primary:hover{ box-shadow:var(--shadow-hover) }
-
-  /* Make sure buttons inside the contact modal match the 3D look too */
-  .contact-actions .btn,
-  .form-actions .btn{ box-shadow:var(--shadow) }
-  .contact-actions .btn:hover,
-  .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
+  .contact-actions .btn, .form-actions .btn{ box-shadow:var(--shadow) }
+  .contact-actions .btn:hover, .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
 
   /* ===== Mobile dock (quick contact) — teal always (match About) ===== */
-  .mobile-dock{
-    position:fixed; left:0; right:0; bottom:0; z-index:980;
-    background: var(--brand-blue-900); color: #ffffff;
-    border-top:1px solid rgba(255,255,255,.18);
-    padding:6px 10px calc(6px + env(safe-area-inset-bottom));
-    display:none; /* shown on <= 960px */
-  }
-  .mobile-dock .dock{
-    max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px;
-  }
-  .mobile-dock .icon-btn{
-    display:inline-flex; align-items:center; justify-content:center;
-    -webkit-tap-highlight-color:transparent;
-    touch-action:manipulation;
-    width:46px; height:46px; border-radius:999px; color:#fff;
-    background: rgba(255,255,255,.10);
-    border: 1px solid rgba(255,255,255,.22);
-    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-  }
-  .mobile-dock .icon{
-    display:block; width:18px; height:18px; flex:0 0 auto;
-  }
-  .mobile-dock .icon *,
-  .mobile-dock .icon path,
-  .mobile-dock .icon rect,
-  .mobile-dock .icon circle,
-  .mobile-dock .icon polygon,
-  .mobile-dock .icon line{
-    fill: currentColor;
-    stroke: none;
-  }
-  /* NEW: Hover lift for dock icons (parity with footer icons) */
-  .mobile-dock .icon-btn:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(0,0,0,.25);
-    background: rgba(255,255,255,.18);
-  }
+  .mobile-dock{ position:fixed; left:0; right:0; bottom:0; z-index:980; background: var(--brand-blue-900); color: #ffffff; border-top:1px solid rgba(255,255,255,.18); padding:6px 10px calc(6px + env(safe-area-inset-bottom)); display:none; }
+  .mobile-dock .dock{ max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px; }
+  .mobile-dock .icon-btn{ display:inline-flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; touch-action:manipulation; width:46px; height:46px; border-radius:999px; color:#fff; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.22); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
+  .mobile-dock .icon{ display:block; width:18px; height:18px; flex:0 0 auto; }
+  .mobile-dock .icon *, .mobile-dock .icon path, .mobile-dock .icon rect, .mobile-dock .icon circle, .mobile-dock .icon polygon, .mobile-dock .icon line{ fill: currentColor; stroke: none; }
+  .mobile-dock .icon-btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18); }
 
   /* ===== CONTACT MODAL (polished) ===== */
-  dialog#contactDialog{
-    width:min(840px, 94vw);
-    border:0;
-    padding:0;
-    border-radius:20px;
-    box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
-    background:#fff;
-    animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
-  }
-  dialog#contactDialog::backdrop{
-    background:rgba(17,24,39,.55);
-    backdrop-filter:saturate(120%) blur(3px);
-    animation:backdrop-in .22s ease;
-  }
-  @keyframes modal-in{
-    from{ transform:translateY(14px) scale(.985); opacity:.0 }
-    to{ transform:none; opacity:1 }
-  }
+  dialog#contactDialog{ width:min(840px, 94vw); border:0; padding:0; border-radius:20px; box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18); background:#fff; animation:modal-in .22s cubic-bezier(.2,.8,.2,1); }
+  dialog#contactDialog::backdrop{ background:rgba(17,24,39,.55); backdrop-filter:saturate(120%) blur(3px); animation:backdrop-in .22s ease; }
+  @keyframes modal-in{ from{ transform:translateY(14px) scale(.985); opacity:.0 } to{ transform:none; opacity:1 } }
   @keyframes backdrop-in{ from{ opacity:.0 } to{ opacity:1 } }
-
-  .modal-header{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 18px 6px; border-bottom:1px solid #e5e7eb;
-  }
-  .modal-title{
-    margin:0; font-weight:900; font-size:1.15rem; letter-spacing:.2px; color:#0f172a;
-  }
-  .modal-close{
-    width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer;
-    display:inline-flex; align-items:center; justify-content:center;
-    box-shadow:var(--shadow);
-    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
-  }
+  .modal-header{ display:flex; align-items:center; justify-content:space-between; padding:18px 18px 6px; border-bottom:1px solid #e5e7eb; }
+  .modal-title{ margin:0; font-weight:900; font-size:1.15rem; letter-spacing:.2px; color:#0f172a; }
+  .modal-close{ width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:transform .16s ease, box-shadow .16s ease, background .16s ease; }
   .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
-
   .modal-body{ padding:14px 18px 18px }
   .contact-actions{ display:flex; gap:12px; flex-wrap:wrap; }
   .contact-actions .btn{ border-radius:999px }
   .contact-actions .btn-primary{ filter:saturate(115%) }
-
   .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
-
-  .form-grid{
-    display:grid;
-    grid-template-columns:120px 1fr;
-    gap:10px 12px;
-    align-items:center;
-  }
+  .form-grid{ display:grid; grid-template-columns:120px 1fr; gap:10px 12px; align-items:center; }
   .form-grid label{ font-weight:700; color:#0f172a }
-  .form-grid input,
-  .form-grid textarea{
-    width:100%;
-    font:inherit;
-    padding:12px 14px;
-    border-radius:14px;
-    border:1px solid #e5e7eb;
-    background:#f8fafc;
-    transition:border-color .16s ease, box-shadow .16s ease, background .16s ease;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
-  }
+  .form-grid input, .form-grid textarea{ width:100%; font:inherit; padding:12px 14px; border-radius:14px; border:1px solid #e5e7eb; background:#f8fafc; transition:border-color .16s ease, box-shadow .16s ease, background .16s ease; box-shadow:inset 0 0 0 1px rgba(255,255,255,.6); }
   .form-grid textarea{ min-height:160px; resize:vertical }
-  .form-grid input:focus,
-  .form-grid textarea:focus{
-    outline:none;
-    border-color:#c5d6e2;
-    background:#fff;
-    box-shadow:0 0 0 6px var(--ring);
-  }
-  .form-actions{
-    grid-column:2 / -1;
-    display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
-  }
-  .form-hint{
-    grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted);
-  }
+  .form-grid input:focus, .form-grid textarea:focus{ outline:none; border-color:#c5d6e2; background:#fff; box-shadow:0 0 0 6px var(--ring); }
+  .form-actions{ grid-column:2 / -1; display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px; }
+  .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:.var(--muted); }
+  @media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } .form-actions, .form-hint{ grid-column:1 / -1 } }
 
-  @media (max-width:640px){
-    .form-grid{ grid-template-columns:1fr; }
-    .form-actions, .form-hint{ grid-column:1 / -1 }
-  }
+  /* ===== Gradient divider (exact implementation; identical to About) ===== */
+  .section-divider{ position:relative; height:4px; margin: var(--divider-gap) 0; border:0; }
+  .section-divider::after{ content:""; position:absolute; inset:0; background: var(--page-bg); z-index:0; }
+  .section-divider::before{ content:""; position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); height:1px; border-radius:999px; background:linear-gradient( 90deg, rgba(15,91,102,var(--divider-edge-alpha)) 0%, rgba(15,91,102,var(--divider-center-alpha)) 50%, rgba(15,91,102,var(--divider-edge-alpha)) 100% ); z-index:1; }
 
   /* ===== Responsive ===== */
-  @media (max-width:1120px){
-    .tiles{ grid-template-columns:repeat(2,1fr) }
-  }
-  @media (max-width:960px){
-    nav.primary-nav{ display:none }
-    .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
-    .tiles{ grid-template-columns:1fr }
-    main{ padding-bottom:90px } /* space for mobile dock */
-    .mobile-dock{ display:block }
-    footer .social{ display:none !important; }
-  }
-  @media (max-width:520px){
-    .h1{ font-size:clamp(26px,8vw,40px) }
-  }
+  @media (max-width:1120px){ .tiles{ grid-template-columns:repeat(2,1fr) } }
+  @media (max-width:960px){ nav.primary-nav{ display:none } .menu-toggle{ display:inline-flex; align-items:center; justify-content:center } .tiles{ grid-template-columns:1fr } main{ padding-bottom:90px } .mobile-dock{ display:block } footer .social{ display:none !important; } }
+  @media (max-width:520px){ .h1{ font-size:clamp(26px,8vw,40px) } }
 
   /* ===== Additions: subtle hover color for brand & nav, skip link ===== */
-  .brand-link--wide:hover .brand-name,
-  .brand-link--wide:focus-visible .brand-name{
-    color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
-  }
-  .brand-link--wide:hover .brand-creds,
-  .brand-link--wide:focus-visible .brand-creds{
-    color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%);
-  }
-  nav.primary-nav a:hover,
-  nav.primary-nav a:focus-visible{
-    color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
-  }
-  @supports not (color-mix: in srgb, white 50%, black 50%){
-    .brand-link--wide:hover .brand-name,
-    .brand-link--wide:hover .brand-creds,
-    nav.primary-nav a:hover{ opacity:.92 }
-  }
+  .brand-link--wide:hover .brand-name, .brand-link--wide:focus-visible .brand-name{ color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%); }
+  .brand-link--wide:hover .brand-creds, .brand-link--wide:focus-visible .brand-creds{ color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%); }
+  nav.primary-nav a:hover, nav.primary-nav a:focus-visible{ color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%); }
+  @supports not (color-mix: in srgb, white 50%, black 50%){ .brand-link--wide:hover .brand-name, .brand-link--wide:hover .brand-creds, nav.primary-nav a:hover{ opacity:.92 } }
+  .skip-link{ position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden; }
+  .skip-link:focus{ left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px; background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000 }
 
-  .skip-link{
-    position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;
-  }
-  .skip-link:focus{
-    left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
-    background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
-  }
-
-  /* ===== Gradient divider (exact implementation, using solid page bg) ===== */
-  .section-divider{
-    position:relative;
-    height:4px;                 /* exact total height */
-    margin: var(--divider-gap) 0; /* equal margins */
-    border:0;
-  }
-  /* full-bleed page bg to avoid seams */
-  .section-divider::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background: var(--page-bg);
-    z-index:0;
-  }
-  /* 1px gradient line, thin edges & darker center */
-  .section-divider::before{
-    content:"";
-    position:absolute;
-    left:0; right:0; top:50%;
-    transform:translateY(-50%);
-    height:1px;                 /* exact line thickness */
-    border-radius:999px;
-    background:linear-gradient(
-      90deg,
-      rgba(15,91,102,var(--divider-edge-alpha)) 0%,
-      rgba(15,91,102,var(--divider-center-alpha)) 50%,
-      rgba(15,91,102,var(--divider-edge-alpha)) 100%
-    );
-    z-index:1;
-  }
-  /* make a divider span full viewport width even inside a .wrap container */
-  .section-divider.full-bleed{
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-  }
-
-  @supports (width: 100dvw) {
-    .section-divider.full-bleed{
-      /* do not count scrollbars */
-      width: 100dvw;
-      margin-left: calc(50% - 50dvw);
-      margin-right: calc(50% - 50dvw);
-    }
-  }
-  .hero-section .wrap {
-    padding-left: calc(var(--wrap-pad) + env(safe-area-inset-left));
-    padding-right: calc(var(--wrap-pad) + env(safe-area-inset-right));
-  }
-</style>
+  .hero-section .wrap { padding-left: calc(var(--wrap-pad) + env(safe-area-inset-left)); padding-right: calc(var(--wrap-pad) + env(safe-area-inset-right)); }
+  </style>
 
   <!-- Inert polyfill (progressive) -->
   <script>
@@ -717,7 +401,6 @@
   <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
     <header>
       <h3>Menu</h3>
-      <!-- FIX: remove incorrect aria-expanded on close button -->
       <button class="menu-toggle" id="menuClose" aria-label="Close menu">
         <span class="bars"></span>
       </button>
@@ -794,15 +477,11 @@
   </header>
 
   <!-- ===== HERO ===== -->
-  <section class="hero-section">
+  <section class="hero-section band">
     <div class="wrap hero">
       <div class="hero-grid">
         <h1 class="h1">Data-Driven Strategy &amp; Execution</h1>
-
-        <p class="tagline">
-          Research Scientist · Mathematical Statistician · Program Director
-        </p>
-
+        <p class="tagline">Research Scientist · Mathematical Statistician · Program Director</p>
         <div class="chips" aria-label="Expertise chips">
           <span class="chip" data-chip="public-health" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Public health &amp; education</span>
           <span class="chip" data-chip="enterprise-strategy" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Enterprise data strategy</span>
@@ -845,26 +524,24 @@
       </section>
     </div>
 
-    <!-- FULL-BLEED divider to match the top one -->
-    <div class="section-divider full-bleed" aria-hidden="true"></div>
+    <div class="section-divider" aria-hidden="true"></div>
     
-      <!-- CTA -->
-      <section class="band" aria-labelledby="next">
-        <div class="wrap">
-          <h2 id="next">What would you like to explore?</h2>
-          <div class="cta-row">
-            <a class="btn" href="/">Home</a>
-            <a class="btn btn-primary" href="/about/">About</a>
-            <a class="btn" href="/portfolio/">Portfolio</a>
-            <a class="btn" href="/cv/">Résumé</a>
-            <a class="btn" href="/services/">Services</a>
-            <!-- contact trigger (CTA row) -->
-            <a class="btn" href="/contact/" data-contact-open
-               aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
-          </div>
+    <!-- CTA -->
+    <section class="band" aria-labelledby="next">
+      <div class="wrap">
+        <h2 id="next">What would you like to explore?</h2>
+        <div class="cta-row">
+          <a class="btn" href="/">Home</a>
+          <a class="btn btn-primary" href="/about/">About</a>
+          <a class="btn" href="/portfolio/">Portfolio</a>
+          <a class="btn" href="/cv/">Résumé</a>
+          <a class="btn" href="/services/">Services</a>
+          <!-- contact trigger (CTA row) -->
+          <a class="btn" href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
   
   <!-- ===== Footer (teal, persistent) ===== -->
   <footer>
@@ -883,7 +560,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
@@ -907,7 +584,7 @@
         <span class="sr-only">LinkedIn</span>
       </a>
       <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
         <span class="sr-only">GitHub</span>
       </a>
     </div>
@@ -922,9 +599,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <div class="chips-content" id="chipsContent">
-        <!-- Filled by JS -->
-      </div>
+      <div class="chips-content" id="chipsContent"><!-- Filled by JS --></div>
     </div>
   </dialog>
 
@@ -999,7 +674,7 @@
       }
     }
 
-    // Attach to ALL contact triggers (header + CTA, future-safe)
+    // Attach to ALL contact triggers (header + CTA)
     document.querySelectorAll('[data-contact-open]').forEach(el => {
       el.addEventListener('click', (e) => {
         if (typeof dialog?.showModal === 'function') {
@@ -1032,7 +707,6 @@
     const menuBtn   = document.getElementById('menuToggle');
     const menuClose = document.getElementById('menuClose');
 
-    // Inert page + focus trap while drawer is open
     function setAppInert(on){
       ['main','header.site-header','.hero-section','footer','.mobile-dock'].forEach(sel=>{
         const el = document.querySelector(sel);
@@ -1055,8 +729,8 @@
 
     function openDrawer(e){
       if (e) e.preventDefault();
-      backdrop.hidden = false;                         // show overlay (removes display:none)
-      document.body.classList.add('drawer-open');      // slide drawer in
+      backdrop.hidden = false;
+      document.body.classList.add('drawer-open');
       drawer.setAttribute('aria-hidden','false');
       menuBtn?.setAttribute('aria-expanded','true');
       setAppInert(true);
@@ -1066,7 +740,7 @@
 
     function closeDrawer(e){
       if (e) e.preventDefault();
-      document.body.classList.remove('drawer-open');   // slide drawer out
+      document.body.classList.remove('drawer-open');
       drawer.setAttribute('aria-hidden','true');
       menuBtn?.setAttribute('aria-expanded','false');
       setTimeout(()=>{ backdrop.hidden = true; }, 220);
@@ -1077,37 +751,21 @@
     menuBtn?.addEventListener('click', openDrawer);
     menuClose?.addEventListener('click', closeDrawer);
     backdrop?.addEventListener('click', closeDrawer);
-    // Allow navigation: close the drawer without preventing default on link clicks
     drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeDrawer()));
-    document.addEventListener('keydown', (e)=>{
-      if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer();
-    });
+    document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer(); });
 
     // Brand link: spin once, then go home (site-relative)
     const brandLink = document.getElementById('brandLink');
     brandLink?.addEventListener('click', (e)=>{
       e.preventDefault();
       const inner = brandLink.querySelector('.avatar-inner');
-
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-        window.location.href = '/';
-        return;
-      }
-
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){ window.location.href = '/'; return; }
       inner.style.setProperty('--spin', '1turn');
-
       const goHome = () => { window.location.href = '/'; };
-
       let done = false;
-      const onEnd = (evt) => {
-        if (!done && evt.propertyName === 'transform'){
-          done = true;
-          inner.removeEventListener('transitionend', onEnd);
-          goHome();
-        }
-      };
+      const onEnd = (evt) => { if (!done && evt.propertyName === 'transform'){ done = true; inner.removeEventListener('transitionend', onEnd); goHome(); } };
       inner.addEventListener('transitionend', onEnd);
-      setTimeout(goHome, 800); // fallback
+      setTimeout(goHome, 800);
     });
 
     // Adaptive bars: dark at top, switch to light after hero exits viewport
@@ -1115,21 +773,14 @@
     function setBarsDark(isDark){
       document.body.classList.toggle('bars-dark', isDark);
       const src = isDark ? logoFront.dataset.logoDark : logoFront.dataset.logoLight;
-      logoFront.src = src;
-      logoBack.src  = src;
+      logoFront.src = src; logoBack.src  = src;
     }
     setBarsDark(true);
-
     if ('IntersectionObserver' in window){
-      const io = new IntersectionObserver(entries=>{
-        entries.forEach(entry=> setBarsDark(entry.isIntersecting));
-      }, {threshold: 0});
+      const io = new IntersectionObserver(entries=>{ entries.forEach(entry=> setBarsDark(entry.isIntersecting)); }, {threshold: 0});
       io.observe(hero);
     } else {
-      window.addEventListener('scroll', ()=>{
-        const isDark = window.scrollY < 60;
-        setBarsDark(isDark);
-      });
+      window.addEventListener('scroll', ()=>{ setBarsDark(window.scrollY < 60); });
     }
 
     // Mark current page in both desktop nav and mobile drawer
@@ -1138,7 +789,7 @@
         const here = new URL(a.href, location.origin).pathname.replace(/\/+$/,'') || '/';
         const path = location.pathname.replace(/\/+$/,'') || '/';
         if (here === path) a.setAttribute('aria-current','page');
-      }catch(_){}
+      }catch(_){ }
     });
 
     // ===== Chips dialog behavior =====
@@ -1220,30 +871,18 @@
       const data = CHIP_PROOFS[key];
       if (!data) return;
       chipsTitleEl.textContent = data.title;
-      const html = `
-        <ul class="proof-list">
-          ${data.bullets.map(b=>`<li>${b}</li>`).join('')}
-        </ul>
-      `;
+      const html = `\n        <ul class="proof-list">\n          ${data.bullets.map(b=>`<li>${b}</li>`).join('')}\n        </ul>\n      `;
       chipsContent.classList.add('is-fading');
-      setTimeout(()=>{
-        chipsContent.innerHTML = html;
-        chipsContent.classList.remove('is-fading');
-      }, 120);
+      setTimeout(()=>{ chipsContent.innerHTML = html; chipsContent.classList.remove('is-fading'); }, 120);
     }
 
     function openChipsDialogFor(chipEl){
       const key = chipEl.dataset.chip;
       if (!key) return;
-
       document.querySelectorAll('.chips .chip[aria-pressed="true"]').forEach(c=>c.setAttribute('aria-pressed','false'));
       chipEl.setAttribute('aria-pressed','true');
       activeChip = chipEl;
-
-      if (!chipsDialog.open){
-        chipsDialog.showModal();
-        setPageInert(true);
-      }
+      if (!chipsDialog.open){ chipsDialog.showModal(); setPageInert(true); }
       fillChipsContent(key);
       chipsTitleEl.focus?.();
     }
@@ -1252,19 +891,13 @@
       if (chipsDialog.open){
         chipsDialog.close();
         setPageInert(false);
-        if (activeChip){
-          activeChip.setAttribute('aria-pressed','false');
-          activeChip.focus();
-          activeChip = null;
-        }
+        if (activeChip){ activeChip.setAttribute('aria-pressed','false'); activeChip.focus(); activeChip = null; }
       }
     }
 
     document.querySelectorAll('.chips .chip').forEach(chip=>{
       chip.addEventListener('click', ()=> openChipsDialogFor(chip));
-      chip.addEventListener('keydown', e=>{
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChipsDialogFor(chip); }
-      });
+      chip.addEventListener('keydown', e=>{ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChipsDialogFor(chip); } });
     });
 
     chipsCloseBtn?.addEventListener('click', closeChipsDialog);
@@ -1273,5 +906,3 @@
   </script>
 </body>
 </html>
-
-
