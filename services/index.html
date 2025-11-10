@@ -161,6 +161,34 @@
         .brand-creds{ color:#c3c9d2 }
       }
 
+      /* ===== Avatar with logo flip (exactly like Home) ===== */
+      .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
+      .avatar-badge{display:block;width:100%;height:100%;border-radius:50%;outline:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+      .avatar-inner{
+        position:relative;width:100%;height:100%;
+        transform-style:preserve-3d;will-change:transform;
+        --ry: 0turn;       /* 0turn = front logo; .5turn = mirrored/back logo */
+        --spin: 0turn;     /* 1turn added on click */
+        transform: rotateY(calc(var(--ry) + var(--spin)));
+        transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+      }
+      .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
+      .avatar-face.front{border:none;box-shadow:none}
+      body.bars-dark .avatar-face.front{border:none;box-shadow:none}
+      .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
+      .avatar-face img{width:100%;height:100%;object-fit:contain;padding:8px;background:transparent}
+      /* Make the "back" logo actually mirrored horizontally */
+      .avatar-face.back img{ transform: scaleX(-1); }
+      /* Hover: flip to mirrored logo */
+      @media (hover:hover) and (pointer:fine){
+        .brand-link--wide:hover .avatar-inner{
+          --ry: .5turn;
+          transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
+        }
+      }
+      @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
+      @media (max-width:960px){ :root{ --avatar-size:72px } }
+
       /* ===== Desktop nav ===== */
       nav.primary-nav{ display:flex }
       nav.primary-nav ul{ list-style:none;display:flex;gap:18px;margin:0;padding:0 }
@@ -318,7 +346,7 @@
       .form-grid textarea{min-height:160px; resize:vertical}
       .form-grid input:focus,.form-grid textarea:focus{outline:none; border-color:#c5d6e2; background:#fff; box-shadow:0 0 0 6px var(--ring)}
       .form-actions{grid-column:2 / -1; display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px}
-      .form-hint{grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted)}
+      .form-hint{grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#(muted)}
       @media (max-width:640px){.form-grid{grid-template-columns:1fr} .form-actions,.form-hint{grid-column:1 / -1}}
 
       /* ===== Footer — teal always ===== */
@@ -883,7 +911,7 @@
       if (menuClose) menuClose.addEventListener('click', closeDrawer);
       if (backdrop) backdrop.addEventListener('click', closeDrawer);
       if (drawer) $all('#mobileDrawer a').forEach(function(a){ a.addEventListener('click', function(){ closeDrawer(); }); });
-      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeDrawer(); });
 
       /* Brand link: spin once → home */
       var brandLink = document.getElementById('brandLink');
@@ -943,8 +971,8 @@
         });
       });
 
-      /* Mark current page in desktop nav */
-      $all('nav.primary-nav a').forEach(function(a){
+      /* Mark current page in BOTH desktop and mobile nav (parity with Home) */
+      $all('nav.primary-nav a, .mobile-drawer nav a').forEach(function(a){
         try{
           var here = new URL(a.href, location.origin).pathname.replace(/\/+$/,'') || '/';
           var path = location.pathname.replace(/\/+$/,'') || '/';
