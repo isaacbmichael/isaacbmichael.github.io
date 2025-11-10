@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -62,6 +62,11 @@
 
     /* Anchor offset for sticky header */
     --anchor-offset: 76px;
+
+    /* NEW: CTA spacing + mobile dock handling */
+    --cta-desktop-gap: 42px;   /* 28 + 14 compromise for desktop bottom spacing */
+    --cta-mobile-gap: 14px;    /* visible space above dock on mobile */
+    --dock-h: 90px;            /* fallback; JS will measure actual height */
   }
   @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -288,7 +293,8 @@
   @media (prefers-reduced-motion:reduce){ .chip, .chips-content{ transition:none } }
 
   /* ===== Sections ===== */
-  main{padding:10px 0 40px;flex:1 0 auto}
+  /* Desktop bottom spacing follows 28 + 14 = 42px compromise */
+  main{padding:10px 0 var(--cta-desktop-gap);flex:1 0 auto}
   section{padding:24px 0}
 
   .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -296,6 +302,13 @@
   .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
   .tile h3{margin:0 0 8px}
   .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
+
+  /* NEW: CTA band spacing (42px top/bottom on desktop; collapse bottom on mobile) */
+  .band--cta{ padding-top: calc(var(--band-space) + 14px); padding-bottom: calc(var(--band-space) + 14px); }
+  .cta-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  @media (max-width:960px){
+    .band--cta{ padding-bottom: 0; } /* let main handle the 14px visible gap above dock */
+  }
 
   /* ===== Footer — teal always (match About) ===== */
   footer{ background: var(--brand-blue-900) !important; color: #ffffff !important; padding: 18px 0; text-align: center; border-top: 1px solid rgba(255,255,255,.18); }
@@ -353,7 +366,15 @@
 
   /* ===== Responsive ===== */
   @media (max-width:1120px){ .tiles{ grid-template-columns:repeat(2,1fr) } }
-  @media (max-width:960px){ nav.primary-nav{ display:none } .menu-toggle{ display:inline-flex; align-items:center; justify-content:center } .tiles{ grid-template-columns:1fr } main{ padding-bottom:90px } .mobile-dock{ display:block } footer .social{ display:none !important; } }
+  @media (max-width:960px){
+    nav.primary-nav{ display:none }
+    .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
+    .tiles{ grid-template-columns:1fr }
+    /* NEW: mobile bottom space = dock height + 14px visible gap */
+    main{ padding-bottom: calc(var(--dock-h) + var(--cta-mobile-gap)); }
+    .mobile-dock{ display:block }
+    footer .social{ display:none !important; }
+  }
   @media (max-width:520px){ .h1{ font-size:clamp(26px,8vw,40px) } }
 
   /* ===== Additions: subtle hover color for brand & nav, skip link ===== */
@@ -527,7 +548,7 @@
     <div class="section-divider" aria-hidden="true"></div>
     
     <!-- CTA -->
-    <section class="band" aria-labelledby="next">
+    <section class="band band--cta" aria-labelledby="next">
       <div class="wrap">
         <h2 id="next">What would you like to explore?</h2>
         <div class="cta-row">
@@ -871,7 +892,11 @@
       const data = CHIP_PROOFS[key];
       if (!data) return;
       chipsTitleEl.textContent = data.title;
-      const html = `\n        <ul class="proof-list">\n          ${data.bullets.map(b=>`<li>${b}</li>`).join('')}\n        </ul>\n      `;
+      const html = `
+        <ul class="proof-list">
+          ${data.bullets.map(b=>`<li>${b}</li>`).join('')}
+        </ul>
+      `;
       chipsContent.classList.add('is-fading');
       setTimeout(()=>{ chipsContent.innerHTML = html; chipsContent.classList.remove('is-fading'); }, 120);
     }
@@ -903,6 +928,19 @@
     chipsCloseBtn?.addEventListener('click', closeChipsDialog);
     chipsDialog.addEventListener('click', (e)=>{ if (e.target === chipsDialog) closeChipsDialog(); });
     chipsDialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeChipsDialog(); });
+
+    // === NEW: Measure mobile dock height and set --dock-h so the visible gap = 14px on mobile ===
+    (function(){
+      function setDockVars(){
+        var dock = document.querySelector('.mobile-dock');
+        var h = dock ? dock.offsetHeight : 0; // includes env(safe-area-inset-bottom)
+        document.documentElement.style.setProperty('--dock-h', h + 'px');
+      }
+      setDockVars();
+      window.addEventListener('load', setDockVars);
+      window.addEventListener('resize', setDockVars, { passive:true });
+      window.addEventListener('orientationchange', setDockVars);
+    })();
   </script>
 </body>
 </html>
