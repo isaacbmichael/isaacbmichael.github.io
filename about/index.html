@@ -75,6 +75,11 @@
 
         /* Anchor offset for sticky header */
         --anchor-offset: 76px;
+
+        /* NEW: CTA spacing + mobile dock handling (parity with Home) */
+        --cta-desktop-gap: 28px;   /* main’s bottom padding on desktop */
+        --cta-mobile-gap: 14px;    /* visible space above dock on mobile */
+        --dock-h: 90px;            /* fallback; JS sets real value */
       }
       @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -105,6 +110,9 @@
       /* Global anchor offset so in-page links don't hide under sticky header */
       :where([id]){ scroll-margin-top: calc(var(--anchor-offset) + 10px) }
 
+      /* Main spacing parity with Home */
+      main{ padding:10px 0 var(--cta-desktop-gap); flex:1 0 auto }
+
       a{ color:var(--accent); text-decoration:none }
       a:hover{ text-decoration:underline }
       .wrap{ max-width:var(--w); margin:0 auto; padding:0 var(--wrap-pad) }
@@ -118,6 +126,8 @@
 
       /* ===== Bands (section spacing) ===== */
       section.band{ position:relative; padding:var(--band-space) 0 }
+      /* CTA band: slight extra top breathing room; desktop keeps 28px bottom */
+      .band--cta{ padding-top: calc(var(--band-space) + 14px); padding-bottom: var(--band-space) }
       h2{ margin:0 0 14px; font-size:clamp(20px,2.6vw,28px) }
 
       /* ===== Sticky Header (full parity with Home) ===== */
@@ -525,7 +535,8 @@
         nav.primary-nav{ display:none }
         .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
         .tiles{ grid-template-columns:1fr }
-        main{ padding-bottom:90px } /* make room for the mobile dock */
+        /* Replace fixed 90px with dynamic dock height + 14px visible cushion */
+        main{ padding-bottom: calc(var(--dock-h) + var(--cta-mobile-gap)) }
         .mobile-dock{ display:block }
         footer .social{ display:none !important }
         .hero-grid{
@@ -536,6 +547,8 @@
             "bio";
         }
         .photo-badge{ justify-self:center; margin-top:0 }
+        /* Avoid double spacing at the bottom band on mobile */
+        .band--cta{ padding-bottom: 0 }
       }
       @media (max-width:520px){
         .h1{ font-size:clamp(26px,8vw,40px) }
@@ -828,7 +841,7 @@
       <div class="section-divider" aria-hidden="true"></div>
     
       <!-- CTA -->
-      <section class="band" aria-labelledby="next">
+      <section class="band band--cta" aria-labelledby="next">
         <div class="wrap">
           <h2 id="next">What would you like to explore?</h2>
           <div class="cta-row" aria-label="Quick navigation">
@@ -1118,6 +1131,19 @@
           if (here === path) a.setAttribute('aria-current','page');
         }catch(_){}
       });
+
+      /* Measure mobile dock height and set --dock-h so visible gap = 14px on mobile */
+      (function(){
+        function setDockVars(){
+          var dock = document.querySelector('.mobile-dock');
+          var h = dock ? dock.offsetHeight : 0; // includes safe-area inset
+          document.documentElement.style.setProperty('--dock-h', h + 'px');
+        }
+        setDockVars();
+        window.addEventListener('load', setDockVars);
+        window.addEventListener('resize', setDockVars, { passive:true });
+        window.addEventListener('orientationchange', setDockVars);
+      })();
 
       /* PHOTO BADGE: 3D tilt + flip + rotating quotes */
       (function(){
