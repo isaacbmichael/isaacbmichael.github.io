@@ -278,26 +278,16 @@
         grid-column:1 / -1; margin-top:6px;
       }
       .chip{
-        position:relative; isolation:isolate;
         display:inline-flex; align-items:center; gap:8px;
-        padding:.55rem .85rem; line-height:1; border-radius:999px; font-weight:800;
-        border:1px solid rgba(0,0,0,.04);
+        padding:.55rem .85rem; border-radius:999px; font-weight:800; line-height:1;
         background:#fff; color:var(--brand-blue-900);
+        border:1px solid rgba(0,0,0,.04);
         box-shadow:var(--shadow);
-        transition:transform .16s ease, box-shadow .16s ease, filter .16s ease, opacity .16s ease;
-        text-decoration:none; cursor:pointer; will-change:transform, box-shadow;
+        text-decoration:none; cursor:pointer;
+        transition:transform .16s ease, box-shadow .16s ease;
       }
-      .chip::before{
-        content:""; position:absolute; inset:1px; border-radius:999px; pointer-events:none; z-index:0;
-        background:linear-gradient(to bottom, rgba(255,255,255,.65), rgba(255,255,255,0) 42%);
-        mix-blend-mode:soft-light; opacity:.85; transition:opacity .16s ease, transform .16s ease;
-      }
-      .chip > *{ position:relative; z-index:1 }
-      .chip:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); text-decoration:none }
-      .chip:hover::before{ opacity:.95; transform:translateY(-1px) }
+      .chip:hover{ text-decoration:none; transform:translateY(-2px); box-shadow:var(--shadow-hover) }
       .chip:active{ transform:translateY(-1px) }
-      /* Active/selected chips stay white (About page behavior) */
-      .chip[aria-current="true"]{ transform:translateY(-1px); box-shadow:var(--shadow-hover) }
 
       /* ===== CTA buttons (shared) ===== */
       .cta-row{
@@ -516,7 +506,7 @@
         grid-column:2 / -1;
         display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
       }
-      .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted) }
+      .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#999 }
       @media (max-width:640px){
         .form-grid{ grid-template-columns:1fr }
         .form-actions, .form-hint{ grid-column:1 / -1 }
@@ -529,7 +519,6 @@
         .scroll-arrow{ animation:none !important }
         nav.primary-nav a::after{ transition:none !important }
         .btn, .chip, .tile, .brand-name, .brand-creds{ transition:none !important }
-        .btn::before, .chip::before{ transition:none !important }
       }
     </style>
 
@@ -1234,103 +1223,26 @@
         window.addEventListener("scroll", function(){ setBarsDark(window.scrollY < 60) });
       }
 
-      /* ===== Smooth glide on scroll chips/arrows + active state tracking ===== */
-      var chipLinks = $all(".chip-row a[href^='#']");
-      var chipMap = {}; // id -> link
-      chipLinks.forEach(function(a){
-        var id=(a.getAttribute("href")||"").slice(1);
-        if(id){ chipMap[id]=a; }
-        a.addEventListener("click", function(e){
-          var href=a.getAttribute("href")||"";
-          if(href.indexOf("#")===0){
+      /* ===== Smooth glide for chips & the scroll arrow (parity with About) ===== */
+      (function(){
+        var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        $all('a.scroll-arrow, .chip-row a').forEach(function(a){
+          a.addEventListener('click', function(e){
+            var href = a.getAttribute('href') || '';
+            if (href.charAt(0) !== '#') return;        // external links pass through
+            var id = href.slice(1);
+            var target = document.getElementById(id);
+            if (!target) return;
             e.preventDefault();
-            var target=document.getElementById(href.slice(1));
-            var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            if(target && target.scrollIntoView){
-              target.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
-              // mark active immediately on click for responsiveness
-              setActiveChip(href.slice(1));
-              // keep the hash updated without page jump
-              history.replaceState(null, "", href);
+            if (target.scrollIntoView){
+              target.scrollIntoView({
+                behavior: prefersReduced ? 'auto' : 'smooth',
+                block: 'start'
+              });
             }
-          }
-        });
-      });
-
-      // also allow the scroll-arrow to use PRM-aware smooth scroll
-      $all("a.scroll-arrow").forEach(function(a){
-        a.addEventListener("click", function(e){
-          var href=a.getAttribute("href")||"";
-          if(href.indexOf("#")===0){
-            e.preventDefault();
-            var target=document.getElementById(href.slice(1));
-            var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-            if(target && target.scrollIntoView){
-              target.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
-              setActiveChip(href.slice(1));
-              history.replaceState(null, "", href);
-            }
-          }
-        });
-      });
-
-      // Active chip helper using aria-current
-      function setActiveChip(id){
-        Object.keys(chipMap).forEach(function(key){
-          chipMap[key].removeAttribute("aria-current");
-        });
-        if(chipMap[id]) chipMap[id].setAttribute("aria-current","true");
-      }
-
-      // Determine current section while scrolling
-      var sectionIds = ["cdc","lsu","consulting","demos"];
-      function updateActiveChipOnScroll(){
-        // choose the section whose middle crosses ~36% down the viewport
-        var probe = window.innerHeight * 0.36;
-        var current = null;
-        for(var i=0;i<sectionIds.length;i++){
-          var id=sectionIds[i], el=document.getElementById(id); if(!el) continue;
-          var r=el.getBoundingClientRect();
-          if(r.top <= probe && r.bottom > probe){ current = id; break; }
-        }
-        // fallback to first visible above top or first section
-        if(!current){
-          for(var j=sectionIds.length-1;j>=0;j--){
-            var id2=sectionIds[j], el2=document.getElementById(id2); if(!el2) continue;
-            if(el2.getBoundingClientRect().top <= probe){ current=id2; break; }
-          }
-          if(!current) current=sectionIds[0];
-        }
-        setActiveChip(current);
-      }
-
-      // Throttle with rAF
-      var ticking=false;
-      function onScroll(){
-        if(!ticking){
-          window.requestAnimationFrame(function(){
-            updateActiveChipOnScroll();
-            ticking=false;
           });
-          ticking=true;
-        }
-      }
-      window.addEventListener("scroll", onScroll, {passive:true});
-      window.addEventListener("resize", onScroll, {passive:true});
-      window.addEventListener("load", function(){
-        // initialize from hash if present; else from scroll position
-        var h=location.hash.replace("#","");
-        if(h && chipMap[h]) setActiveChip(h); else updateActiveChipOnScroll();
-      });
-      window.addEventListener("hashchange", function(){
-        var h=location.hash.replace("#","");
-        if(h && chipMap[h]) setActiveChip(h);
-      });
-
-      // === Fix: prevent chips from showing "active" on initial load ===
-      window.addEventListener("load", () => {
-        $all(".chip-row a").forEach(chip => chip.removeAttribute("aria-current"));
-      });
+        });
+      })();
 
       // Mark current page in desktop + mobile navs
       $all('nav.primary-nav a, .mobile-drawer nav a').forEach(function(a){
