@@ -242,6 +242,12 @@ footer a:hover,
       /* Active page styling (parity with Home) */
       nav.primary-nav a[aria-current="page"]{ font-weight:900 }
       nav.primary-nav a[aria-current="page"]::after{ transform:scaleX(1) }
+      
+      /* Active (current page) state in the mobile drawer */
+      .mobile-drawer nav a[aria-current="page"]{
+        background: rgba(255,255,255,.18);
+        border-color: rgba(0,0,0,.18);
+      }
 
       /* ===== Mobile hamburger (hidden on desktop) ===== */
       .menu-toggle{
