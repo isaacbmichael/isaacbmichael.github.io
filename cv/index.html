@@ -942,6 +942,18 @@ footer a:hover,
         } catch(_) {}
       });
     })();
+
+      (function(){
+    function setDockVars(){
+      var dock = document.querySelector('.mobile-dock');
+      var h = dock ? dock.offsetHeight : 0;
+      document.documentElement.style.setProperty('--dock-h', h + 'px');
+    }
+    setDockVars();
+    window.addEventListener('load', setDockVars);
+    window.addEventListener('resize', setDockVars, { passive:true });
+    window.addEventListener('orientationchange', setDockVars);
+  })();
   </script>
 </body>
 </html>
