@@ -268,15 +268,19 @@
       }
       .bio p{ margin:0 0 10px }
 
-      /* Section shortcuts (chips) */
-      .chip-row{display:flex; gap:8px; flex-wrap:wrap}
+      /* Section shortcuts (chips) — updated to match Portfolio */
+      .chip-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px}
       .chip{
         display:inline-flex; align-items:center; gap:8px;
-        padding:.45rem .8rem; border:1px solid #e5e7eb; border-radius:999px;
-        background:#fff; color:var(--brand-blue-900); /* teal text */
-        font-weight:800; box-shadow:var(--shadow)
+        padding:.55rem .85rem;
+        border:1px solid rgba(0,0,0,.04);
+        border-radius:999px;
+        background:#fff; color:var(--brand-blue-900);
+        font-weight:800; box-shadow:var(--shadow);
+        transition:transform .16s ease, box-shadow .16s ease;
       }
-      .chip:hover{text-decoration:none; transform:translateY(-1px); box-shadow:var(--shadow-hover)}
+      .chip:hover{ text-decoration:none; transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+      .chip:active{ transform:translateY(-1px) }
 
       /* Scroll cue */
       .scroll-cue{ display:flex; justify-content:center; margin-top:6px }
@@ -667,7 +671,7 @@
         <div class="wrap">
           <h2 id="how">How it works</h2>
 
-          <div class="tiles">
+        <div class="tiles">
             <div class="tile">
               <h3>1) Fit check (15 min)</h3>
               <p>Goals, constraints, data availability. If we’re not a fit, I’ll point you to a better option.</p>
