@@ -1327,6 +1327,11 @@
         if(h && chipMap[h]) setActiveChip(h);
       });
 
+      // === Fix: prevent chips from showing "active" on initial load ===
+      window.addEventListener("load", () => {
+        $all(".chip-row a").forEach(chip => chip.removeAttribute("aria-current"));
+      });
+
       // Mark current page in desktop + mobile navs
       $all('nav.primary-nav a, .mobile-drawer nav a').forEach(function(a){
         try{
