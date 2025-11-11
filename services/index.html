@@ -713,22 +713,32 @@
 
       <div class="section-divider" aria-hidden="true"></div>
 
-      <!-- CTA -->
+      <!-- CTA (conversion-focused) -->
       <section class="band" aria-labelledby="next">
         <div class="wrap">
-          <h2 id="next">What would you like to explore?</h2>
-          <div class="cta-row">
-            <a class="btn" href="/">Home</a>
-            <a class="btn" href="/about/">About</a>
-            <a class="btn" href="/portfolio/">Portfolio</a>
-            <a class="btn" href="/cv/">Résumé</a>
-            <a class="btn" href="/services/">Services</a>
-            <!-- Bottom Contact trigger opens the same dialog -->
-            <a class="btn btn-primary" href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
+          <h2 id="next">Ready to talk?</h2>
+          <!-- Primary actions -->
+          <div class="cta-row" aria-label="Contact options">
+            <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email me</a>
+            <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
+            <a class="btn" href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861" title="+1 (254) 366-6861">Call or text</a>
+            <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <!-- Opens the existing contact dialog -->
+            <a class="btn" href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Open contact form</a>
+          </div>
+
+          <!-- Subtle secondary nav to keep exploration utility -->
+          <div class="cta-row" style="margin-top:10px; filter:saturate(.92); opacity:.9" aria-label="Keep exploring">
+            <span class="sr-only">Keep exploring:</span>
+            <a class="btn btn-outline" href="/">Home</a>
+            <a class="btn btn-outline" href="/about/">About</a>
+            <a class="btn btn-outline" href="/portfolio/">Portfolio</a>
+            <a class="btn btn-outline" href="/cv/">Résumé</a>
+            <a class="btn btn-outline" href="/services/" aria-current="page">Services</a>
           </div>
         </div>
       </section>
-    </main>
 
     <!-- ===== Footer (teal, persistent) ===== -->
     <footer>
