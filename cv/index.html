@@ -265,9 +265,11 @@
       margin:0; font-weight:900; letter-spacing:.2px;
       font-size:clamp(28px,6vw,56px); line-height:1.08; color:var(--ink);
     }
+    /* (1) Ensure lead matches Portfolio description color exactly */
     .lead{ margin:0; color:var(--muted) }
 
     /* ===== Downloads / Tiles ===== */
+    /* (2) Keep title spacing identical: main has 10px top padding like About/Portfolio */
     main{ padding:10px 0 var(--cta-desktop-gap); flex:1 0 auto }
     .tiles{
       display:grid;
@@ -570,21 +572,21 @@
     </div>
   </header>
 
-  <!-- ===== Hero ===== -->
-  <section class="hero-section band">
-    <div class="wrap hero">
-      <div class="hero-grid">
-        <h1 class="h1">Résumé &amp; CV</h1>
-        <p class="lead">
-          Download the two-page résumé (default) or the full academic CV. An ATS-ready résumé is included for portals that parse PDFs.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider" aria-hidden="true"></div>
-
   <main id="main">
+    <!-- ===== Hero (moved inside <main> to match spacing) ===== -->
+    <section class="hero-section band">
+      <div class="wrap hero">
+        <div class="hero-grid">
+          <h1 class="h1">Résumé &amp; CV</h1>
+          <p class="lead">
+            Download the two-page résumé (default) or the full academic CV. An ATS-ready résumé is included for portals that parse PDFs.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider" aria-hidden="true"></div>
+
     <!-- Downloads -->
     <section class="band" aria-labelledby="downloads">
       <div class="wrap">
