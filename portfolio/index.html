@@ -1090,7 +1090,8 @@
         if(dialog && !dialog.open){
           window.__lastFocused=document.activeElement;
           if(typeof dialog.showModal==="function") dialog.showModal();
-          ["main","header.site-header",".mobile-dock"].forEach(function(sel){
+          /* Inert everything behind the modal (parity with drawer) */
+          ["main","header.site-header",".hero-section","footer",".mobile-dock"].forEach(function(sel){
             var el=$(sel); if(el) el.setAttribute("inert","");
           });
           var nameEl=$("#qName"); if(nameEl) nameEl.focus();
@@ -1100,7 +1101,7 @@
         if(e) e.preventDefault();
         if(dialog && dialog.open){
           dialog.close();
-          ["main","header.site-header",".mobile-dock"].forEach(function(sel){
+          ["main","header.site-header",".hero-section","footer",".mobile-dock"].forEach(function(sel){
             var el=$(sel); if(el) el.removeAttribute("inert");
           });
           var backTo=window.__lastFocused || document.querySelector("[data-contact-open]");
@@ -1132,7 +1133,7 @@
               email=(qEmail && qEmail.value||"").trim(),
               msg=(qMsg && qMsg.value||"").trim();
           var subject=encodeURIComponent("Website inquiry"),
-              body=encodeURIComponent(msg + "\n\n— " + name + (email ? " <"+email+">" : ""));
+              body=encodeURIComponent(msg + "\n\n— " + name + (email ? " <"+email+">" : "" ));
           window.location.href="mailto:isaac.b.michael@gmail.com?subject="+subject+"&body="+body;
           closeDialog();
         });
