@@ -25,7 +25,6 @@
   <style>
   /* ===== Design Tokens (Royal Teal) ===== */
   :root{
-    /* Updated brand anchors */
     --brand-blue-900:#0B3F47;  /* dark bar bg */
     --brand-blue-700:#0F5B66;  /* primary accents */
     --accent:var(--brand-blue-700);
@@ -37,10 +36,7 @@
     --bar-fg:var(--brand-blue-900);
     --bar-border:#e5e7eb;
 
-    /* Solid page background (very light teal) — match About */
     --page-bg:#F2F7F8;
-
-    /* Ring tinted to new accent */
     --ring:rgba(15,91,102,.35);
 
     --surface:#ffffff;
@@ -54,23 +50,21 @@
     --drawer-bg:#ffffff;
     --drawer-fg:#111827;
 
-    /* About/Shared: Bands + Section divider tokens (exact) */
+    /* Bands + divider tokens (canonical) */
     --band-space:28px;
     --divider-gap: 2px;
     --divider-edge-alpha: .12;
     --divider-center-alpha: .68;
 
-    /* Anchor offset for sticky header */
     --anchor-offset: 76px;
 
-    /* NEW: CTA spacing + mobile dock handling */
     --cta-desktop-gap: 28px;   
-    --cta-mobile-gap: 14px;    /* visible space above dock on mobile */
-    --dock-h: 90px;            /* fallback; JS will measure actual height */
+    --cta-mobile-gap: 14px;
+    --dock-h: 90px;
   }
   @media (min-width:1600px){ :root{ --w:1440px } }
 
-  /* Bars DARK variant (used at the top; toggled by body.bars-dark) */
+  /* Bars DARK variant */
   body.bars-dark{
     --bar-bg:var(--brand-blue-900);
     --bar-fg:#ffffff;
@@ -93,21 +87,18 @@
     padding-top: env(safe-area-inset-top);
   }
   :focus-visible{ outline:none; box-shadow:0 0 0 6px var(--ring) }
-  /* Global anchor offset so in-page links don't hide under sticky header */
   :where([id]){ scroll-margin-top: calc(var(--anchor-offset) + 10px) }
 
   a{color:var(--accent);text-decoration:none}
   a:hover{text-decoration:underline}
   .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
 
-  /* Visually hidden text */
   .sr-only{
     position:absolute !important;
     width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
     clip:rect(0,0,0,0);white-space:nowrap;border:0;
   }
 
-  /* ===== Bands (shared with About) ===== */
   section.band{ position:relative; padding:var(--band-space) 0 }
   h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
 
@@ -119,30 +110,24 @@
     backdrop-filter:saturate(120%) blur(2px);
     transition:background-color .2s ease, color .2s ease, border-color .2s ease;
   }
-
-  /* Make the header container full-bleed */
   .site-header .wrap{ max-width:none; padding-left:0; padding-right:0 }
 
   .topbar{
     display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:10px 0; /* vertical only; horizontal gutters handled below */
+    padding:10px 0;
   }
 
-  /* Desktop: gutters that match the page wrap */
   @media (min-width:961px){
     :root{ --nav-gutter: var(--wrap-pad); }
     .topbar > .brand{ margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left)); }
     .topbar > nav.primary-nav{ margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right)); }
   }
-
-  /* Mobile: modest side padding on the bar */
   @media (max-width:960px){
     .topbar{ padding-left: calc(16px + env(safe-area-inset-left)); padding-right: calc(16px + env(safe-area-inset-right)); }
   }
 
   .brand{display:flex;align-items:center;gap:12px}
 
-  /* ===== Brand link ===== */
   .brand-link--wide{
     display:flex;align-items:center;gap:12px;
     color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
@@ -174,15 +159,12 @@
     transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
   }
   .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
-  /* Remove white ring/border + shadows entirely */
   .avatar-face.front{border:none;box-shadow:none}
   body.bars-dark .avatar-face.front{border:none;box-shadow:none}
   .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
   .avatar-face img{width:100%;height:100%;object-fit:contain;padding:8px;background:transparent}
-  /* Make the "back" logo actually mirrored horizontally */
   .avatar-face.back img{ transform: scaleX(-1); }
 
-  /* Hover: flip to mirrored logo */
   @media (hover:hover) and (pointer:fine){
     .brand-link--wide:hover .avatar-inner{
       --ry: .5turn;
@@ -202,13 +184,12 @@
   }
   nav.primary-nav a:hover{color:var(--bar-fg);text-decoration:none}
   nav.primary-nav a:hover::after{transform:scaleX(1)}
-  /* Active page styling */
   nav.primary-nav a[aria-current="page"]{ font-weight:900; }
   nav.primary-nav a[aria-current="page"]::after{ transform:scaleX(1); }
 
-  /* ===== Mobile hamburger (hidden on desktop) ===== */
+  /* ===== Mobile hamburger ===== */
   .menu-toggle{
-    display:none; /* shown on <= 960px */
+    display:none;
     background:transparent;border:none;color:var(--bar-fg);
     width:44px;height:44px;border-radius:10px;cursor:pointer;
     -webkit-tap-highlight-color:transparent;
@@ -219,22 +200,19 @@
     display:block;width:22px;height:2px;background:currentColor;border-radius:2px;position:relative;margin:0 auto;
     transition:transform .2s ease, opacity .2s ease;
   }
-  .menu-toggle .bars{ top:0 }
-  .menu-toggle .bars::before,
-  .menu-toggle .bars::after{ content:""; position:absolute; left:0 }
-  .menu-toggle .bars::before{ transform:translateY(-7px) }
-  .menu-toggle .bars::after{ transform:translateY(7px) }
+  .menu-toggle .bars::before{ content:""; position:absolute; left:0; transform:translateY(-7px) }
+  .menu-toggle .bars::after{ content:""; position:absolute; left:0; transform:translateY(7px) }
 
   /* ===== Mobile drawer ===== */
   .drawer-backdrop{
     position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:saturate(120%) blur(2px);
-    opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:1090; /* raised */
+    opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:1090;
   }
   .mobile-drawer{
     position:fixed; inset:0 0 0 auto; width:min(420px, 92vw);
     background:var(--drawer-bg); color:var(--drawer-fg);
     transform:translateX(100%); transition:transform .22s cubic-bezier(.2,.8,.2,1);
-    box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1100; /* raised above backdrop */
+    box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1100;
     display:flex; flex-direction:column; gap:10px; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
   }
   .mobile-drawer header{ display:flex; align-items:center; justify-content:space-between; }
@@ -245,7 +223,6 @@
     font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06)
   }
   .mobile-drawer nav a:hover{ background:rgba(255,255,255,.12) }
-  /* Active page state in mobile drawer */
   .mobile-drawer nav a[aria-current="page"]{ background: rgba(255,255,255,.14); border-color: rgba(0,0,0,.08); }
   .mobile-drawer .quick{ display:grid; gap:10px; margin-top:4px }
   .mobile-drawer .quick .btn{ width:100%; justify-content:center }
@@ -256,7 +233,7 @@
 
   /* ===== HERO ===== */
   .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
-  /* Match About/Portfolio: band wrapper + inner hero padding */
+  /* Match Portfolio band + inner padding */
   .hero-section.band{ padding-top:22px; padding-bottom:var(--band-space) }
   .hero{padding:6px 0 0}
   .hero-grid{
@@ -267,7 +244,7 @@
       "tagline"
       "intro"
       "chips";
-    gap: clamp(18px, 2.2vw, 24px); /* parity with Portfolio hero rhythm */
+    gap: clamp(18px, 2.2vw, 24px);
     align-items:start;
   }
   .hero-grid > *{ min-width:0 }
@@ -280,13 +257,16 @@
     font-size:clamp(14px,1.6vw,18px); line-height:1.35; white-space:normal;
   }
   @supports (text-wrap: balance){ .tagline{ text-wrap:balance } }
+  /* FULL-WIDTH intro (requested) */
   .intro{
-    grid-area:intro; margin:0; max-width:72ch; color:var(--ink);
+    grid-area:intro; margin:0;
+    max-width:none; width:100%;
+    color:var(--ink);
     font-size:clamp(15px,1.7vw,18px); line-height:1.55; font-weight:500;
   }
   @supports (text-wrap: balance){ .intro{ text-wrap:balance } }
 
-  /* ===== Chips (smoother, gentler) ===== */
+  /* ===== Chips (gentle + explicit hand cursor) ===== */
   .chips{
     grid-area:chips; display:flex; align-items:center; gap:10px 10px;
     margin:0; padding:0 0 2px; white-space:normal; overflow:visible; flex-wrap:wrap;
@@ -297,13 +277,14 @@
     padding:.55rem .85rem; border-radius:999px;
     font-weight:800; font-size:clamp(12px,1.3vw,14px);
     border:1px solid rgba(17,24,39,.08);
-    transform:translateZ(0); /* avoid flicker */
+    transform:translateZ(0);
     transition:
       transform .22s cubic-bezier(.2,.8,.2,1),
       background-color .22s ease,
       border-color .22s ease,
       box-shadow .22s ease,
       filter .22s ease;
+    cursor:pointer; /* pointing-hand cursor */
   }
   @media (hover:hover){
     .chip:hover{
@@ -311,17 +292,19 @@
       box-shadow:var(--shadow-hover);
       background:#fff;
       border-color:rgba(15,91,102,.22);
+      cursor:pointer; /* reinforce on hover */
     }
   }
-  .chip:active{ transform:translateY(-1px) }
+  .chip:active{ transform:translateY(-1px); cursor:pointer }
   .chip:focus-visible{
     outline:none; transform:translateY(-2px);
     box-shadow:var(--shadow-hover);
     background:#fff; border-color:rgba(15,91,102,.35);
+    cursor:pointer;
   }
   .chip[aria-pressed="true"]{
     background:#fff; border-color:rgba(15,91,102,.28); box-shadow:var(--shadow);
-    filter:saturate(105%);
+    filter:saturate(105%); cursor:pointer;
   }
 
   /* Chips proof dialog */
@@ -341,15 +324,11 @@
   @media (prefers-reduced-motion:reduce){ .chip, .chips-content{ transition:none } }
 
   /* ===== Sections ===== */
-  /* Desktop bottom spacing follows 28 + 14 = 42px compromise */
   main{padding:10px 0 var(--cta-desktop-gap);flex:1 0 auto}
   section{padding:24px 0}
 
-  /* ===== Featured (larger cards with more content) ===== */
-  .tiles{
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:22px;
-  }
+  /* ===== Featured (larger cards) ===== */
+  .tiles{ display:grid;grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
   .tile{
     position:relative;background:var(--surface);border-radius:var(--radius);
     padding:24px 24px;box-shadow:var(--shadow);
@@ -360,14 +339,13 @@
   .tile p{margin:0;color:#1f2937;line-height:1.55}
   .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
-  /* NEW: CTA band spacing (42px top/bottom on desktop; collapse bottom on mobile) */
   .band--cta{ padding-top: calc(var(--band-space) + 14px); padding-bottom: var(--band-space);}
   .cta-row{ display:flex; flex-wrap:wrap; gap:10px; }
   @media (max-width:960px){
-    .band--cta{ padding-bottom: 0; } /* let main handle the 14px visible gap above dock */
+    .band--cta{ padding-bottom: 0; }
   }
 
-  /* ===== Footer — teal always (match About) ===== */
+  /* ===== Footer ===== */
   footer{ background: var(--brand-blue-900) !important; color: #ffffff !important; padding: 18px 0; text-align: center; border-top: 1px solid rgba(255,255,255,.18); }
   footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
   .social{display:flex;align-items:center;gap:10px}
@@ -375,7 +353,6 @@
   footer .icon-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18); }
   .icon{width:18px;height:18px;fill:currentColor}
 
-  /* ===== Buttons (shadow consistency across variants & contexts) ===== */
   .btn{ display:inline-flex;align-items:center;gap:8px; padding:.7rem 1rem;border-radius:999px;font-weight:800; border:1px solid rgba(0,0,0,.04); background:#fff;color:var(--brand-blue-900); box-shadow:var(--shadow); transition:transform .16s ease, box-shadow .16s ease, filter .16s ease; text-decoration:none; cursor:pointer; }
   .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
   .btn:active{transform:translateY(-1px)}
@@ -385,7 +362,7 @@
   .contact-actions .btn, .form-actions .btn{ box-shadow:var(--shadow) }
   .contact-actions .btn:hover, .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
 
-  /* ===== Mobile dock (quick contact) — teal always (match About) ===== */
+  /* ===== Mobile dock ===== */
   .mobile-dock{ position:fixed; left:0; right:0; bottom:0; z-index:980; background: var(--brand-blue-900); color: #ffffff; border-top:1px solid rgba(255,255,255,.18); padding:6px 10px calc(6px + env(safe-area-inset-bottom)); display:none; }
   .mobile-dock .dock{ max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px; }
   .mobile-dock .icon-btn{ display:inline-flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; touch-action:manipulation; width:46px; height:46px; border-radius:999px; color:#fff; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.22); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
@@ -393,7 +370,7 @@
   .mobile-dock .icon *, .mobile-dock .icon path, .mobile-dock .icon rect, .mobile-dock .icon circle, .mobile-dock .icon polygon, .mobile-dock .icon line{ fill: currentColor; stroke: none; }
   .mobile-dock .icon-btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18); }
 
-  /* ===== CONTACT MODAL (polished) ===== */
+  /* ===== CONTACT MODAL ===== */
   dialog#contactDialog{ width:min(840px, 94vw); border:0; padding:0; border-radius:20px; box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18); background:#fff; animation:modal-in .22s cubic-bezier(.2,.8,.2,1); }
   dialog#contactDialog::backdrop{ background:rgba(17,24,39,.55); backdrop-filter:saturate(120%) blur(3px); animation:backdrop-in .22s ease; }
   @keyframes modal-in{ from{ transform:translateY(14px) scale(.985); opacity:.0 } to{ transform:none; opacity:1 } }
@@ -416,25 +393,20 @@
   .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:.var(--muted); }
   @media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } .form-actions, .form-hint{ grid-column:1 / -1 } }
 
-  /* ===== Gradient divider (exact implementation; identical to About) ===== */
   .section-divider{ position:relative; height:4px; margin: var(--divider-gap) 0; border:0; }
   .section-divider::after{ content:""; position:absolute; inset:0; background: var(--page-bg); z-index:0; }
   .section-divider::before{ content:""; position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); height:1px; border-radius:999px; background:linear-gradient( 90deg, rgba(15,91,102,var(--divider-edge-alpha)) 0%, rgba(15,91,102,var(--divider-center-alpha)) 50%, rgba(15,91,102,var(--divider-edge-alpha)) 100% ); z-index:1; }
 
-  /* ===== Responsive ===== */
   @media (max-width:1120px){ .tiles{ grid-template-columns:repeat(2,1fr) } }
   @media (max-width:960px){
     nav.primary-nav{ display:none }
     .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
     .tiles{ grid-template-columns:1fr }
-    /* NEW: mobile bottom space = dock height + 14px visible gap */
     main{ padding-bottom: calc(var(--dock-h) + var(--cta-mobile-gap)); }
     .mobile-dock{ display:block }
     footer .social{ display:none !important; }
   }
-  /* Removed Home-only .h1 mobile override to keep parity with Portfolio */
 
-  /* ===== Additions: subtle hover color for brand & nav, skip link ===== */
   .brand-link--wide:hover .brand-name, .brand-link--wide:focus-visible .brand-name{ color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%); }
   .brand-link--wide:hover .brand-creds, .brand-link--wide:focus-visible .brand-creds{ color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%); }
   nav.primary-nav a:hover, nav.primary-nav a:focus-visible{ color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%); }
@@ -615,14 +587,13 @@
           <a class="btn" href="/portfolio/">Portfolio</a>
           <a class="btn" href="/cv/">Résumé</a>
           <a class="btn" href="/services/">Services</a>
-          <!-- contact trigger (CTA row) -->
           <a class="btn" href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
         </div>
       </div>
     </section>
   </main>
   
-  <!-- ===== Footer (teal, persistent) ===== -->
+  <!-- ===== Footer ===== -->
   <footer>
     <div class="wrap">
       <div class="social" aria-label="External profiles">
@@ -647,7 +618,7 @@
     </div>
   </footer>
 
-  <!-- ===== Bottom quick-contact dock (mobile, teal) ===== -->
+  <!-- ===== Bottom quick-contact dock (mobile) ===== -->
   <div class="mobile-dock" role="region" aria-label="Quick contact">
     <div class="dock">
       <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
@@ -729,7 +700,7 @@
     // Contact modal
     const dialog = document.getElementById('contactDialog');
     const contactClose = document.getElementById('contactClose');
-    ofcontactCancel= document.getElementById('contactCancel');
+    const contactCancel = document.getElementById('contactCancel');
     const quickForm    = document.getElementById('quickForm');
 
     function openDialog(e){
@@ -753,7 +724,6 @@
       }
     }
 
-    // Attach to ALL contact triggers (header + CTA)
     document.querySelectorAll('[data-contact-open]').forEach(el => {
       el.addEventListener('click', (e) => {
         if (typeof dialog?.showModal === 'function') {
@@ -765,7 +735,7 @@
     });
 
     contactClose?.addEventListener('click', closeDialog);
-    ofcontactCancel?.addEventListener('click', closeDialog);
+    contactCancel?.addEventListener('click', closeDialog);
     dialog.addEventListener('click', (e)=>{ if (e.target === dialog) closeDialog(); });
     dialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeDialog(); });
 
@@ -862,7 +832,7 @@
       window.addEventListener('scroll', ()=>{ setBarsDark(window.scrollY < 60); });
     }
 
-    // Mark current page in both desktop nav and mobile drawer
+    // Mark current page
     document.querySelectorAll('nav.primary-nav a, .mobile-drawer nav a').forEach(a=>{
       try{
         const here = new URL(a.href, location.origin).pathname.replace(/\/+$/,'') || '/';
@@ -987,11 +957,11 @@
     chipsDialog.addEventListener('click', (e)=>{ if (e.target === chipsDialog) closeChipsDialog(); });
     chipsDialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeChipsDialog(); });
 
-    // === NEW: Measure mobile dock height and set --dock-h so the visible gap = 14px on mobile ===
+    // === Measure mobile dock height for proper bottom gap ===
     (function(){
       function setDockVars(){
         var dock = document.querySelector('.mobile-dock');
-        var h = dock ? dock.offsetHeight : 0; // includes env(safe-area-inset-bottom)
+        var h = dock ? dock.offsetHeight : 0;
         document.documentElement.style.setProperty('--dock-h', h + 'px');
       }
       setDockVars();
