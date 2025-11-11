@@ -66,6 +66,7 @@
 
         /* Anchor offset for sticky header */
         --anchor-offset: 76px;
+        --nav-underline-alpha: 25%;
       }
       @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -214,8 +215,12 @@ footer a:hover,
       nav.primary-nav ul{ list-style:none;display:flex;gap:18px;margin:0;padding:0 }
       nav.primary-nav a{ color:var(--bar-fg);font-weight:700;position:relative }
       nav.primary-nav a::after{
-        content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:color-mix(in srgb, var(--bar-fg) 25%, transparent);transform:scaleX(0);
-        transform-origin:left;transition:transform .22s ease;
+        content:"";
+        position:absolute; left:0; right:0; bottom:-6px; height:2px;
+        background: color-mix(in srgb, var(--bar-fg) var(--nav-underline-alpha), transparent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform .22s ease;
       }
       nav.primary-nav a:hover{ color:var(--bar-fg);text-decoration:none }
       nav.primary-nav a:hover::after{ transform:scaleX(1) }
@@ -1045,6 +1050,18 @@ footer a:hover,
           if (here === path) a.setAttribute('aria-current','page');
         }catch(_){ }
       });
+      
+      (function(){
+        function setDockVars(){
+          var dock = document.querySelector('.mobile-dock');
+          var h = dock ? dock.offsetHeight : 0;
+          document.documentElement.style.setProperty('--dock-h', h + 'px');
+        }
+        setDockVars();
+        window.addEventListener('load', setDockVars);
+        window.addEventListener('resize', setDockVars, { passive:true });
+        window.addEventListener('orientationchange', setDockVars);
+      })();
     </script>
   </body>
 </html>
