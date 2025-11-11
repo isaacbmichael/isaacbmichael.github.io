@@ -308,6 +308,17 @@
       .btn-chip{ padding:.55rem .9rem; font-weight:900; letter-spacing:.1px; }
       .btn-chip.btn-outline{ color:var(--brand-blue-900) }
 
+      /* Active chip state mirrors primary button */
+      .chip-row .btn[aria-current="true"]{
+        background:var(--brand-blue-700);
+        color:#fff;
+        border-color:transparent;
+        box-shadow:var(--shadow-hover);
+      }
+      .chip-row .btn[aria-current="true"]::before{
+        background:linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,0) 40%);
+      }
+
       /* Scroll cue */
       .scroll-cue{ display:flex; justify-content:center; margin-top:6px }
       .scroll-arrow{
@@ -494,7 +505,7 @@
         grid-column:2 / -1;
         display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
       }
-      .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted) }
+      .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#muted }
       @media (max-width:640px){
         .form-grid{ grid-template-columns:1fr }
         .form-actions, .form-hint{ grid-column:1 / -1 }
@@ -1213,17 +1224,97 @@
         window.addEventListener("scroll", function(){ setBarsDark(window.scrollY < 60) });
       }
 
-      // Smooth glide on scroll chips/arrows
-      $all("a.scroll-arrow, .chip-row a").forEach(function(a){
+      /* ===== Smooth glide on scroll chips/arrows + active state tracking ===== */
+      var chipLinks = $all(".chip-row a[href^='#']");
+      var chipMap = {}; // id -> link
+      chipLinks.forEach(function(a){
+        var id=(a.getAttribute("href")||"").slice(1);
+        if(id){ chipMap[id]=a; }
         a.addEventListener("click", function(e){
           var href=a.getAttribute("href")||"";
           if(href.indexOf("#")===0){
             e.preventDefault();
-            var id=href.slice(1);
-            var target=document.getElementById(id);
-            if(target && target.scrollIntoView) target.scrollIntoView({behavior:"smooth", block:"start"});
+            var target=document.getElementById(href.slice(1));
+            var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if(target && target.scrollIntoView){
+              target.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
+              // mark active immediately on click for responsiveness
+              setActiveChip(href.slice(1));
+              // keep the hash updated without page jump
+              history.replaceState(null, "", href);
+            }
           }
         });
+      });
+
+      // also allow the scroll-arrow to use PRM-aware smooth scroll
+      $all("a.scroll-arrow").forEach(function(a){
+        a.addEventListener("click", function(e){
+          var href=a.getAttribute("href")||"";
+          if(href.indexOf("#")===0){
+            e.preventDefault();
+            var target=document.getElementById(href.slice(1));
+            var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if(target && target.scrollIntoView){
+              target.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
+              setActiveChip(href.slice(1));
+              history.replaceState(null, "", href);
+            }
+          }
+        });
+      });
+
+      // Active chip helper using aria-current
+      function setActiveChip(id){
+        Object.keys(chipMap).forEach(function(key){
+          chipMap[key].removeAttribute("aria-current");
+        });
+        if(chipMap[id]) chipMap[id].setAttribute("aria-current","true");
+      }
+
+      // Determine current section while scrolling
+      var sectionIds = ["cdc","lsu","consulting","demos"];
+      function updateActiveChipOnScroll(){
+        // choose the section whose middle crosses ~36% down the viewport
+        var probe = window.innerHeight * 0.36;
+        var current = null;
+        for(var i=0;i<sectionIds.length;i++){
+          var id=sectionIds[i], el=document.getElementById(id); if(!el) continue;
+          var r=el.getBoundingClientRect();
+          if(r.top <= probe && r.bottom > probe){ current = id; break; }
+        }
+        // fallback to first visible above top or first section
+        if(!current){
+          for(var j=sectionIds.length-1;j>=0;j--){
+            var id2=sectionIds[j], el2=document.getElementById(id2); if(!el2) continue;
+            if(el2.getBoundingClientRect().top <= probe){ current=id2; break; }
+          }
+          if(!current) current=sectionIds[0];
+        }
+        setActiveChip(current);
+      }
+
+      // Throttle with rAF
+      var ticking=false;
+      function onScroll(){
+        if(!ticking){
+          window.requestAnimationFrame(function(){
+            updateActiveChipOnScroll();
+            ticking=false;
+          });
+          ticking=true;
+        }
+      }
+      window.addEventListener("scroll", onScroll, {passive:true});
+      window.addEventListener("resize", onScroll, {passive:true});
+      window.addEventListener("load", function(){
+        // initialize from hash if present; else from scroll position
+        var h=location.hash.replace("#","");
+        if(h && chipMap[h]) setActiveChip(h); else updateActiveChipOnScroll();
+      });
+      window.addEventListener("hashchange", function(){
+        var h=location.hash.replace("#","");
+        if(h && chipMap[h]) setActiveChip(h);
       });
 
       // Mark current page in desktop + mobile navs
