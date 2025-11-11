@@ -796,9 +796,14 @@
 
           <div class="form-actions">
             <button type="button" class="btn btn-outline" id="contactCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary">Send via Email</button>
+            <button type="submit" class="btn btn-primary" aria-describedby="mailtoHint">
+              Send via Email
+            </button>
           </div>
-          <small class="form-hint">Submitting opens your email client with your message pre-filled (no data is stored on this site).</small>
+
+          <small id="mailtoHint" class="form-hint" role="note">
+            Submitting opens your email client with your message pre-filled (no data is stored on this site).
+          </small>
         </form>
       </div>
     </dialog>
