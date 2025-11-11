@@ -269,9 +269,37 @@
         margin:0; font-weight:900; letter-spacing:.2px;
         font-size:clamp(28px,6vw,56px); line-height:1.08; color:var(--ink);
       }
-      .lead{ margin:0; color:var(--muted); grid-column:1 / -1; max-width:none }
+      /* Match Executive bio color (ink) */
+      .lead{ margin:0; color:var(--ink); grid-column:1 / -1; max-width:none }
 
-      /* ===== Anchor Buttons (unified 3D style) ===== */
+      /* ===== Anchor Chips (exact parity with About page) ===== */
+      .chip-row{
+        display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+        grid-column:1 / -1; margin-top:6px;
+      }
+      .chip{
+        position:relative; isolation:isolate;
+        display:inline-flex; align-items:center; gap:8px;
+        padding:.55rem .85rem; line-height:1; border-radius:999px; font-weight:800;
+        border:1px solid rgba(0,0,0,.04);
+        background:#fff; color:var(--brand-blue-900);
+        box-shadow:var(--shadow);
+        transition:transform .16s ease, box-shadow .16s ease, filter .16s ease, opacity .16s ease;
+        text-decoration:none; cursor:pointer; will-change:transform, box-shadow;
+      }
+      .chip::before{
+        content:""; position:absolute; inset:1px; border-radius:999px; pointer-events:none; z-index:0;
+        background:linear-gradient(to bottom, rgba(255,255,255,.65), rgba(255,255,255,0) 42%);
+        mix-blend-mode:soft-light; opacity:.85; transition:opacity .16s ease, transform .16s ease;
+      }
+      .chip > *{ position:relative; z-index:1 }
+      .chip:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); text-decoration:none }
+      .chip:hover::before{ opacity:.95; transform:translateY(-1px) }
+      .chip:active{ transform:translateY(-1px) }
+      /* Active/selected chips stay white (About page behavior) */
+      .chip[aria-current="true"]{ transform:translateY(-1px); box-shadow:var(--shadow-hover) }
+
+      /* ===== CTA buttons (shared) ===== */
       .cta-row{
         display:flex; flex-wrap:wrap;
         gap:12px; row-gap:12px;
@@ -288,7 +316,6 @@
         transition:transform .16s ease, box-shadow .16s ease, filter .16s ease, opacity .16s ease;
         text-decoration:none; cursor:pointer; will-change:transform, box-shadow;
       }
-      /* glossy top light for 3D feel */
       .btn::before{
         content:""; position:absolute; inset:1px; border-radius:999px; pointer-events:none; z-index:0;
         background:linear-gradient(to bottom, rgba(255,255,255,.65), rgba(255,255,255,0) 42%);
@@ -302,22 +329,6 @@
       .btn-primary{ background:var(--brand-blue-700); color:#fff; border-color:transparent; box-shadow:var(--shadow) }
       .btn-primary:hover{ box-shadow:var(--shadow-hover); filter:saturate(115%) brightness(1.02) }
       .btn-primary::before{ background:linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,0) 40%) }
-
-      /* In-page anchor “chips” now use the same button system */
-      .chip-row{ display:flex; gap:8px; flex-wrap:wrap; grid-column:1 / -1 }
-      .btn-chip{ padding:.55rem .9rem; font-weight:900; letter-spacing:.1px; }
-      .btn-chip.btn-outline{ color:var(--brand-blue-900) }
-
-      /* Active chip state mirrors primary button */
-      .chip-row .btn[aria-current="true"]{
-        background:var(--brand-blue-700);
-        color:#fff;
-        border-color:transparent;
-        box-shadow:var(--shadow-hover);
-      }
-      .chip-row .btn[aria-current="true"]::before{
-        background:linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,0) 40%);
-      }
 
       /* Scroll cue */
       .scroll-cue{ display:flex; justify-content:center; margin-top:6px }
@@ -517,8 +528,8 @@
         .avatar-inner{ transition:none !important; transform:none !important }
         .scroll-arrow{ animation:none !important }
         nav.primary-nav a::after{ transition:none !important }
-        .btn, .tile, .brand-name, .brand-creds{ transition:none !important }
-        .btn::before{ transition:none !important }
+        .btn, .chip, .tile, .brand-name, .brand-creds{ transition:none !important }
+        .btn::before, .chip::before{ transition:none !important }
       }
     </style>
 
@@ -630,11 +641,10 @@
               A selection of my most meaningful work—national public-health delivery at CDC, program building at LSU, independent client projects, and a few technical demos. Each card includes a short summary, and the larger ones expand to show how the work actually got done.
             </p>
             <nav aria-label="Section shortcuts" class="chip-row">
-              <!-- chips now use unified button system -->
-              <a class="btn btn-chip btn-outline" href="#cdc" aria-label="Centers for Disease Control and Prevention (CDC)" title="Centers for Disease Control and Prevention">CDC</a>
-              <a class="btn btn-chip btn-outline" href="#lsu" aria-label="Louisiana State University (LSU)" title="Louisiana State University">LSU</a>
-              <a class="btn btn-chip btn-outline" href="#consulting">Independent Consulting</a>
-              <a class="btn btn-chip btn-outline" href="#demos">Technical Demos</a>
+              <a class="chip" href="#cdc" aria-label="Centers for Disease Control and Prevention (CDC)" title="Centers for Disease Control and Prevention">CDC</a>
+              <a class="chip" href="#lsu" aria-label="Louisiana State University (LSU)" title="Louisiana State University">LSU</a>
+              <a class="chip" href="#consulting">Independent Consulting</a>
+              <a class="chip" href="#demos">Technical Demos</a>
             </nav>
           </div>
 
@@ -1038,7 +1048,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.5-1.5-1.5-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
@@ -1151,7 +1161,7 @@
       }
 
       // Mobile drawer
-      var drawer=$("#mobileDrawer"), backdrop=$("#drawerBackdrop"), menuBtn=$("#menuToggle"), menuClose=$("#menuClose");
+      var drawer=$("#mobileDrawer"), backdrop=$("#drawerBackdrop"), menuBtn=$("#menuToggle"), menuClose=$("#menuClose"]);
       function setAppInert(on){ ["main","header.site-header",".hero-section","footer",".mobile-dock"].forEach(function(sel){var el=$(sel); if(!el) return; on ? el.setAttribute("inert","") : el.removeAttribute("inert")}); }
       function trapFocusWithin(el){
         if(!el || el.__trapBound) return; el.__trapBound=true;
