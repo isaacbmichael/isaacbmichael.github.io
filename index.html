@@ -246,6 +246,12 @@ footer a:hover,
   .mobile-drawer .quick{ display:grid; gap:10px; margin-top:4px }
   .mobile-drawer .quick .btn{ width:100%; justify-content:center }
 
+    /* Active (current page) state in the mobile drawer */
+  .mobile-drawer nav a[aria-current="page"]{
+    background: rgba(255,255,255,.18);
+    border-color: rgba(0,0,0,.18);
+  }
+
   body.drawer-open .drawer-backdrop{ opacity:1; pointer-events:auto }
   body.drawer-open .mobile-drawer{ transform:none }
   body.drawer-open{ overflow:hidden }
@@ -994,6 +1000,7 @@ footer a:hover,
   </script>
 </body>
 </html>
+
 
 
 
