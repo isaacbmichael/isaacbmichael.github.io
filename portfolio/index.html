@@ -516,7 +516,7 @@
         grid-column:2 / -1;
         display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px;
       }
-      .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#muted }
+      .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted) }
       @media (max-width:640px){
         .form-grid{ grid-template-columns:1fr }
         .form-actions, .form-hint{ grid-column:1 / -1 }
@@ -1048,7 +1048,7 @@
           <span class="sr-only">LinkedIn</span>
         </a>
         <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.5-1.5-1.5-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
@@ -1161,7 +1161,7 @@
       }
 
       // Mobile drawer
-      var drawer=$("#mobileDrawer"), backdrop=$("#drawerBackdrop"), menuBtn=$("#menuToggle"), menuClose=$("#menuClose"]);
+      var drawer=$("#mobileDrawer"), backdrop=$("#drawerBackdrop"), menuBtn=$("#menuToggle"), menuClose=$("#menuClose");
       function setAppInert(on){ ["main","header.site-header",".hero-section","footer",".mobile-dock"].forEach(function(sel){var el=$(sel); if(!el) return; on ? el.setAttribute("inert","") : el.removeAttribute("inert")}); }
       function trapFocusWithin(el){
         if(!el || el.__trapBound) return; el.__trapBound=true;
