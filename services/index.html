@@ -270,7 +270,12 @@
 
       /* Section shortcuts (chips) */
       .chip-row{display:flex; gap:8px; flex-wrap:wrap}
-      .chip{display:inline-flex; align-items:center; gap:8px; padding:.45rem .8rem; border:1px solid #e5e7eb; border-radius:999px; background:#fff; color:var(--ink); font-weight:800; box-shadow:var(--shadow)}
+      .chip{
+        display:inline-flex; align-items:center; gap:8px;
+        padding:.45rem .8rem; border:1px solid #e5e7eb; border-radius:999px;
+        background:#fff; color:var(--brand-blue-900); /* teal text */
+        font-weight:800; box-shadow:var(--shadow)
+      }
       .chip:hover{text-decoration:none; transform:translateY(-1px); box-shadow:var(--shadow-hover)}
 
       /* Scroll cue */
@@ -976,7 +981,7 @@
         window.addEventListener('scroll', function(){ setBarsDark(window.scrollY < 60); });
       }
 
-      /* Smooth glide on scroll arrow + chips */
+      /* Smooth glide on scroll arrow + chips (PRM-aware) */
       $all('a.scroll-arrow, .chip-row a').forEach(function(a){
         a.addEventListener('click', function(e){
           var href = a.getAttribute('href') || '';
@@ -984,7 +989,10 @@
             e.preventDefault();
             var id = href.slice(1);
             var target = document.getElementById(id);
-            if (target && target.scrollIntoView) target.scrollIntoView({ behavior:'smooth', block:'start' });
+            var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (target && target.scrollIntoView){
+              target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+            }
           }
         });
       });
