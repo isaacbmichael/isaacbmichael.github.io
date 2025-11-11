@@ -256,37 +256,85 @@
 
   /* ===== HERO ===== */
   .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
-  /* Match About: band wrapper + inner hero padding */
+  /* Match About/Portfolio: band wrapper + inner hero padding */
   .hero-section.band{ padding-top:22px; padding-bottom:var(--band-space) }
   .hero{padding:6px 0 0}
-  .hero-grid{ display:grid;grid-template-columns:1fr;grid-template-areas:"title" "tagline" "chips"; row-gap:6px;align-items:start }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "title"
+      "tagline"
+      "intro"
+      "chips";
+    gap: clamp(18px, 2.2vw, 24px); /* parity with Portfolio hero rhythm */
+    align-items:start;
+  }
   .hero-grid > *{ min-width:0 }
-  .h1{ margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word; text-indent:0; }
-  .tagline{ grid-area:tagline;margin:6px 0 0;color:var(--ink);font-weight:800;letter-spacing:.15px; font-size:clamp(14px,1.6vw,18px); line-height:1.35; white-space:normal; }
+  .h1{
+    margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);
+    line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word;text-indent:0;
+  }
+  .tagline{
+    grid-area:tagline;margin:0;color:var(--ink);font-weight:800;letter-spacing:.15px;
+    font-size:clamp(14px,1.6vw,18px); line-height:1.35; white-space:normal;
+  }
   @supports (text-wrap: balance){ .tagline{ text-wrap:balance } }
+  .intro{
+    grid-area:intro; margin:0; max-width:72ch; color:var(--ink);
+    font-size:clamp(15px,1.7vw,18px); line-height:1.55; font-weight:500;
+  }
+  @supports (text-wrap: balance){ .intro{ text-wrap:balance } }
 
-  /* ===== Chips ===== */
-  .chips{ grid-area:chips; display:flex; align-items:center; gap:8px 8px; margin-top:6px; padding-bottom:4px; white-space:normal; overflow:visible; flex-wrap:wrap; perspective:none; }
-  .chip{ display:inline-block; flex:0 0 auto; background:rgba(17,24,39,.08); color:var(--ink); padding:6px 10px; border-radius:999px; font-weight:700; font-size:clamp(12px,1.3vw,14px); border:1px solid rgba(17,24,39,.08); white-space:nowrap; cursor:pointer; will-change:auto; transition: transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease, background .18s ease, border-color .18s ease; }
-  @media (hover:hover){ .chip:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); background:#fff; border-color:rgba(15,91,102,.22); } }
+  /* ===== Chips (smoother, gentler) ===== */
+  .chips{
+    grid-area:chips; display:flex; align-items:center; gap:10px 10px;
+    margin:0; padding:0 0 2px; white-space:normal; overflow:visible; flex-wrap:wrap;
+  }
+  .chip{
+    display:inline-block; flex:0 0 auto;
+    background:rgba(17,24,39,.08); color:var(--ink);
+    padding:.55rem .85rem; border-radius:999px;
+    font-weight:800; font-size:clamp(12px,1.3vw,14px);
+    border:1px solid rgba(17,24,39,.08);
+    transform:translateZ(0); /* avoid flicker */
+    transition:
+      transform .22s cubic-bezier(.2,.8,.2,1),
+      background-color .22s ease,
+      border-color .22s ease,
+      box-shadow .22s ease,
+      filter .22s ease;
+  }
+  @media (hover:hover){
+    .chip:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-hover);
+      background:#fff;
+      border-color:rgba(15,91,102,.22);
+    }
+  }
   .chip:active{ transform:translateY(-1px) }
-  .chip:is(:hover,:focus-visible){ will-change:transform }
-  .chip[aria-pressed="true"]{ background:#fff; border-color:rgba(15,91,102,.35); box-shadow:var(--shadow); }
-  .chip:focus-visible{ transform: translateY(-2px); box-shadow: var(--shadow-hover); background: #fff; border-color: rgba(15,91,102,.35); }
+  .chip:focus-visible{
+    outline:none; transform:translateY(-2px);
+    box-shadow:var(--shadow-hover);
+    background:#fff; border-color:rgba(15,91,102,.35);
+  }
+  .chip[aria-pressed="true"]{
+    background:#fff; border-color:rgba(15,91,102,.28); box-shadow:var(--shadow);
+    filter:saturate(105%);
+  }
 
   /* Chips proof dialog */
-  dialog#chipsDialog{ width:min(760px,94vw); border:0; padding:0; border-radius:20px; background:#fff; box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18); animation:modal-in .22s cubic-bezier(.2,.8,.2,1); }
-  dialog#chipsDialog::backdrop{ background:rgba(17,24,39,.55); backdrop-filter:saturate(120%) blur(3px); animation:backdrop-in .22s ease; }
+  dialog#chipsDialog{ width:min(760px,94vw); border:0; padding:0; border-radius:20px; background:#fff; box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18); animation:modal-in .24s cubic-bezier(.2,.8,.2,1); }
+  dialog#chipsDialog::backdrop{ background:rgba(17,24,39,.55); backdrop-filter:saturate(120%) blur(3px); animation:backdrop-in .24s ease; }
   #chipsDialog .modal-header{ position: relative; border-bottom: 0; padding:18px 18px 10px; }
-  /* remove focus ring on chips dialog title */
   #chipsDialog .modal-title:focus, #chipsDialog .modal-title:focus-visible{ outline:none !important; box-shadow:none !important; }
-  /* Gradient header rule (matches section divider tokens) */
   #chipsDialog .modal-header::after{ content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 1px; border-radius: 999px; background: linear-gradient( 90deg, rgba(15,91,102,var(--divider-edge-alpha)) 0%, rgba(15,91,102,var(--divider-center-alpha)) 50%, rgba(15,91,102,var(--divider-edge-alpha)) 100% ); }
   #chipsDialog .modal-title{ margin:0; font-weight:900; font-size:1.05rem; color:#0f172a }
-  #chipsDialog .modal-close{ width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:transform .16s ease, box-shadow .16s ease, background .16s ease; }
+  #chipsDialog .modal-close{ width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
   #chipsDialog .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
   #chipsDialog .modal-body{ padding:14px 18px 18px }
-  .chips-content{ opacity:1; transition:opacity .16s ease }
+  .chips-content{ opacity:1; transition:opacity .22s ease }
   .chips-content.is-fading{ opacity:0 }
   .proof-list{ margin:8px 0 0; padding-left:18px }
   .proof-list li{ margin:6px 0 }
@@ -297,10 +345,19 @@
   main{padding:10px 0 var(--cta-desktop-gap);flex:1 0 auto}
   section{padding:24px 0}
 
-  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .tile{position:relative;background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
+  /* ===== Featured (larger cards with more content) ===== */
+  .tiles{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:22px;
+  }
+  .tile{
+    position:relative;background:var(--surface);border-radius:var(--radius);
+    padding:24px 24px;box-shadow:var(--shadow);
+    transition:transform .18s ease, box-shadow .18s ease; min-height:180px;
+  }
   .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
-  .tile h3{margin:0 0 8px}
+  .tile h3{margin:0 0 10px;font-size:1.15rem}
+  .tile p{margin:0;color:#1f2937;line-height:1.55}
   .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
 
   /* NEW: CTA band spacing (42px top/bottom on desktop; collapse bottom on mobile) */
@@ -375,7 +432,7 @@
     .mobile-dock{ display:block }
     footer .social{ display:none !important; }
   }
-  @media (max-width:520px){ .h1{ font-size:clamp(26px,8vw,40px) } }
+  /* Removed Home-only .h1 mobile override to keep parity with Portfolio */
 
   /* ===== Additions: subtle hover color for brand & nav, skip link ===== */
   .brand-link--wide:hover .brand-name, .brand-link--wide:focus-visible .brand-name{ color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%); }
@@ -503,6 +560,7 @@
       <div class="hero-grid">
         <h1 class="h1">Data-Driven Strategy &amp; Execution</h1>
         <p class="tagline">Research Scientist · Mathematical Statistician · Program Director</p>
+        <p class="intro">I help teams turn complicated data questions into clear, defensible decisions. My work blends survey methodology, analytics automation, and executive reporting so leaders can see what's true, what matters, and what to do next—without guesswork or fragile one-off spreadsheets.</p>
         <div class="chips" aria-label="Expertise chips">
           <span class="chip" data-chip="public-health" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Public health &amp; education</span>
           <span class="chip" data-chip="enterprise-strategy" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Enterprise data strategy</span>
@@ -526,19 +584,19 @@
         <div class="tiles">
           <article class="tile">
             <h3 id="tile-portfolio">Portfolio</h3>
-            <p>Selected projects in survey methods, automation, reporting, and templates.</p>
+            <p>A curated set of projects across survey methods, automation, and decision analytics. See examples of PRAMS weighting and delivery, reproducible reporting pipelines, and executive briefings that translate complex results into action.</p>
             <a class="card-link" href="/portfolio/" aria-labelledby="tile-portfolio">View</a>
           </article>
 
           <article class="tile">
             <h3 id="tile-services">Services</h3>
-            <p>Advisory and consulting to modernize data systems, automate analytics, and deliver clear outcomes.</p>
+            <p>Partner on enterprise data strategy, modernization, and analytics enablement. I offer advisory and hands-on support—operating models, SLAs, QA gates, and templates—so your team can deliver reliable insights at pace.</p>
             <a class="card-link" href="/services/" aria-labelledby="tile-services">View</a>
           </article>
 
           <article class="tile">
             <h3 id="tile-cv">Résumé &amp; CV</h3>
-            <p>Download the two-page résumé or full academic CV (inline preview included).</p>
+            <p>Browse my two-page résumé or full academic CV, including federal and state work, publications, trainings, and leadership. Inline previews make it easy to scan before downloading.</p>
             <a class="card-link" href="/cv/" aria-labelledby="tile-cv">View</a>
           </article>
         </div>
@@ -671,7 +729,7 @@
     // Contact modal
     const dialog = document.getElementById('contactDialog');
     const contactClose = document.getElementById('contactClose');
-    const contactCancel= document.getElementById('contactCancel');
+    ofcontactCancel= document.getElementById('contactCancel');
     const quickForm    = document.getElementById('quickForm');
 
     function openDialog(e){
@@ -707,7 +765,7 @@
     });
 
     contactClose?.addEventListener('click', closeDialog);
-    contactCancel?.addEventListener('click', closeDialog);
+    ofcontactCancel?.addEventListener('click', closeDialog);
     dialog.addEventListener('click', (e)=>{ if (e.target === dialog) closeDialog(); });
     dialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeDialog(); });
 
@@ -898,7 +956,7 @@
         </ul>
       `;
       chipsContent.classList.add('is-fading');
-      setTimeout(()=>{ chipsContent.innerHTML = html; chipsContent.classList.remove('is-fading'); }, 120);
+      setTimeout(()=>{ chipsContent.innerHTML = html; chipsContent.classList.remove('is-fading'); }, 160);
     }
 
     function openChipsDialogFor(chipEl){
@@ -944,6 +1002,3 @@
   </script>
 </body>
 </html>
-
-
-
