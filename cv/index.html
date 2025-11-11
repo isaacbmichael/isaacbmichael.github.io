@@ -409,7 +409,7 @@
     /* ===== Footer — teal always ===== */
     footer{
       background: var(--brand-blue-900) !important;
-      color: #ffffff !important;
+      color: #ffffff) !important;
       padding: 18px 0;
       text-align: center;
       border-top: 1px solid rgba(255,255,255,.18);
@@ -610,8 +610,9 @@
               <h3 class="card-title">Résumé</h3>
               <a class="btn btn-primary" href="/assets/pdfs/resume.pdf" download>Download résumé</a>
             </div>
-            <object data="/assets/pdfs/resume.pdf" type="application/pdf" class="pdfobj">
-              <iframe src="/assets/pdfs/resume.pdf" title="Résumé PDF preview" class="pdfframe"></iframe>
+            <!-- Default viewer zoom (75%) + fit width -->
+            <object data="/assets/pdfs/resume.pdf#page=1&view=FitH&zoom=75" type="application/pdf" class="pdfobj">
+              <iframe src="/assets/pdfs/resume.pdf#page=1&view=FitH&zoom=75" title="Résumé PDF preview" class="pdfframe"></iframe>
             </object>
           </article>
 
@@ -621,8 +622,9 @@
               <h3 class="card-title">Full CV</h3>
               <a class="btn btn-primary" href="/assets/pdfs/cv.pdf" download>Download full CV</a>
             </div>
-            <object data="/assets/pdfs/cv.pdf" type="application/pdf" class="pdfobj">
-              <iframe src="/assets/pdfs/cv.pdf" title="CV PDF preview" class="pdfframe"></iframe>
+            <!-- Default viewer zoom (75%) + fit width -->
+            <object data="/assets/pdfs/cv.pdf#page=1&view=FitH&zoom=75" type="application/pdf" class="pdfobj">
+              <iframe src="/assets/pdfs/cv.pdf#page=1&view=FitH&zoom=75" title="CV PDF preview" class="pdfframe"></iframe>
             </object>
             <p class="note">Comprehensive roles, projects, teaching, publications, and service. Best for academic or consulting inquiries.</p>
           </article>
@@ -900,6 +902,21 @@
         if (here === path) a.setAttribute('aria-current','page');
       }catch(_){}
     });
+
+    /* ===== Enforce default PDF zoom (75%) and fit width on load ===== */
+    (function(){
+      var PREFERRED_ZOOM = 75; // tweak here if you ever want a different default
+      var FRAGMENT = "#page=1&view=FitH&zoom=" + encodeURIComponent(PREFERRED_ZOOM);
+
+      document.querySelectorAll('object.pdfobj').forEach(function(obj){
+        try {
+          var d = obj.getAttribute('data') || "";
+          if (d && !/#/.test(d)) obj.setAttribute('data', d + FRAGMENT);
+          var iframe = obj.querySelector('iframe.pdfframe');
+          if (iframe && iframe.src && !/#/.test(iframe.src)) iframe.src = iframe.src + FRAGMENT;
+        } catch(_) {}
+      });
+    })();
   </script>
 </body>
 </html>
