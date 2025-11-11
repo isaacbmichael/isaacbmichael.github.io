@@ -56,6 +56,8 @@
 
         /* Page layout tokens */
         --band-space:28px;
+        --cta-desktop-gap:28px;   /* pairs with 28px section bottom = 56px total gap */
+        --cta-mobile-gap:14px;    /* visible cushion above the mobile dock = 28 + 14 = 42px */
 
         /* Section divider tokens (exact) */
         --divider-gap: 2px;
@@ -292,7 +294,8 @@
       .tile ul{ margin:8px 0 0 18px; padding:0 }
       .tile li{ margin:6px 0 }
 
-      .cta-row{ display:flex; gap:10px; flex-wrap:wrap }
+      /* CTA row (parity) */
+      .cta-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px }
       .btn{
         display:inline-flex;align-items:center;gap:8px;
         padding:.7rem 1rem;border-radius:999px;font-weight:800;
@@ -346,7 +349,7 @@
       .form-grid textarea{min-height:160px; resize:vertical}
       .form-grid input:focus,.form-grid textarea:focus{outline:none; border-color:#c5d6e2; background:#fff; box-shadow:0 0 0 6px var(--ring)}
       .form-actions{grid-column:2 / -1; display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px}
-      .form-hint{grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:var(--muted)}
+      .form-hint{grid-column:2 / -1; margin-top:4px; font-size:.9rem; color:#e11d48} /* optional: highlight that no data is stored */
       @media (max-width:640px){.form-grid{grid-template-columns:1fr} .form-actions,.form-hint{grid-column:1 / -1}}
 
       /* ===== Footer — teal always ===== */
@@ -392,6 +395,9 @@
       .mobile-dock .icon *, .mobile-dock .icon path, .mobile-dock .icon rect, .mobile-dock .icon circle, .mobile-dock .icon polygon, .mobile-dock .icon line{ fill: currentColor; stroke:none }
       .mobile-dock .icon-btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18) }
 
+      /* ===== Main padding (sets CTA→footer gap) ===== */
+      main{ padding:10px 0 var(--cta-desktop-gap); flex:1 0 auto }
+
       /* ===== Responsive ===== */
       @media (max-width:1120px){
         .tiles{ grid-template-columns:repeat(2, 1fr) }
@@ -400,7 +406,7 @@
         nav.primary-nav{ display:none }
         .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
         .tiles{ grid-template-columns:1fr }
-        main{ padding-bottom:90px } /* make room for the mobile dock */
+        main{ padding-bottom: calc(var(--dock-h, 56px) + var(--cta-mobile-gap)) } /* 42px visible cushion above dock */
         .mobile-dock{ display:block }
         footer .social{ display:none !important }
       }
