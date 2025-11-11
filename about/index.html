@@ -459,6 +459,22 @@
       .btn-primary{ background:var(--brand-blue-700); color:#fff; border-color:transparent; box-shadow:var(--shadow) }
       .btn-primary:hover{ box-shadow:var(--shadow-hover) }
 
+      /* ===== NEW: Chips row (in-hero anchor buttons) ===== */
+      .chip-row{
+        display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;
+      }
+      .chip{
+        display:inline-flex; align-items:center; gap:8px;
+        padding:.55rem .85rem; border-radius:999px; font-weight:800; line-height:1;
+        background:#fff; color:var(--brand-blue-900);
+        border:1px solid rgba(0,0,0,.04);
+        box-shadow:var(--shadow);
+        text-decoration:none; cursor:pointer;
+        transition:transform .16s ease, box-shadow .16s ease;
+      }
+      .chip:hover{ text-decoration:none; transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+      .chip:active{ transform:translateY(-1px) }
+
       /* ===== Gradient divider (exact) ===== */
       .section-divider{
         position:relative;
@@ -736,6 +752,14 @@
               </div>
             </figure>
           </div>
+
+          <!-- NEW: In-hero anchor chips -->
+          <nav class="chip-row" aria-label="Section shortcuts">
+            <a class="chip" href="#impact">Recent impact</a>
+            <a class="chip" href="#how">How I work</a>
+            <a class="chip" href="#credentials">Credentials</a>
+            <a class="chip" href="#next">Contact &amp; links</a>
+          </nav>
 
           <!-- Scroll cue -->
           <div class="scroll-cue">
@@ -1110,18 +1134,26 @@
         window.addEventListener('scroll', function(){ setBarsDark(window.scrollY < 60); });
       }
 
-      /* Smooth glide on the scroll arrow */
-      $all('a.scroll-arrow').forEach(function(a){
-        a.addEventListener('click', function(e){
-          var href = a.getAttribute('href') || '';
-          if (href.indexOf('#') === 0){
-            e.preventDefault();
+      /* Smooth glide for chips & the scroll arrow */
+      (function(){
+        var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        $all('a.scroll-arrow, .chip-row a').forEach(function(a){
+          a.addEventListener('click', function(e){
+            var href = a.getAttribute('href') || '';
+            if (href.charAt(0) !== '#') return;
             var id = href.slice(1);
             var target = document.getElementById(id);
-            if (target && target.scrollIntoView) target.scrollIntoView({ behavior:'smooth', block:'start' });
-          }
+            if (!target) return;
+            e.preventDefault();
+            if (target.scrollIntoView){
+              target.scrollIntoView({
+                behavior: prefersReduced ? 'auto' : 'smooth',
+                block: 'start'
+              });
+            }
+          });
         });
-      });
+      })();
 
       /* Mark current page in both desktop nav and mobile drawer (parity with Home) */
       $all('nav.primary-nav a, .mobile-drawer nav a').forEach(function(a){
