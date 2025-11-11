@@ -101,6 +101,24 @@
     a{ color:var(--accent); text-decoration:none }
     a:hover{ text-decoration:underline }
     .wrap{ max-width:var(--w); margin:0 auto; padding:0 var(--wrap-pad) }
+    
+    /* Keep footer & dock icons rock-solid (macOS fix) */
+    :where(footer .icon-btn, .mobile-dock .icon-btn){
+      text-decoration: none !important;   /* ignore global underline */
+      will-change: transform;             /* pre-promote each icon */
+      transform: translateZ(0);           /* make its own layer */
+      backface-visibility: hidden;
+      contain: paint;                      /* isolate repaints */
+    }
+
+    :where(footer .icon-btn:hover, .mobile-dock .icon-btn:hover){
+      text-decoration: none !important;
+      transform: translate3d(0, -2px, 0);  /* ONLY the hovered one moves */
+    }
+
+/* Optional: scope underlines to text links, not icon buttons */
+footer a:hover,
+.mobile-dock a:hover { text-decoration: none; }
 
     /* Visually hidden text */
     .sr-only{
