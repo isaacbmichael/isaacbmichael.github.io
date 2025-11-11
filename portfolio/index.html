@@ -73,10 +73,10 @@
         /* Header underline tint */
         --nav-underline-alpha:25%;
 
-        /* NEW: CTA spacing + mobile dock handling (match Home) */
-        --cta-desktop-gap:28px;  /* main bottom pad on desktop */
-        --cta-mobile-gap:14px;   /* visible gap above dock on mobile */
-        --dock-h:90px;           /* fallback; script measures actual height */
+        /* CTA spacing + mobile dock handling */
+        --cta-desktop-gap:28px;
+        --cta-mobile-gap:14px;
+        --dock-h:90px;
       }
       @media (min-width:1600px){ :root{ --w:1440px } }
 
@@ -107,7 +107,7 @@
       a:hover{ text-decoration:underline }
       .wrap{ max-width:var(--w); margin:0 auto; padding:0 var(--wrap-pad) }
 
-      /* NEW: main bottom spacing for 28+28=56px total before footer (28 from last .band + 28 here) */
+      /* Main bottom spacing = 28px */
       main{ padding:10px 0 var(--cta-desktop-gap); flex:1 0 auto }
 
       /* Global anchor offset so in-page links don't hide under sticky header */
@@ -270,14 +270,43 @@
         font-size:clamp(28px,6vw,56px); line-height:1.08; color:var(--ink);
       }
       .lead{ margin:0; color:var(--muted); grid-column:1 / -1; max-width:none }
-      .chip-row{ display:flex; gap:8px; flex-wrap:wrap; grid-column:1 / -1 }
-      .chip{
-        display:inline-flex; align-items:center; gap:8px;
-        padding:.45rem .8rem; border:1px solid #e5e7eb; border-radius:999px;
-        background:#fff; color:var(--ink); font-weight:800; box-shadow:var(--shadow);
-        transition:transform .16s ease, box-shadow .16s ease;
+
+      /* ===== Anchor Buttons (unified 3D style) ===== */
+      .cta-row{
+        display:flex; flex-wrap:wrap;
+        gap:12px; row-gap:12px;
+        align-items:center;
+        margin-top:6px;
       }
-      .chip:hover{ text-decoration:none; transform:translateY(-1px); box-shadow:var(--shadow-hover) }
+      .btn{
+        position:relative; isolation:isolate;
+        display:inline-flex; align-items:center; gap:8px;
+        padding:.7rem 1rem; border-radius:999px; font-weight:800;
+        border:1px solid rgba(0,0,0,.04);
+        background:#fff; color:var(--brand-blue-900);
+        box-shadow:var(--shadow);
+        transition:transform .16s ease, box-shadow .16s ease, filter .16s ease, opacity .16s ease;
+        text-decoration:none; cursor:pointer; will-change:transform, box-shadow;
+      }
+      /* glossy top light for 3D feel */
+      .btn::before{
+        content:""; position:absolute; inset:1px; border-radius:999px; pointer-events:none; z-index:0;
+        background:linear-gradient(to bottom, rgba(255,255,255,.65), rgba(255,255,255,0) 42%);
+        mix-blend-mode:soft-light; opacity:.85; transition:opacity .16s ease, transform .16s ease;
+      }
+      .btn > *{ position:relative; z-index:1 }
+      .btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); text-decoration:none }
+      .btn:hover::before{ opacity:.95; transform:translateY(-1px) }
+      .btn:active{ transform:translateY(-1px) }
+      .btn-outline{ background:transparent; color:var(--ink); border:1px solid #e5e7eb }
+      .btn-primary{ background:var(--brand-blue-700); color:#fff; border-color:transparent; box-shadow:var(--shadow) }
+      .btn-primary:hover{ box-shadow:var(--shadow-hover); filter:saturate(115%) brightness(1.02) }
+      .btn-primary::before{ background:linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,0) 40%) }
+
+      /* In-page anchor “chips” now use the same button system */
+      .chip-row{ display:flex; gap:8px; flex-wrap:wrap; grid-column:1 / -1 }
+      .btn-chip{ padding:.55rem .9rem; font-weight:900; letter-spacing:.1px; }
+      .btn-chip.btn-outline{ color:var(--brand-blue-900) }
 
       /* Scroll cue */
       .scroll-cue{ display:flex; justify-content:center; margin-top:6px }
@@ -285,8 +314,9 @@
         display:inline-grid; place-items:center; width:38px; height:38px; border-radius:999px;
         background:#fff; border:1px solid rgba(15,91,102,.25); color:var(--brand-blue-700);
         box-shadow:0 8px 18px rgba(17,24,39,.18); text-decoration:none; animation:floaty 2.4s ease-in-out infinite;
+        transition:transform .16s ease, box-shadow .16s ease;
       }
-      .scroll-arrow:hover{ text-decoration:none; transform:translateY(-2px) }
+      .scroll-arrow:hover{ text-decoration:none; transform:translateY(-2px); box-shadow:0 12px 24px rgba(17,24,39,.20) }
       @keyframes floaty{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(4px) } }
 
       /* Section label */
@@ -313,28 +343,6 @@
       .tile details summary{ cursor:pointer; font-weight:800; color:var(--brand-blue-700) }
       .tile details[open] summary{ margin-bottom:6px }
       .tile details summary::-webkit-details-marker{ display:none }
-
-      /* ===== CTA row — parity with About ===== */
-      .cta-row{
-        display:flex; flex-wrap:wrap;
-        gap:12px; row-gap:12px;
-        align-items:center;
-        margin-top:6px;
-      }
-      .btn{
-        display:inline-flex; align-items:center; gap:8px;
-        padding:.7rem 1rem; border-radius:999px; font-weight:800;
-        border:1px solid rgba(0,0,0,.04);
-        background:#fff; color:var(--brand-blue-900);
-        box-shadow:var(--shadow);
-        transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
-        text-decoration:none; cursor:pointer;
-      }
-      .btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); text-decoration:none }
-      .btn:active{ transform:translateY(-1px) }
-      .btn-outline{ background:transparent; color:var(--ink); border:1px solid #e5e7eb }
-      .btn-primary{ background:var(--brand-blue-700); color:#fff; border-color:transparent; box-shadow:var(--shadow) }
-      .btn-primary:hover{ box-shadow:var(--shadow-hover) }
 
       /* ===== Gradient divider (exact) ===== */
       .section-divider{
@@ -404,7 +412,7 @@
         nav.primary-nav{ display:none }
         .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
         .tiles{ grid-template-columns:1fr }
-        /* NEW: mobile bottom space = measured dock height + 14px visible gap */
+        /* mobile bottom space = measured dock height + 14px visible gap */
         main{ padding-bottom: calc(var(--dock-h) + var(--cta-mobile-gap)); }
         .mobile-dock{ display:block }
         footer .social{ display:none !important }
@@ -492,13 +500,14 @@
         .form-actions, .form-hint{ grid-column:1 / -1 }
       }
 
-      /* ===== Reduced Motion: respect user preference ===== */
+      /* ===== Reduced Motion ===== */
       @media (prefers-reduced-motion: reduce){
         * { scroll-behavior:auto !important }
         .avatar-inner{ transition:none !important; transform:none !important }
         .scroll-arrow{ animation:none !important }
         nav.primary-nav a::after{ transition:none !important }
         .btn, .tile, .brand-name, .brand-creds{ transition:none !important }
+        .btn::before{ transition:none !important }
       }
     </style>
 
@@ -610,10 +619,11 @@
               A selection of my most meaningful work—national public-health delivery at CDC, program building at LSU, independent client projects, and a few technical demos. Each card includes a short summary, and the larger ones expand to show how the work actually got done.
             </p>
             <nav aria-label="Section shortcuts" class="chip-row">
-              <a class="chip" href="#cdc" aria-label="Centers for Disease Control and Prevention (CDC)" title="Centers for Disease Control and Prevention">CDC</a>
-              <a class="chip" href="#lsu" aria-label="Louisiana State University (LSU)" title="Louisiana State University">LSU</a>
-              <a class="chip" href="#consulting">Independent Consulting</a>
-              <a class="chip" href="#demos">Technical Demos</a>
+              <!-- chips now use unified button system -->
+              <a class="btn btn-chip btn-outline" href="#cdc" aria-label="Centers for Disease Control and Prevention (CDC)" title="Centers for Disease Control and Prevention">CDC</a>
+              <a class="btn btn-chip btn-outline" href="#lsu" aria-label="Louisiana State University (LSU)" title="Louisiana State University">LSU</a>
+              <a class="btn btn-chip btn-outline" href="#consulting">Independent Consulting</a>
+              <a class="btn btn-chip btn-outline" href="#demos">Technical Demos</a>
             </nav>
           </div>
 
@@ -1224,11 +1234,11 @@
         }catch(_){}
       });
 
-      // === Measure mobile dock height and set --dock-h so the visible gap = 14px on mobile (parity with Home) ===
+      // Measure mobile dock height and set --dock-h so visible gap = 14px on mobile
       (function(){
         function setDockVars(){
           var dock = document.querySelector('.mobile-dock');
-          var h = dock ? dock.offsetHeight : 0; // includes env(safe-area-inset-bottom)
+          var h = dock ? dock.offsetHeight : 0;
           document.documentElement.style.setProperty('--dock-h', h + 'px');
         }
         setDockVars();
