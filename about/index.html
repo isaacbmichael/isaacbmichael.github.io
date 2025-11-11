@@ -592,6 +592,27 @@
         left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px;
         background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000
       }
+      /* --- Read-more controls for tiles (Royal Teal friendly) --- */
+      details.more { margin-top:8px }
+      details.more summary {
+        list-style: none;
+        display: inline-flex; align-items:center; gap:8px;
+        padding:.55rem .85rem; border-radius:999px; font-weight:800; line-height:1;
+        background:#fff; color:var(--brand-blue-900);
+        border:1px solid rgba(0,0,0,.04);
+        box-shadow:var(--shadow);
+        cursor:pointer; user-select:none;
+        transition:transform .16s ease, box-shadow .16s ease;
+      }
+      details.more summary:hover { transform:translateY(-2px); box-shadow:var(--shadow-hover) }
+      details.more summary:active { transform:translateY(-1px) }
+      /* hide default marker */
+      details.more summary::-webkit-details-marker{ display:none }
+      details.more summary::marker{ content:"" }
+      /* swap the labels without JS */
+      details.more .when-open { display:none }
+      details.more[open] .when-open { display:inline }
+      details.more[open] .when-closed { display:none }
     </style>
 
     <!-- Inert polyfill (progressive) -->
@@ -839,7 +860,7 @@
           <h2 id="credentials">Credentials</h2>
 
           <div class="tiles">
-            <!-- Degrees -->
+            <!-- Degrees (compact, no expander needed) -->
             <div class="tile">
               <h3>Education</h3>
               <ul>
@@ -850,52 +871,82 @@
               </ul>
             </div>
 
-            <!-- Publications (teaser) -->
+            <!-- Publications: short teaser + full list in details -->
             <div class="tile">
               <h3>Selected publications</h3>
               <ul>
                 <li><strong>Extended Power Weighted Rellich-Type Inequalities with Logarithmic Refinements</strong> — Yokohama Publishers (2024)</li>
                 <li><strong>Preliminary Validation of Digital Photography to Assess the Home Food Environment</strong> — EJIHPE (2023)</li>
                 <li><strong>Online Engineering Bridge Summer Program… Calculus</strong> — ASEE (2023)</li>
-                <li><strong>A New Proof of the Power Weighted Birman–Hardy–Rellich Inequalities</strong> — Birkhäuser (2022)</li>
               </ul>
-              <a class="card-link" href="/writing/" aria-label="See publications and writing">View</a>
+              <details class="more">
+                <summary><span class="when-closed">Read more</span><span class="when-open">Show less</span></summary>
+                <ul style="margin-top:8px">
+                  <li><strong>A New Proof of the Power Weighted Birman–Hardy–Rellich Inequalities</strong> — Birkhäuser (2022)</li>
+                  <li><strong>A sequence of weighted Birman–Hardy–Rellich-type inequalities with logarithmic refinements</strong> — IEOT (2022)</li>
+                  <li><strong>Optimality of constants in weighted Birman–Hardy–Rellich inequalities…</strong> — CUBO (2022)</li>
+                  <li><strong>On weighted Hardy-type inequalities</strong> — MIA (2020)</li>
+                  <li><strong>Radial and logarithmic refinements of Hardy’s inequality</strong> — St. Petersburg Math. J. (2019)</li>
+                  <li><strong>On Birman’s sequence of Hardy–Rellich-type inequalities</strong> — JDE (2018)</li>
+                  <li><strong>Net regular signed trees</strong> — Australas. J. Combin. (2016)</li>
+                </ul>
+                <p style="margin-top:8px"><a href="/writing/" aria-label="See publications and writing">View all publications</a></p>
+              </details>
             </div>
 
-            <!-- Tools & platforms -->
-            <div class="tile">
-              <h3>Tools &amp; platforms</h3>
-              <p><strong>Statistical &amp; DS:</strong> SAS, R, Python, SQL, Scikit-learn, CHAID, ARIMA, K-Means, SEM, complex survey sampling, forecasting.</p>
-              <p><strong>AI &amp; MLOps:</strong> ChatGPT, ChatCDC, Google Gemini, BigQuery ML, TensorFlow, Databricks (DLT, MLOps), SAS Macros, R Markdown, Python/VBA/Shell, Apps Script.</p>
-              <p><strong>Data &amp; Cloud:</strong> Redshift, GCP/BigQuery, DBVisualizer, Delta Live Tables, SAS Studio, Google Colab.</p>
-              <p><strong>BI &amp; viz:</strong> Tableau, Power BI, Looker Studio, SAS ODS Graphics, Excel dashboards.</p>
-              <p><strong>Dev &amp; OS:</strong> LaTeX/Beamer, Git/GitHub, RStudio, VS Code; Windows, macOS, Linux (CLI).</p>
-              <p><strong>Web &amp; productivity:</strong> HTML/JS (basic), Google Workspace, Microsoft 365, OpenOffice.</p>
-            </div>
-
-            <!-- Graduate coursework (curated) -->
-            <div class="tile">
-              <h3>Selected graduate coursework</h3>
-              <ul>
-                <li>Statistical Theory; Statistical Inference I; Probability &amp; Statistics; Regression Analysis; Experimental Design; Experimental Statistics II; Nonparametric Statistics; Statistical Data Mining; SEM &amp; HLM; Practicum in Statistical Consulting I–II</li>
-                <li>Functional Analysis; Operator &amp; Spectral Theory I–II; PDEs &amp; Distribution Theory I–II; Calculus of Variations; Potential Theory; Real Analysis I–II; Differential Geometry; Compact Lie Groups; Complex Analysis; Riemann Surfaces; Advanced Algebra &amp; Topology</li>
-              </ul>
-            </div>
-
-            <!-- Job-related training -->
-            <div class="tile">
-              <h3>Job-related training</h3>
-              <ul>
-                <li><strong>CDC PRAMS Data Weighting System</strong> (Nov 2023–Feb 2024) — end-to-end protocol, SAS automation, lookup/exception handling, final deliverables.</li>
-                <li><strong>CDC Sampling Verification</strong> (Oct 2023) — strata logic, rate checks, t-tests/χ² QA, ratio-class adjustments.</li>
-                <li><strong>CDC SAS ODS Graphics</strong> (Sept 2023) — statistical graphics &amp; templating.</li>
-                <li><strong>U.S. Census: Introduction to Survey Sampling</strong> (Dec 2022) — SRS, stratified, cluster designs.</li>
-                <li><strong>ML upskilling (2025)</strong> — TensorFlow for DL (Udacity); Advanced MLOps &amp; DLT (Databricks); Scikit-learn Foundations (Great Learning); BigQuery ML + Gemini AI (Google Cloud Skills Boost).</li>
-              </ul>
-            </div>
+      <!-- Tools & platforms: one-liners + reveal detail -->
+      <div class="tile">
+        <h3>Tools &amp; platforms</h3>
+        <p><strong>Stat/DS:</strong> SAS, R, Python, SQL, SEM, survey sampling.</p>
+        <p><strong>AI/MLOps:</strong> BigQuery ML, TensorFlow, Databricks (DLT, MLOps).</p>
+        <details class="more">
+          <summary><span class="when-closed">Read more</span><span class="when-open">Show less</span></summary>
+          <div style="margin-top:8px">
+            <p><strong>Algorithms &amp; libs:</strong> Scikit-learn, CHAID, ARIMA, K-Means; R Markdown, SAS Macros.</p>
+            <p><strong>Data &amp; cloud:</strong> Redshift, GCP/BigQuery, DBVisualizer, SAS Studio, Google Colab.</p>
+            <p><strong>BI/viz:</strong> Tableau, Power BI, Looker Studio, SAS ODS Graphics, Excel dashboards.</p>
+            <p><strong>Dev/OS:</strong> LaTeX/Beamer, Git/GitHub, RStudio, VS Code; Windows, macOS, Linux (CLI).</p>
+            <p><strong>Web/productivity:</strong> HTML/JS (basic), Google Workspace, Microsoft 365, OpenOffice.</p>
           </div>
-        </div>
-      </section>
+        </details>
+      </div>
+
+      <!-- Coursework: a few highlights + full lists in details -->
+      <div class="tile">
+        <h3>Selected graduate coursework</h3>
+        <ul>
+          <li>Statistical Theory; Statistical Inference I; Regression Analysis; Experimental Design</li>
+          <li>Functional Analysis; Operator &amp; Spectral Theory; PDEs/Distributions</li>
+        </ul>
+        <details class="more">
+          <summary><span class="when-closed">Read more</span><span class="when-open">Show less</span></summary>
+          <div style="margin-top:8px">
+            <p><strong>LSU (M.Ap.St.):</strong> EXST 7061 Statistical Theory; 7003 Statistical Inference I; 7060 Probability &amp; Statistics; 7034 Regression; 7031 Experimental Design; 7014 Experimental Statistics II; 7011 Nonparametric; 7142 Data Mining; 7047 SEM &amp; HLM; 7083/7084 Statistical Consulting I–II.</p>
+            <p><strong>Baylor (PhD/MS Math):</strong> Real Analysis I–II; Differential Geometry; Compact Lie Groups; Functional Analysis; Operator &amp; Spectral Theory I–II; Potential Theory; PDE Theory; Distribution Theory I–II; Calculus of Variations; Differential Equations; Complex Analysis; Riemann Surfaces; Advanced Algebra I–II; Algebraic Topology; Topology; Graph Theory; Additive Combinatorics.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Training: top items + full list in details -->
+      <div class="tile">
+        <h3>Job-related training</h3>
+        <ul>
+          <li><strong>CDC PRAMS Data Weighting System</strong> (Nov 2023–Feb 2024)</li>
+          <li><strong>CDC Sampling Verification</strong> (Oct 2023)</li>
+        </ul>
+        <details class="more">
+          <summary><span class="when-closed">Read more</span><span class="when-open">Show less</span></summary>
+          <ul style="margin-top:8px">
+            <li><strong>CDC SAS ODS Graphics</strong> (Sept 2023)</li>
+            <li><strong>U.S. Census: Introduction to Survey Sampling</strong> (Dec 2022)</li>
+            <li><strong>ML upskilling (2025):</strong> TensorFlow for DL (Udacity); Advanced MLOps &amp; DLT (Databricks); Scikit-learn Foundations (Great Learning); BigQuery ML + Gemini AI (Google Cloud Skills Boost)</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       <div class="section-divider" aria-hidden="true"></div>
     
