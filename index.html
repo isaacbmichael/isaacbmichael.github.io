@@ -39,6 +39,16 @@
   <!-- Preload logo variants for faster first paint -->
   <link rel="preload" href="/assets/brands/logo-tealroyal.svg" as="image" type="image/svg+xml" fetchpriority="high">
   <link rel="preload" href="/assets/brands/logo-white.svg" as="image" type="image/svg+xml">
+  
+  <script>
+  (function(){
+    // Respect reduced motion and run once per session
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || sessionStorage.getItem('introDone') === '1') return;
+    // Add an early class so we avoid any flicker before paint
+    document.documentElement.classList.add('intro-anim');
+  })();
+  </script>
 
   <style>
   /* ===== Design Tokens (Royal Teal) ===== */
@@ -459,6 +469,26 @@ footer a:hover,
   .skip-link:focus{ left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px; background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000 }
 
   .hero-section .wrap { padding-left: calc(var(--wrap-pad) + env(safe-area-inset-left)); padding-right: calc(var(--wrap-pad) + env(safe-area-inset-right)); }
+  
+  /* First-visit page fade: subtle, fast, professional */
+  @media (prefers-reduced-motion: reduce) {
+    html.intro-anim *, html.intro-ready * { transition: none !important; animation: none !important; }
+  }
+
+  /* Start slightly transparent and settled; applies only when the head script added .intro-anim */
+  html.intro-anim body {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  /* Reveal once the tail script flips to .intro-ready */
+  html.intro-ready body {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity .28s ease,
+      transform .28s cubic-bezier(.2,.8,.2,1);
+  }  
   </style>
 
   <!-- Inert polyfill (progressive) -->
@@ -1015,9 +1045,24 @@ footer a:hover,
       window.addEventListener('resize', setDockVars, { passive:true });
       window.addEventListener('orientationchange', setDockVars);
     })();
+
+    (function(){
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce || !document.documentElement.classList.contains('intro-anim')) return;
+
+      // rAF twice: ensure the initial styles apply before we reveal
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          document.documentElement.classList.add('intro-ready');
+          document.documentElement.classList.remove('intro-anim');
+          sessionStorage.setItem('introDone','1'); // only on first visit this session
+        });
+      });
+    })();
   </script>
 </body>
 </html>
+
 
 
 
