@@ -42,11 +42,10 @@
   
   <script>
   (function(){
-    // Respect reduced motion and run once per session
+    // Respect reduced motion; run on EVERY page load
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce || sessionStorage.getItem('introDone') === '1') return;
-    // Add an early class so we avoid any flicker before paint
-    document.documentElement.classList.add('intro-anim');
+    if (reduce) return;
+    document.documentElement.classList.add('intro-anim'); // set before paint
   })();
   </script>
 
@@ -1108,13 +1107,13 @@ footer a:hover,
         requestAnimationFrame(function(){
           document.documentElement.classList.add('intro-ready');
           document.documentElement.classList.remove('intro-anim');
-          sessionStorage.setItem('introDone','1'); // only on first visit this session
         });
       });
     })();
   </script>
 </body>
 </html>
+
 
 
 
