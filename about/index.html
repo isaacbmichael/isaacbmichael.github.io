@@ -1356,7 +1356,7 @@ footer a:hover,
         var coin = badge.querySelector('.coin');
         var LS_KEY = 'aboutBadgeIntroSeen';
         var forceIntro = /\bintro=1\b/i.test(location.search);
-        var shouldSpin = !reduceMotion && (forceIntro || !localStorage.getItem(LS_KEY));
+        var shouldSpin = !reduceMotion;
 
         if (shouldSpin && coin) {
           // Delay slightly so layout/IO observers settle (prevents jank)
