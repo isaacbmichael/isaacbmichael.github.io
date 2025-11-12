@@ -18,7 +18,6 @@
   <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
   <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
   
-  <!-- Favicons / site icons -->
   <!-- Favicons / site icons (Safari-safe order: PNG/ICO first) -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -27,6 +26,8 @@
   <!-- Optional: keep SVG favicons, but AFTER PNG/ICO (Safari may ignore them) -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+  <!-- Legacy shortcut icon helps some WebKit preview paths -->
+  <link rel="shortcut icon" href="/favicon.ico">
 
   <!-- iOS home-screen -->
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
@@ -36,6 +37,27 @@
 
   <!-- PWA manifest (absolute paths inside) -->
   <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 🧩 Safari bfcache favicon nudge (ensures icon restores when returning via Back) -->
+  <script>
+    (function () {
+      function refreshFavicon() {
+        var el = document.querySelector('link[rel="icon"][type="image/png"][sizes="32x32"]')
+              || document.querySelector('link[rel="icon"][sizes="any"]')
+              || document.querySelector('link[rel="icon"]');
+        if (!el) return;
+        var href = el.getAttribute('href');
+        el.setAttribute('href', '');
+        el.setAttribute('href', href);
+      }
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) refreshFavicon();
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') refreshFavicon();
+      });
+    })();
+  </script>
 
   <!-- Preload logo variants for faster first paint -->
   <link rel="preload" href="/assets/brands/logo-tealroyal.svg" as="image" type="image/svg+xml" fetchpriority="high">
@@ -400,7 +422,7 @@ footer a:hover,
   }
 
   /* ===== Footer ===== */
-  footer{ background: var(--brand-blue-900) !important; color: #ffffff !important; padding: 18px 0; text-align: center; border-top: 1px solid rgba(255,255,255,.18); }
+  footer{ background: var(--brand-blue-900) !important; color: #ffffff) !important; padding: 18px 0; text-align: center; border-top: 1px solid rgba(255,255,255,.18); }
   footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
   .social{display:flex;align-items:center;gap:10px}
   footer .icon-btn{ display:inline-flex;align-items:center;justify-content:center; width:38px;height:38px;border-radius:999px; background: rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.22); color:#fff; transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
@@ -1129,6 +1151,7 @@ footer a:hover,
   </script>
 </body>
 </html>
+
 
 
 
