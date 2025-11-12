@@ -19,18 +19,19 @@
   <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
   
   <!-- Favicons / site icons -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <!-- Favicons / site icons (Safari-safe order: PNG/ICO first) -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
-  <!-- Optional: dark-mode SVG (white glyph) -->
+  <!-- Optional: keep SVG favicons, but AFTER PNG/ICO (Safari may ignore them) -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)">
 
   <!-- iOS home-screen -->
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 
-  <!-- Safari pinned tab -->
+  <!-- Safari pinned tab (monochrome) -->
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0F5B66">
 
   <!-- PWA manifest (absolute paths inside) -->
@@ -1128,6 +1129,7 @@ footer a:hover,
   </script>
 </body>
 </html>
+
 
 
 
