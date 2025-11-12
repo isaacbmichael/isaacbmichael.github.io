@@ -1110,9 +1110,25 @@ footer a:hover,
         });
       });
     })();
+    
+    // Optional: replay the intro when the page is restored from bfcache
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // Re-apply the classes to trigger the transitions again
+        document.documentElement.classList.remove('intro-ready');
+        document.documentElement.classList.add('intro-anim');
+        requestAnimationFrame(function(){
+          requestAnimationFrame(function(){
+            document.documentElement.classList.add('intro-ready');
+            document.documentElement.classList.remove('intro-anim');
+          });
+        });
+      }
+    });
   </script>
 </body>
 </html>
+
 
 
 
