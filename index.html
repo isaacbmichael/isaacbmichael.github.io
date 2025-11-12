@@ -1081,6 +1081,7 @@ footer a:hover,
       // Respect reduced motion; only run if first-visit gate is active
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;
+      if (!document.documentElement.classList.contains('intro-anim')) return;  // ← add this
 
       // Build reveal sequence: hero elements first, then the three tiles
       var seq = [];
@@ -1114,6 +1115,7 @@ footer a:hover,
   </script>
 </body>
 </html>
+
 
 
 
