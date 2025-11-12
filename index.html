@@ -458,7 +458,8 @@ footer a:hover,
   .modal-close{ width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:transform .16s ease, box-shadow .16s ease, background .16s ease; }
   .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
   .modal-body{ padding:14px 18px 18px }
-  .contact-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+  /* Updated: allow positioning of the call popover */
+  .contact-actions{ position:relative; display:flex; gap:12px; flex-wrap:wrap; }
   .contact-actions .btn{ border-radius:999px }
   .contact-actions .btn-primary{ filter:saturate(115%) }
   .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
@@ -474,6 +475,20 @@ footer a:hover,
   .section-divider{ position:relative; height:4px; margin: var(--divider-gap) 0; border:0; }
   .section-divider::after{ content:""; position:absolute; inset:0; background: var(--page-bg); z-index:0; }
   .section-divider::before{ content:""; position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); height:1px; border-radius:999px; background:linear-gradient( 90deg, rgba(15,91,102,var(--divider-edge-alpha)) 0%, rgba(15,91,102,var(--divider-center-alpha)) 50%, rgba(15,91,102,var(--divider-edge-alpha)) 100% ); z-index:1; }
+
+  /* === Single-button call popover === */
+  .call-popover{
+    position:absolute; z-index:1200;
+    transform: translateY(calc(100% + 8px));
+    left:0;
+    background:#fff; color:var(--ink);
+    border:1px solid #e5e7eb; border-radius:12px;
+    box-shadow: var(--shadow);
+    padding:10px 12px; font-size:.95rem; white-space:nowrap;
+  }
+  .call-popover__number{ font-weight:800; cursor:pointer }
+  .call-popover__hint{ color:var(--muted); font-weight:600; font-size:.85em }
+  @media (hover:none){ .call-popover__hint{ display:none } }
 
   @media (max-width:1120px){ .tiles{ grid-template-columns:repeat(2,1fr) } }
   @media (max-width:960px){
@@ -595,13 +610,11 @@ footer a:hover,
     <div class="quick" aria-label="Quick actions">
       <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email</a>
       <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-      <div class="btn-group call-cluster" data-phone="+12543666861">   
-        <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>   
-        <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>   
-        <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>  
-        <a class="btn btn-outline" data-facetime hidden>FaceTime</a>   
-        <small class="sr-only" data-phonetext>+1 (254) 366-6861</small> 
-      </div>
+      <!-- Single call/text button (no extra buttons) -->
+      <a class="btn call-link" data-phone="+12543666861"
+         href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">
+        Call or text
+      </a>
       <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
   </aside>
@@ -800,13 +813,17 @@ footer a:hover,
     <div class="modal-body">
       <div class="contact-actions" aria-label="Quick links">
         <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-        <div class="btn-group call-cluster" data-phone="+12543666861">   
-          <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>   
-          <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>   
-          <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>   
-          <a class="btn btn-outline" data-facetime hidden>FaceTime</a>   
-          <small class="sr-only" data-phonetext>+1 (254) 366-6861</small> 
-        </div>
+
+        <!-- Single call/text button with popover to copy -->
+        <a class="btn call-link" data-phone="+12543666861"
+           href="tel:+12543666861" aria-describedby="callTip">
+          Call or text
+        </a>
+        <span id="callTip" class="call-popover" data-popover hidden>
+          <span class="call-popover__number">+1 (254) 366-6861</span>
+          <span class="call-popover__hint">Click number to copy</span>
+        </span>
+
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
@@ -944,7 +961,7 @@ footer a:hover,
     menuClose?.addEventListener('click', closeDrawer);
     backdrop?.addEventListener('click', closeDrawer);
     drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeDrawer()));
-    document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer(); });
+    document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeDrawer(); });
 
     // Brand link: spin once, then go home (site-relative)
     const brandLink = document.getElementById('brandLink');
@@ -1162,82 +1179,60 @@ footer a:hover,
         });
       }
     });
-  (function(){
-    // Enhance every "call cluster"
-    const clusters = document.querySelectorAll('.call-cluster');
-    if (!clusters.length) return;
 
-    const UA = navigator.userAgent || '';
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
-    const isMac = /Macintosh|Mac OS X/i.test(UA);
-    const canLikelyCall = isMobile || isMac; // dialer/FaceTime paths
+    /* ===== Single-button call behavior ===== */
+    (function(){
+      const UA = navigator.userAgent || '';
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
+      const isMac = /Macintosh|Mac OS X/i.test(UA);
+      const canLikelyCall = isMobile || isMac; // native dialer or FaceTime usually present
 
-    clusters.forEach(cluster => {
-      const phone = cluster.getAttribute('data-phone') || '';
-      const prettyEl = cluster.querySelector('[data-phonetext]');
-      const prettyNumber = (prettyEl && prettyEl.textContent.trim()) || phone;
-
-      // Wire up main anchors
-      const callLink = cluster.querySelector('[data-call]');
-      const smsLink  = cluster.querySelector('[data-sms]');
-      const ftLink   = cluster.querySelector('[data-facetime]');
-      const copyBtn  = cluster.querySelector('[data-copy]');
-
-      if (callLink) callLink.href = `tel:${phone}`;
-      if (smsLink)  smsLink.href  = `sms:${phone}`;
-
-      // macOS → expose FaceTime Audio
-      if (isMac && ftLink) {
-        ftLink.hidden = false;
-        ftLink.href = `facetime-audio://${phone}`;
-        ftLink.setAttribute('rel','noopener');
-      }
-
-      // Desktop without a likely handler → show Copy (graceful fallback)
-      if (!canLikelyCall) {
-        if (copyBtn) copyBtn.hidden = false;
-        // Optional: reveal "Text" if you want to encourage SMS from desktop apps that support it
-        // smsLink && (smsLink.hidden = false);
-        // Add a gentle title to set expectations
-        callLink && callLink.setAttribute('title','Your computer may ask which app to use for calls (Teams, Skype, etc.).');
-      }
-
-      // Copy button behavior
-      copyBtn && copyBtn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(phone);
-          const prev = copyBtn.textContent;
-          copyBtn.textContent = 'Copied';
-          setTimeout(()=> copyBtn.textContent = prev, 1200);
-        } catch(_) {
-          // Clipboard blocked → show an alert as last resort
-          alert('Phone number: ' + prettyNumber);
-        }
+      // Ensure tel: hrefs are set from data-phone (drawer + dialog)
+      document.querySelectorAll('.call-link[data-phone]').forEach(a=>{
+        const ph = a.getAttribute('data-phone') || '';
+        if (ph) a.setAttribute('href', 'tel:' + ph);
       });
-    });
-  })();
+
+      // Contact dialog popover (hover/focus to reveal; click number to copy)
+      const callBtn = document.querySelector('#contactDialog .call-link[data-phone]');
+      const pop     = document.querySelector('#contactDialog [data-popover]');
+      if (callBtn && pop){
+        const phone = callBtn.getAttribute('data-phone') || '';
+
+        function position(){
+          const btn = callBtn.getBoundingClientRect();
+          const row = callBtn.closest('.contact-actions').getBoundingClientRect();
+          pop.style.left = (btn.left - row.left) + 'px';
+        }
+        const show = () => { pop.hidden = false; position(); };
+        const hide = () => { pop.hidden = true; };
+
+        callBtn.addEventListener('mouseenter', show);
+        callBtn.addEventListener('focus', show);
+        callBtn.addEventListener('mouseleave', hide);
+        callBtn.addEventListener('blur', hide);
+        window.addEventListener('resize', () => { if (!pop.hidden) position(); }, { passive:true });
+
+        const numberEl = pop.querySelector('.call-popover__number');
+        numberEl?.addEventListener('click', async () => {
+          try{
+            await navigator.clipboard.writeText(phone);
+          }catch(_){
+            alert('Phone number: ' + numberEl.textContent.trim());
+            return;
+          }
+          const prev = numberEl.textContent;
+          numberEl.textContent = 'Copied';
+          setTimeout(()=> numberEl.textContent = prev, 1000);
+        });
+
+        // Desktop hint if there may be no handler
+        if (!canLikelyCall){
+          callBtn.title = 'Your computer may ask which app to use (Teams, Skype, etc.). Hover to copy the number.';
+        }
+      }
+    })();
 
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
