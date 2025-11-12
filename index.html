@@ -489,6 +489,37 @@ footer a:hover,
       opacity .28s ease,
       transform .28s cubic-bezier(.2,.8,.2,1);
   }  
+  /* Staggered first-visit reveal + subtle header avatar settle */
+  @media (prefers-reduced-motion: no-preference) {
+    /* Hidden state while html has .intro-anim */
+    .intro-anim [data-reveal] {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    /* Shown state once html gets .intro-ready */
+    .intro-ready [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity .28s ease,
+        transform .28s cubic-bezier(.2,.8,.2,1);
+      transition-delay: var(--rd, 0ms); /* per-element delay set in JS */
+    }
+
+    /* Optional: divider line grows in very subtly */
+    .intro-anim .section-divider::before {
+      transform: translateY(-50%) scaleX(0);
+      transform-origin: left;
+    }
+    .intro-ready .section-divider::before {
+      transform: translateY(-50%) scaleX(1);
+      transition: transform .32s ease .16s;
+    }
+
+    /* You approved this: tiny avatar settle for first visit */
+    .intro-anim .brand .avatar { transform: scale(.985); }
+    .intro-ready .brand .avatar { transform: none; transition: transform .32s cubic-bezier(.2,.8,.2,1); }
+  }
   </style>
 
   <!-- Inert polyfill (progressive) -->
@@ -1047,6 +1078,27 @@ footer a:hover,
     })();
 
     (function(){
+      // Respect reduced motion; only run if first-visit gate is active
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+
+      // Build reveal sequence: hero elements first, then the three tiles
+      var seq = [];
+      var heroKids = document.querySelectorAll('.hero-grid > *'); // h1, tagline, intro, chips
+      var tiles    = document.querySelectorAll('.tiles .tile');    // featured tiles
+      heroKids.forEach(function(el){ seq.push(el); });
+      tiles.forEach(function(el){ seq.push(el); });
+
+      // Tag and stagger
+      var base = 40;  // ms
+      var step = 60;  // ms between elements
+      seq.forEach(function(el, i){
+        el.setAttribute('data-reveal', '');
+        el.style.setProperty('--rd', (base + i * step) + 'ms');
+      });
+    })();
+    
+    (function(){
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce || !document.documentElement.classList.contains('intro-anim')) return;
 
@@ -1062,6 +1114,7 @@ footer a:hover,
   </script>
 </body>
 </html>
+
 
 
 
