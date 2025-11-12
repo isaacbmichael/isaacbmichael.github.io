@@ -355,6 +355,7 @@ footer a:hover,
       .btn-primary{ background:var(--brand-blue-700); color:#fff; border-color:transparent; box-shadow:var(--shadow) }
       .btn-primary:hover{ box-shadow:var(--shadow-hover); filter:saturate(115%) brightness(1.02) }
       .btn-primary::before{ background:linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,0) 40%) }
+      .btn-group{display:inline-flex;gap:8px;flex-wrap:wrap;align-items:center}
 
       /* Scroll cue */
       .scroll-cue{ display:flex; justify-content:center; margin-top:6px }
@@ -605,7 +606,13 @@ footer a:hover,
       <div class="quick" aria-label="Quick actions">
         <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email</a>
         <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-        <a class="btn" href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861" title="+1 (254) 366-6861">Call or text</a>
+        <div class="btn-group call-cluster" data-phone="+12543666861">
+          <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>
+          <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>
+          <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>
+          <a class="btn btn-outline" data-facetime hidden>FaceTime</a>
+          <small class="sr-only" data-phonetext>+1 (254) 366-6861</small>
+        </div>
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </div>
     </aside>
@@ -1086,7 +1093,13 @@ footer a:hover,
       <div class="modal-body">
         <div class="contact-actions" aria-label="Quick links">
           <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-          <a class="btn" href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861" title="+1 (254) 366-6861">Call or text</a>
+          <div class="btn-group call-cluster" data-phone="+12543666861">
+          <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>
+          <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>
+          <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>
+          <a class="btn btn-outline" data-facetime hidden>FaceTime</a>
+          <small class="sr-only" data-phonetext>+1 (254) 366-6861</small>
+        </div>
           <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
@@ -1298,6 +1311,60 @@ footer a:hover,
         window.addEventListener('resize', setDockVars, { passive:true });
         window.addEventListener('orientationchange', setDockVars);
       })();
+  (function(){
+    // Enhance every "call cluster"
+    const clusters = document.querySelectorAll('.call-cluster');
+    if (!clusters.length) return;
+
+    const UA = navigator.userAgent || '';
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
+    const isMac = /Macintosh|Mac OS X/i.test(UA);
+    const canLikelyCall = isMobile || isMac; // dialer/FaceTime paths
+
+    clusters.forEach(cluster => {
+      const phone = cluster.getAttribute('data-phone') || '';
+      const prettyEl = cluster.querySelector('[data-phonetext]');
+      const prettyNumber = (prettyEl && prettyEl.textContent.trim()) || phone;
+
+      // Wire up main anchors
+      const callLink = cluster.querySelector('[data-call]');
+      const smsLink  = cluster.querySelector('[data-sms]');
+      const ftLink   = cluster.querySelector('[data-facetime]');
+      const copyBtn  = cluster.querySelector('[data-copy]');
+
+      if (callLink) callLink.href = `tel:${phone}`;
+      if (smsLink)  smsLink.href  = `sms:${phone}`;
+
+      // macOS → expose FaceTime Audio
+      if (isMac && ftLink) {
+        ftLink.hidden = false;
+        ftLink.href = `facetime-audio://${phone}`;
+        ftLink.setAttribute('rel','noopener');
+      }
+
+      // Desktop without a likely handler → show Copy (graceful fallback)
+      if (!canLikelyCall) {
+        if (copyBtn) copyBtn.hidden = false;
+        // Optional: reveal "Text" if you want to encourage SMS from desktop apps that support it
+        // smsLink && (smsLink.hidden = false);
+        // Add a gentle title to set expectations
+        callLink && callLink.setAttribute('title','Your computer may ask which app to use for calls (Teams, Skype, etc.).');
+      }
+
+      // Copy button behavior
+      copyBtn && copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(phone);
+          const prev = copyBtn.textContent;
+          copyBtn.textContent = 'Copied';
+          setTimeout(()=> copyBtn.textContent = prev, 1200);
+        } catch(_) {
+          // Clipboard blocked → show an alert as last resort
+          alert('Phone number: ' + prettyNumber);
+        }
+      });
+    });
+  })();
     </script>
   </body>
 </html>
