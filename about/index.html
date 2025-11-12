@@ -447,6 +447,39 @@ footer a:hover,
       .photo-badge .byline{ margin-top:8px; font-weight:800; color:var(--brand-blue-700); font-size:.95em }
       @media (hover:hover){ .photo-badge:hover .tilt{ filter: drop-shadow(0 18px 36px rgba(17,24,39,.24)) } }
 
+      /* Intro state: start slightly rotated & faded, then settle */
+      .photo-badge {
+        /* default: no intro offset */
+        --intro: 0turn;
+        transition: opacity .7s ease;
+      }
+      /* We'll add this class in JS before animating */
+      .photo-badge.__intro {
+        --intro: -.5turn;     /* half turn toward the back */
+        opacity: 0;           /* fade in as it flips */
+      }
+      /* And this class triggers the animation to final state */
+      .photo-badge.__intro-go {
+        --intro: 0turn;
+        opacity: 1;
+      }
+
+      /* Tie the intro offset into your existing transforms */
+      .photo-badge .coin {
+        /* was: rotateY(var(--flip)) */
+        transform: translateZ(.01px) rotateY(calc(var(--flip) + var(--intro)));
+        transition: transform .9s cubic-bezier(.2,.8,.2,1);
+      }
+      .photo-badge .tilt::after,
+      .photo-badge .tilt::before {
+        /* was: rotateY(var(--flip)) */
+        transform: translateZ(.01px) rotateY(calc(var(--flip) + var(--intro)));
+        transition: transform .9s cubic-bezier(.2,.8,.2,1);
+      }
+
+      /* (Optional but recommended) Ensure the container also opacity-fades smoothly */
+      .photo-badge .tilt { transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease }
+      
       /* ===== Cards ===== */
       .tiles{ display:grid; grid-template-columns:repeat(3, 1fr); gap:18px }
       .tile{
@@ -1365,6 +1398,49 @@ footer a:hover,
           setTilt(0, 0);
         }
       })();
+
+      (function () {
+    var badge = document.getElementById('photoBadge');
+    if (!badge) return;
+
+    // Respect reduced motion
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return; // skip the intro animation entirely
+
+    // Try to wait for the portrait so we don't animate a blank face
+    var img = badge.querySelector('.face.front img');
+
+    function runIntro() {
+      // Set starting pose on the very first frame...
+      badge.classList.add('__intro');
+      // ...then, after layout paints, trigger the animation to final
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          badge.classList.add('__intro-go');
+          // Clean up classes after it finishes (keeps DOM tidy)
+          var done = false;
+          badge.addEventListener('transitionend', function (e) {
+            if (done || e.propertyName !== 'transform') return;
+            done = true;
+            badge.classList.remove('__intro', '__intro-go');
+          });
+        });
+      });
+    }
+
+    // Use HTMLImageElement.decode() when available to avoid flashes
+    if (img && typeof img.decode === 'function') {
+      img.decode().catch(function () { /* ignore */ }).then(runIntro);
+    } else {
+      // Fallback if decode() isn’t available
+      if (img && !img.complete) {
+        img.addEventListener('load', runIntro, { once: true });
+        img.addEventListener('error', runIntro, { once: true });
+      } else {
+        runIntro();
+      }
+    }
+  })();
     </script>
   </body>
 </html>
