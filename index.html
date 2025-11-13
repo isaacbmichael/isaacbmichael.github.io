@@ -477,6 +477,7 @@ footer a:hover,
   .section-divider::before{ content:""; position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); height:1px; border-radius:999px; background:linear-gradient( 90deg, rgba(15,91,102,var(--divider-edge-alpha)) 0%, rgba(15,91,102,var(--divider-center-alpha)) 50%, rgba(15,91,102,var(--divider-edge-alpha)) 100% ); z-index:1; }
 
   /* === Single-button call popover === */
+  .btn-xs{ padding:.42rem .7rem; font-weight:800; border-radius:12px; }
   .call-popover{
     position:absolute; z-index:1200;
     transform: translateY(calc(100% + 8px));
@@ -504,7 +505,19 @@ footer a:hover,
     border-radius:8px;
   }
   .call-popover__hint{ color:var(--muted); font-weight:600; font-size:.85em }
-  @media (hover:none){ .call-popover__hint{ display:none } }
+  .call-popover__actions{ display:none; gap:8px; margin-top:8px }
+
+  /* Mobile/touch: center the popover under the row; show Text/Copy actions */
+  @media (hover:none){
+    .call-popover{
+      left:50% !important;
+      transform: translate(-50%, 10px);
+      max-width:92vw;
+      text-align:center;
+    }
+    .call-popover__actions{ display:flex }
+    .call-popover__hint{ display:none }
+  }
 
   @media (max-width:1120px){ .tiles{ grid-template-columns:repeat(2,1fr) } }
   @media (max-width:960px){
@@ -830,14 +843,24 @@ footer a:hover,
       <div class="contact-actions" aria-label="Quick links">
         <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
 
-        <!-- Single call/text button with popover to copy -->
+        <!-- Single call/text button with popover to copy or text -->
         <a class="btn call-link" data-phone="+12543666861"
            href="tel:+12543666861" aria-describedby="callTip">
           Call or text
         </a>
-        <span id="callTip" class="call-popover" data-popover hidden>
-          <button type="button" class="call-popover__copy" data-copy-number="+12543666861" aria-label="Copy phone number">+1 (254) 366-6861</button>
+        <span id="callTip" class="call-popover" data-popover hidden role="dialog" aria-label="Phone options">
+          <!-- Number is clickable to copy on all devices -->
+          <button type="button" class="call-popover__copy" data-copy-number="+12543666861" aria-label="Copy phone number">
+            +1 (254) 366-6861
+          </button>
           <span class="call-popover__hint">Click to copy</span>
+
+          <!-- Mobile/touch actions -->
+          <div class="call-popover__actions" data-mobile-actions>
+            <a class="btn btn-primary btn-xs" data-call href="tel:+12543666861">Call</a>
+            <a class="btn btn-outline btn-xs" data-text href="sms:+12543666861">Text</a>
+            <button type="button" class="btn btn-outline btn-xs" data-copy>Copy</button>
+          </div>
         </span>
 
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -1196,67 +1219,94 @@ footer a:hover,
       }
     });
 
-    /* ===== Single-button call behavior with copy popover ===== */
+    /* ===== Single-button call behavior with copy/text popover ===== */
     (function(){
       const UA = navigator.userAgent || '';
       const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
       const isMac = /Macintosh|Mac OS X/i.test(UA);
-      const canLikelyCall = isMobile || isMac; // native dialer or FaceTime usually present
+      const canLikelyCall = isMobile || isMac;
 
-      // Ensure tel: hrefs are set from data-phone (drawer + dialog)
+      // Keep tel: hrefs in sync with data-phone (drawer + dialog)
       document.querySelectorAll('.call-link[data-phone]').forEach(a=>{
         const ph = a.getAttribute('data-phone') || '';
         if (ph) a.setAttribute('href', 'tel:' + ph);
       });
 
-      // Contact dialog popover (hover/focus to reveal; click number to copy)
+      // Dialog popover
       const callBtn = document.querySelector('#contactDialog .call-link[data-phone]');
       const pop     = document.querySelector('#contactDialog [data-popover]');
-      if (callBtn && pop){
-        const copyBtn = pop.querySelector('.call-popover__copy');
-        const phone   = copyBtn?.getAttribute('data-copy-number') || callBtn.getAttribute('data-phone') || '';
+      if (!callBtn || !pop) return;
 
-        function position(){
-          const btn = callBtn.getBoundingClientRect();
-          const row = callBtn.closest('.contact-actions').getBoundingClientRect();
-          pop.style.left = (btn.left - row.left) + 'px';
+      const copyBtn  = pop.querySelector('.call-popover__copy');
+      const copyBtn2 = pop.querySelector('[data-copy]');
+      const textLink = pop.querySelector('[data-text]');
+      const callLink = pop.querySelector('[data-call]');
+      const phone    = (copyBtn?.getAttribute('data-copy-number') || callBtn.getAttribute('data-phone') || '').trim();
+
+      // Position (desktop: align under the trigger; mobile: CSS centers it)
+      function position(){
+        if (window.matchMedia('(hover:none)').matches) return; // centered by CSS on touch
+        const btn = callBtn.getBoundingClientRect();
+        const row = callBtn.closest('.contact-actions').getBoundingClientRect();
+        pop.style.left = (btn.left - row.left) + 'px';
+      }
+
+      const show = () => { pop.hidden = false; position(); };
+      const hide = () => { pop.hidden = true; };
+
+      // Keep open while either trigger OR popover is hovered/focused
+      let refs = 0, timer = null;
+      const enter = () => { refs++; clearTimeout(timer); show(); };
+      const leave = () => {
+        refs = Math.max(0, refs - 1);
+        if (!refs) timer = setTimeout(hide, 200);
+      };
+
+      // Mouse + keyboard
+      callBtn.addEventListener('mouseenter', enter);
+      callBtn.addEventListener('mouseleave', leave);
+      callBtn.addEventListener('focus', enter);
+      callBtn.addEventListener('blur', leave);
+      pop.addEventListener('mouseenter', enter);
+      pop.addEventListener('mouseleave', leave);
+      pop.addEventListener('focusin', enter);
+      pop.addEventListener('focusout', leave);
+
+      // Touch: show on press but don't interfere with the native dialer
+      callBtn.addEventListener('pointerdown', () => {
+        if (window.matchMedia('(hover:none)').matches) {
+          enter();
+          clearTimeout(timer);
+          timer = setTimeout(hide, 4000); // auto-hide after a moment
         }
-        const show = () => { pop.hidden = false; position(); };
-        const hide = () => { pop.hidden = true; };
+      }, {passive:true});
 
-        // Keep open while either trigger OR popover is hovered/focused
-        let refs = 0;
-        const enter = () => { refs++; show(); };
-        const leave = () => { refs = Math.max(0, refs - 1); if (!refs) hide(); };
+      window.addEventListener('resize', () => { if (!pop.hidden) position(); }, { passive:true });
 
-        callBtn.addEventListener('mouseenter', enter);
-        callBtn.addEventListener('mouseleave', leave);
-        pop.addEventListener('mouseenter', enter);
-        pop.addEventListener('mouseleave', leave);
-
-        callBtn.addEventListener('focus', enter);
-        callBtn.addEventListener('blur', leave);
-        pop.addEventListener('focusin', enter);
-        pop.addEventListener('focusout', leave);
-
-        window.addEventListener('resize', () => { if (!pop.hidden) position(); }, { passive:true });
-
-        // Click-to-copy behavior on the number
-        copyBtn?.addEventListener('click', async () => {
-          try{
-            await navigator.clipboard.writeText(phone);
-            const prev = copyBtn.textContent;
-            copyBtn.textContent = 'Copied';
-            setTimeout(()=> (copyBtn.textContent = prev), 1000);
-          }catch(_){
-            alert('Phone number: ' + (copyBtn.textContent || phone));
-          }
-        });
-
-        // Desktop hint if there may be no handler
-        if (!canLikelyCall){
-          callBtn.title = 'Your computer may ask which app to use (Teams, Skype, etc.). Hover to copy the number.';
+      // Copy helpers
+      async function doCopy() {
+        try{
+          await navigator.clipboard.writeText(phone);
+          const prev = copyBtn.textContent;
+          copyBtn.textContent = 'Copied';
+          setTimeout(()=> (copyBtn.textContent = prev), 1000);
+        }catch(_){
+          alert('Phone number: ' + (copyBtn.textContent || phone));
         }
+      }
+
+      copyBtn?.addEventListener('click', doCopy);
+      copyBtn2?.addEventListener('click', doCopy);
+
+      // Desktop hint if there may be no handler
+      if (!canLikelyCall){
+        callBtn.title = 'Your computer may ask which app to use (Teams, Skype, etc.). Hover to copy the number.';
+      }
+
+      // Ensure the call/text links carry the same phone value
+      if (phone){
+        callLink?.setAttribute('href', 'tel:' + phone);
+        textLink?.setAttribute('href', 'sms:' + phone);
       }
     })();
 
