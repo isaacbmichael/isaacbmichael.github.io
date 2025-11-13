@@ -15,26 +15,49 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F7F8">
   <!-- Updated to new dark brand color -->
   <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#0B3F47">
-  <meta property="og:image" content="https://isaacbmichael.com/afssets/og/home.png">
+  <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
   <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
   
-  <!-- Favicons / site icons -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <!-- Favicons / site icons (Safari-safe order: PNG/ICO first) -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
-  <!-- Optional: dark-mode SVG (white glyph) -->
+  <!-- Optional: keep SVG favicons, but AFTER PNG/ICO (Safari may ignore them) -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+  <!-- Legacy shortcut icon helps some WebKit preview paths -->
+  <link rel="shortcut icon" href="/favicon.ico">
 
   <!-- iOS home-screen -->
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 
-  <!-- Safari pinned tab -->
+  <!-- Safari pinned tab (monochrome) -->
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0F5B66">
 
   <!-- PWA manifest (absolute paths inside) -->
   <link rel="manifest" href="/site.webmanifest">
+
+  <!-- 🧩 Safari bfcache favicon nudge (ensures icon restores when returning via Back) -->
+  <script>
+    (function () {
+      function refreshFavicon() {
+        var el = document.querySelector('link[rel="icon"][type="image/png"][sizes="32x32"]')
+              || document.querySelector('link[rel="icon"][sizes="any"]')
+              || document.querySelector('link[rel="icon"]');
+        if (!el) return;
+        var href = el.getAttribute('href');
+        el.setAttribute('href', '');
+        el.setAttribute('href', href);
+      }
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) refreshFavicon();
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') refreshFavicon();
+      });
+    })();
+  </script>
 
   <!-- Preload logo variants for faster first paint -->
   <link rel="preload" href="/assets/brands/logo-tealroyal.svg" as="image" type="image/svg+xml" fetchpriority="high">
@@ -1197,7 +1220,6 @@ footer a:hover,
   </script>
 </body>
 </html>
-
 
 
 
