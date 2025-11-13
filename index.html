@@ -485,8 +485,24 @@ footer a:hover,
     border:1px solid #e5e7eb; border-radius:12px;
     box-shadow: var(--shadow);
     padding:10px 12px; font-size:.95rem; white-space:nowrap;
+    pointer-events:auto;
   }
-  .call-popover__number{ font-weight:800; cursor:pointer }
+  .call-popover__copy{
+    appearance:none;
+    border:0;
+    background:transparent;
+    padding:0;
+    margin:0 8px 0 0;
+    font:inherit;
+    font-weight:800;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .call-popover__copy:focus-visible{
+    outline:none;
+    box-shadow:0 0 0 6px var(--ring);
+    border-radius:8px;
+  }
   .call-popover__hint{ color:var(--muted); font-weight:600; font-size:.85em }
   @media (hover:none){ .call-popover__hint{ display:none } }
 
@@ -820,8 +836,8 @@ footer a:hover,
           Call or text
         </a>
         <span id="callTip" class="call-popover" data-popover hidden>
-          <span class="call-popover__number">+1 (254) 366-6861</span>
-          <span class="call-popover__hint">Click number to copy</span>
+          <button type="button" class="call-popover__copy" data-copy-number="+12543666861" aria-label="Copy phone number">+1 (254) 366-6861</button>
+          <span class="call-popover__hint">Click to copy</span>
         </span>
 
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -1180,7 +1196,7 @@ footer a:hover,
       }
     });
 
-    /* ===== Single-button call behavior ===== */
+    /* ===== Single-button call behavior with copy popover ===== */
     (function(){
       const UA = navigator.userAgent || '';
       const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
@@ -1197,7 +1213,8 @@ footer a:hover,
       const callBtn = document.querySelector('#contactDialog .call-link[data-phone]');
       const pop     = document.querySelector('#contactDialog [data-popover]');
       if (callBtn && pop){
-        const phone = callBtn.getAttribute('data-phone') || '';
+        const copyBtn = pop.querySelector('.call-popover__copy');
+        const phone   = copyBtn?.getAttribute('data-copy-number') || callBtn.getAttribute('data-phone') || '';
 
         function position(){
           const btn = callBtn.getBoundingClientRect();
@@ -1207,23 +1224,33 @@ footer a:hover,
         const show = () => { pop.hidden = false; position(); };
         const hide = () => { pop.hidden = true; };
 
-        callBtn.addEventListener('mouseenter', show);
-        callBtn.addEventListener('focus', show);
-        callBtn.addEventListener('mouseleave', hide);
-        callBtn.addEventListener('blur', hide);
+        // Keep open while either trigger OR popover is hovered/focused
+        let refs = 0;
+        const enter = () => { refs++; show(); };
+        const leave = () => { refs = Math.max(0, refs - 1); if (!refs) hide(); };
+
+        callBtn.addEventListener('mouseenter', enter);
+        callBtn.addEventListener('mouseleave', leave);
+        pop.addEventListener('mouseenter', enter);
+        pop.addEventListener('mouseleave', leave);
+
+        callBtn.addEventListener('focus', enter);
+        callBtn.addEventListener('blur', leave);
+        pop.addEventListener('focusin', enter);
+        pop.addEventListener('focusout', leave);
+
         window.addEventListener('resize', () => { if (!pop.hidden) position(); }, { passive:true });
 
-        const numberEl = pop.querySelector('.call-popover__number');
-        numberEl?.addEventListener('click', async () => {
+        // Click-to-copy behavior on the number
+        copyBtn?.addEventListener('click', async () => {
           try{
             await navigator.clipboard.writeText(phone);
+            const prev = copyBtn.textContent;
+            copyBtn.textContent = 'Copied';
+            setTimeout(()=> (copyBtn.textContent = prev), 1000);
           }catch(_){
-            alert('Phone number: ' + numberEl.textContent.trim());
-            return;
+            alert('Phone number: ' + (copyBtn.textContent || phone));
           }
-          const prev = numberEl.textContent;
-          numberEl.textContent = 'Copied';
-          setTimeout(()=> numberEl.textContent = prev, 1000);
         });
 
         // Desktop hint if there may be no handler
