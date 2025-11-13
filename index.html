@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -14,10 +14,10 @@
   <!-- Light mode now matches solid page bg -->
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F7F8">
   <!-- Updated to new dark brand color -->
-  <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#0B3F47">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B3F47">
   <meta property="og:image" content="https://isaacbmichael.com/assets/og/home.png">
   <meta name="twitter:image" content="https://isaacbmichael.com/assets/og/home.png">
-  
+
   <!-- Favicons / site icons (Safari-safe order: PNG/ICO first) -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -43,8 +43,8 @@
     (function () {
       function refreshFavicon() {
         var el = document.querySelector('link[rel="icon"][type="image/png"][sizes="32x32"]')
-              || document.querySelector('link[rel="icon"][sizes="any"]')
-              || document.querySelector('link[rel="icon"]');
+          || document.querySelector('link[rel="icon"][sizes="any"]')
+          || document.querySelector('link[rel="icon"]');
         if (!el) return;
         var href = el.getAttribute('href');
         el.setAttribute('href', '');
@@ -62,488 +62,1331 @@
   <!-- Preload logo variants for faster first paint -->
   <link rel="preload" href="/assets/brands/logo-tealroyal.svg" as="image" type="image/svg+xml" fetchpriority="high">
   <link rel="preload" href="/assets/brands/logo-white.svg" as="image" type="image/svg+xml">
-  
+
   <script>
-  (function(){
-    // Respect reduced motion; run on EVERY page load
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) return;
-    document.documentElement.classList.add('intro-anim'); // set before paint
-  })();
+    (function () {
+      // Respect reduced motion; run on EVERY page load
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      document.documentElement.classList.add('intro-anim'); // set before paint
+    })();
   </script>
 
   <style>
-  /* ===== Design Tokens (Royal Teal) ===== */
-  :root{
-    --brand-blue-900:#0B3F47;  /* dark bar bg */
-    --brand-blue-700:#0F5B66;  /* primary accents */
-    --accent:var(--brand-blue-700);
+    /* ===== Design Tokens (Royal Teal) ===== */
+    :root {
+      --brand-blue-900:#0B3F47;  /* dark bar bg */
+      --brand-blue-700:#0F5B66;  /* primary accents */
+      --accent:var(--brand-blue-700);
 
-    --ink:#111827;
-    --muted:#5b6470;
+      --ink:#111827;
+      --muted:#5b6470;
 
-    --bar-bg:#ffffff;
-    --bar-fg:var(--brand-blue-900);
-    --bar-border:#e5e7eb;
+      --bar-bg:#ffffff;
+      --bar-fg:var(--brand-blue-900);
+      --bar-border:#e5e7eb;
 
-    --page-bg:#F2F7F8;
-    --ring:rgba(15,91,102,.35);
+      --page-bg:#F2F7F8;
+      --ring:rgba(15,91,102,.35);
 
-    --surface:#ffffff;
-    --radius:14px;
-    --w:1360px;
-    --wrap-pad:clamp(12px,2vw,20px);
-    --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
-    --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
-    --avatar-size:96px;
+      --surface:#ffffff;
+      --radius:14px;
+      --w:1360px;
+      --wrap-pad:clamp(12px,2vw,20px);
+      --shadow:0 10px 20px rgba(17,24,39,.08), 0 2px 6px rgba(17,24,39,.04);
+      --shadow-hover:0 16px 28px rgba(17,24,39,.12), 0 4px 12px rgba(17,24,39,.06);
+      --avatar-size:96px;
 
-    --drawer-bg:#ffffff;
-    --drawer-fg:#111827;
+      --drawer-bg:#ffffff;
+      --drawer-fg:#111827;
 
-    /* Bands + divider tokens (canonical) */
-    --band-space:28px;
-    --divider-gap: 2px;
-    --divider-edge-alpha: .12;
-    --divider-center-alpha: .68;
+      /* Bands + divider tokens (canonical) */
+      --band-space:28px;
+      --divider-gap:2px;
+      --divider-edge-alpha:.12;
+      --divider-center-alpha:.68;
 
-    --anchor-offset: 76px;
+      --anchor-offset:76px;
 
-    --cta-desktop-gap: 28px;   
-    --cta-mobile-gap: 14px;
-    --dock-h: 90px;
-  }
-  @media (min-width:1600px){ :root{ --w:1440px } }
-
-  /* Bars DARK variant */
-  body.bars-dark{
-    --bar-bg:var(--brand-blue-900);
-    --bar-fg:#ffffff;
-    --bar-border:rgba(255,255,255,.16);
-    --drawer-bg:#0e2a39;
-    --drawer-fg:#eaf2f6;
-  }
-
-  /* ===== Base / Layout ===== */
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  html{background:var(--page-bg)}
-  body{
-    margin:0;
-    font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-    color:var(--ink);
-    background:var(--page-bg);
-    min-height:100svh;display:flex;flex-direction:column;
-    scroll-behavior:smooth;
-    padding-top: env(safe-area-inset-top);
-  }
-  :focus-visible{ outline:none; box-shadow:0 0 0 6px var(--ring) }
-  :where([id]){ scroll-margin-top: calc(var(--anchor-offset) + 10px) }
-
-  a{color:var(--accent);text-decoration:none}
-  a:hover{text-decoration:underline}
-  .wrap{max-width:var(--w);margin:0 auto;padding:0 var(--wrap-pad)}
- 
-    /* Keep footer & dock icons rock-solid (macOS fix) */
-  :where(footer .icon-btn, .mobile-dock .icon-btn){
-    text-decoration: none !important;   /* ignore global underline */
-    will-change: transform;             /* pre-promote each icon */
-    transform: translateZ(0);           /* make its own layer */
-    backface-visibility: hidden;
-    contain: paint;                      /* isolate repaints */
-  }
-
-  :where(footer .icon-btn:hover, .mobile-dock .icon-btn:hover){
-    text-decoration: none !important;
-    transform: translate3d(0, -2px, 0);  /* ONLY the hovered one moves */
-  }
-
-/* Optional: scope underlines to text links, not icon buttons */
-footer a:hover,
-.mobile-dock a:hover { text-decoration: none; }
-
-
-  .sr-only{
-    position:absolute !important;
-    width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
-    clip:rect(0,0,0,0);white-space:nowrap;border:0;
-  }
-
-  section.band{ position:relative; padding:var(--band-space) 0 }
-  h2{margin:0 0 14px;font-size:clamp(20px,2.6vw,28px)}
-
-  /* ===== Sticky Header ===== */
-  header.site-header{
-    position:sticky; top:0; z-index:1000;
-    background:var(--bar-bg); color:var(--bar-fg);
-    border-bottom:1px solid var(--bar-border);
-    backdrop-filter:saturate(120%) blur(2px);
-    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
-  }
-  .site-header .wrap{ max-width:none; padding-left:0; padding-right:0 }
-
-  .topbar{
-    display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:10px 0;
-  }
-
-  @media (min-width:961px){
-    :root{ --nav-gutter: var(--wrap-pad); }
-    .topbar > .brand{ margin-left: calc(var(--nav-gutter) + env(safe-area-inset-left)); }
-    .topbar > nav.primary-nav{ margin-right: calc(var(--nav-gutter) + env(safe-area-inset-right)); }
-  }
-  @media (max-width:960px){
-    .topbar{ padding-left: calc(16px + env(safe-area-inset-left)); padding-right: calc(16px + env(safe-area-inset-right)); }
-  }
-
-  .brand{display:flex;align-items:center;gap:12px}
-
-  .brand-link--wide{
-    display:flex;align-items:center;gap:12px;
-    color:var(--bar-fg);text-decoration:none;border-radius:0;padding:0;outline:none;
-  }
-  .brand-link--wide:hover{ text-decoration:none }
-
-  .brand-text{display:flex;flex-direction:column;line-height:1.1}
-  .brand-name{
-    font-weight:900;letter-spacing:.2px;font-size:clamp(18px,1.8vw,24px);color:var(--bar-fg);
-    transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
-  }
-  .brand-creds{
-    color:color-mix(in srgb, var(--bar-fg) 70%, #cfd8e3);
-    font-weight:400;letter-spacing:.2px;font-size:clamp(12px,1.2vw,14px);
-    transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
-  }
-  @supports not (color-mix: in srgb, white 50%, black 50%){ .brand-creds{ color:#c3c9d2 } }
-  @media (prefers-reduced-motion:reduce){ .brand-name,.brand-creds{ transition:none } }
-
-  /* ===== Avatar with logo flip (no portrait) ===== */
-  .avatar{width:var(--avatar-size);height:var(--avatar-size);perspective:1100px}
-  .avatar-badge{display:block;width:100%;height:100%;border-radius:50%;outline:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
-  .avatar-inner{
-    position:relative;width:100%;height:100%;
-    transform-style:preserve-3d;will-change:transform;
-    --ry: 0turn;       /* 0turn = front logo; .5turn = mirrored/back logo */
-    --spin: 0turn;     /* 1turn added on click */
-    transform: rotateY(calc(var(--ry) + var(--spin)));
-    transition: transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
-  }
-  .avatar-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;backface-visibility:hidden}
-  .avatar-face.front{border:none;box-shadow:none}
-  body.bars-dark .avatar-face.front{border:none;box-shadow:none}
-  .avatar-face.back{transform:rotateY(180deg);border:none;box-shadow:none;background:transparent}
-  .avatar-face img{width:100%;height:100%;object-fit:contain;padding:8px;background:transparent}
-  .avatar-face.back img{ transform: scaleX(-1); }
-
-  @media (hover:hover) and (pointer:fine){
-    .brand-link--wide:hover .avatar-inner{
-      --ry: .5turn;
-      transform: rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
+      --cta-desktop-gap:28px;
+      --cta-mobile-gap:14px;
+      --dock-h:90px;
     }
-  }
-  @media (prefers-reduced-motion:reduce){ .avatar-inner{transition:none } }
-  @media (max-width:960px){ :root{ --avatar-size:72px } }
 
-  /* ===== Desktop nav ===== */
-  nav.primary-nav{ display:flex }
-  nav.primary-nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0}
-  nav.primary-nav a{color:var(--bar-fg);font-weight:700;position:relative}
-  nav.primary-nav a::after{
-    content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:color-mix(in srgb, var(--bar-fg) 25%, transparent);transform:scaleX(0);
-    transform-origin:left;transition:transform .22s ease;
-  }
-  nav.primary-nav a:hover{color:var(--bar-fg);text-decoration:none}
-  nav.primary-nav a:hover::after{transform:scaleX(1)}
-  nav.primary-nav a[aria-current="page"]{ font-weight:900; }
-  nav.primary-nav a[aria-current="page"]::after{ transform:scaleX(1); }
+    @media (min-width:1600px) {
+      :root { --w:1440px }
+    }
 
-  /* ===== Mobile hamburger ===== */
-  .menu-toggle{
-    display:none;
-    background:transparent;border:none;color:var(--bar-fg);
-    width:44px;height:44px;border-radius:10px;cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .menu-toggle .bars,
-  .menu-toggle .bars::before,
-  .menu-toggle .bars::after{
-    display:block;width:22px;height:2px;background:currentColor;border-radius:2px;position:relative;margin:0 auto;
-    transition:transform .2s ease, opacity .2s ease;
-  }
-  .menu-toggle .bars::before{ content:""; position:absolute; left:0; transform:translateY(-7px) }
-  .menu-toggle .bars::after{ content:""; position:absolute; left:0; transform:translateY(7px) }
+    /* Bars DARK variant */
+    body.bars-dark {
+      --bar-bg:var(--brand-blue-900);
+      --bar-fg:#ffffff;
+      --bar-border:rgba(255,255,255,.16);
+      --drawer-bg:#0e2a39;
+      --drawer-fg:#eaf2f6;
+    }
 
-  /* ===== Mobile drawer ===== */
-  .drawer-backdrop{
-    position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:saturate(120%) blur(2px);
-    opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:1090;
-  }
-  .mobile-drawer{
-    position:fixed; inset:0 0 0 auto; width:min(420px, 92vw);
-    background:var(--drawer-bg); color:var(--drawer-fg);
-    transform:translateX(100%); transition:transform .22s cubic-bezier(.2,.8,.2,1);
-    box-shadow:-20px 0 40px rgba(0,0,0,.2); z-index:1100;
-    display:flex; flex-direction:column; gap:10px; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
-  }
-  .mobile-drawer header{ display:flex; align-items:center; justify-content:space-between; }
-  .mobile-drawer h3{ margin:0; font-size:1.05rem; font-weight:900 }
-  .mobile-drawer nav ul{ list-style:none; margin:10px 0; padding:0; display:grid; gap:8px }
-  .mobile-drawer nav a{
-    display:block; padding:12px 10px; border-radius:12px; color:inherit; background:rgba(255,255,255,.06);
-    font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,.06)
-  }
-  .mobile-drawer nav a:hover{ background:rgba(255,255,255,.12) }
-  .mobile-drawer nav a[aria-current="page"]{ background: rgba(255,255,255,.14); border-color: rgba(0,0,0,.08); }
-  .mobile-drawer .quick{ display:grid; gap:10px; margin-top:4px }
-  .mobile-drawer .quick .btn{ width:100%; justify-content:center }
+    /* ===== Base / Layout ===== */
+    * { box-sizing:border-box }
+    html, body { height:100% }
+    html { background:var(--page-bg) }
+    body {
+      margin:0;
+      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      color:var(--ink);
+      background:var(--page-bg);
+      min-height:100svh;
+      display:flex;
+      flex-direction:column;
+      scroll-behavior:smooth;
+      padding-top:env(safe-area-inset-top);
+    }
+
+    :focus-visible {
+      outline:none;
+      box-shadow:0 0 0 6px var(--ring)
+    }
+
+    :where([id]) { scroll-margin-top:calc(var(--anchor-offset) + 10px) }
+
+    a {
+      color:var(--accent);
+      text-decoration:none
+    }
+
+    a:hover { text-decoration:underline }
+
+    .wrap {
+      max-width:var(--w);
+      margin:0 auto;
+      padding:0 var(--wrap-pad)
+    }
+
+    /* Keep footer & dock icons rock-solid (macOS fix) */
+    :where(footer .icon-btn, .mobile-dock .icon-btn) {
+      text-decoration:none !important;   /* ignore global underline */
+      will-change:transform;             /* pre-promote each icon */
+      transform:translateZ(0);           /* make its own layer */
+      backface-visibility:hidden;
+      contain:paint;                     /* isolate repaints */
+    }
+
+    :where(footer .icon-btn:hover, .mobile-dock .icon-btn:hover) {
+      text-decoration:none !important;
+      transform:translate3d(0, -2px, 0);  /* ONLY the hovered one moves */
+    }
+
+    /* Optional: scope underlines to text links, not icon buttons */
+    footer a:hover,
+    .mobile-dock a:hover { text-decoration:none; }
+
+    .sr-only {
+      position:absolute !important;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    section.band {
+      position:relative;
+      padding:var(--band-space) 0
+    }
+
+    h2 {
+      margin:0 0 14px;
+      font-size:clamp(20px,2.6vw,28px)
+    }
+
+    /* ===== Sticky Header ===== */
+    header.site-header {
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:var(--bar-bg);
+      color:var(--bar-fg);
+      border-bottom:1px solid var(--bar-border);
+      backdrop-filter:saturate(120%) blur(2px);
+      transition:background-color .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    .site-header .wrap {
+      max-width:none;
+      padding-left:0;
+      padding-right:0
+    }
+
+    .topbar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 0;
+    }
+
+    @media (min-width:961px) {
+      :root { --nav-gutter:var(--wrap-pad); }
+
+      .topbar > .brand {
+        margin-left:calc(var(--nav-gutter) + env(safe-area-inset-left));
+      }
+
+      .topbar > nav.primary-nav {
+        margin-right:calc(var(--nav-gutter) + env(safe-area-inset-right));
+      }
+    }
+
+    @media (max-width:960px) {
+      .topbar {
+        padding-left:calc(16px + env(safe-area-inset-left));
+        padding-right:calc(16px + env(safe-area-inset-right));
+      }
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:12px
+    }
+
+    .brand-link--wide {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:var(--bar-fg);
+      text-decoration:none;
+      border-radius:0;
+      padding:0;
+      outline:none;
+    }
+
+    .brand-link--wide:hover { text-decoration:none }
+
+    .brand-text {
+      display:flex;
+      flex-direction:column;
+      line-height:1.1
+    }
+
+    .brand-name {
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:clamp(18px,1.8vw,24px);
+      color:var(--bar-fg);
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+    }
+
+    .brand-creds {
+      color:color-mix(in srgb, var(--bar-fg) 70%, #cfd8e3);
+      font-weight:400;
+      letter-spacing:.2px;
+      font-size:clamp(12px,1.2vw,14px);
+      transition:transform .25s cubic-bezier(.2,.8,.2,1), text-shadow .25s ease;
+    }
+
+    @supports not (color-mix:in srgb, white 50%, black 50%) {
+      .brand-creds { color:#c3c9d2 }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .brand-name,
+      .brand-creds { transition:none }
+    }
+
+    /* ===== Avatar with logo flip (no portrait) ===== */
+    .avatar {
+      width:var(--avatar-size);
+      height:var(--avatar-size);
+      perspective:1100px
+    }
+
+    .avatar-badge {
+      display:block;
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      outline:none;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+      cursor:pointer;
+    }
+
+    .avatar-inner {
+      position:relative;
+      width:100%;
+      height:100%;
+      transform-style:preserve-3d;
+      will-change:transform;
+      --ry:0turn;       /* 0turn = front logo; .5turn = mirrored/back logo */
+      --spin:0turn;     /* 1turn added on click */
+      transform:rotateY(calc(var(--ry) + var(--spin)));
+      transition:transform .72s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+    }
+
+    .avatar-face {
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      overflow:hidden;
+      backface-visibility:hidden
+    }
+
+    .avatar-face.front {
+      border:none;
+      box-shadow:none
+    }
+
+    body.bars-dark .avatar-face.front {
+      border:none;
+      box-shadow:none
+    }
+
+    .avatar-face.back {
+      transform:rotateY(180deg);
+      border:none;
+      box-shadow:none;
+      background:transparent
+    }
+
+    .avatar-face img {
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      padding:8px;
+      background:transparent
+    }
+
+    .avatar-face.back img { transform:scaleX(-1); }
+
+    @media (hover:hover) and (pointer:fine) {
+      .brand-link--wide:hover .avatar-inner {
+        --ry:.5turn;
+        transform:rotateY(calc(var(--ry) + var(--spin))) rotateX(8deg) translateY(-2px);
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .avatar-inner { transition:none }
+    }
+
+    @media (max-width:960px) {
+      :root { --avatar-size:72px }
+    }
+
+    /* ===== Desktop nav ===== */
+    nav.primary-nav { display:flex }
+
+    nav.primary-nav ul {
+      list-style:none;
+      display:flex;
+      gap:18px;
+      margin:0;
+      padding:0
+    }
+
+    nav.primary-nav a {
+      color:var(--bar-fg);
+      font-weight:700;
+      position:relative
+    }
+
+    nav.primary-nav a::after {
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:-6px;
+      height:2px;
+      background:color-mix(in srgb, var(--bar-fg) 25%, transparent);
+      transform:scaleX(0);
+      transform-origin:left;
+      transition:transform .22s ease;
+    }
+
+    nav.primary-nav a:hover {
+      color:var(--bar-fg);
+      text-decoration:none
+    }
+
+    nav.primary-nav a:hover::after { transform:scaleX(1) }
+
+    nav.primary-nav a[aria-current="page"] { font-weight:900; }
+
+    nav.primary-nav a[aria-current="page"]::after { transform:scaleX(1); }
+
+    /* ===== Mobile hamburger ===== */
+    .menu-toggle {
+      display:none;
+      background:transparent;
+      border:none;
+      color:var(--bar-fg);
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .menu-toggle .bars,
+    .menu-toggle .bars::before,
+    .menu-toggle .bars::after {
+      display:block;
+      width:22px;
+      height:2px;
+      background:currentColor;
+      border-radius:2px;
+      position:relative;
+      margin:0 auto;
+      transition:transform .2s ease, opacity .2s ease;
+    }
+
+    .menu-toggle .bars::before {
+      content:"";
+      position:absolute;
+      left:0;
+      transform:translateY(-7px)
+    }
+
+    .menu-toggle .bars::after {
+      content:"";
+      position:absolute;
+      left:0;
+      transform:translateY(7px)
+    }
+
+    /* ===== Mobile drawer ===== */
+    .drawer-backdrop {
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      backdrop-filter:saturate(120%) blur(2px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .18s ease;
+      z-index:1090;
+    }
+
+    .mobile-drawer {
+      position:fixed;
+      inset:0 0 0 auto;
+      width:min(420px, 92vw);
+      background:var(--drawer-bg);
+      color:var(--drawer-fg);
+      transform:translateX(100%);
+      transition:transform .22s cubic-bezier(.2,.8,.2,1);
+      box-shadow:-20px 0 40px rgba(0,0,0,.2);
+      z-index:1100;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+    }
+
+    .mobile-drawer header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .mobile-drawer h3 {
+      margin:0;
+      font-size:1.05rem;
+      font-weight:900
+    }
+
+    .mobile-drawer nav ul {
+      list-style:none;
+      margin:10px 0;
+      padding:0;
+      display:grid;
+      gap:8px
+    }
+
+    .mobile-drawer nav a {
+      display:block;
+      padding:12px 10px;
+      border-radius:12px;
+      color:inherit;
+      background:rgba(255,255,255,.06);
+      font-weight:800;
+      text-decoration:none;
+      border:1px solid rgba(0,0,0,.06)
+    }
+
+    .mobile-drawer nav a:hover { background:rgba(255,255,255,.12) }
+
+    .mobile-drawer nav a[aria-current="page"] {
+      background:rgba(255,255,255,.14);
+      border-color:rgba(0,0,0,.08);
+    }
+
+    .mobile-drawer .quick {
+      display:grid;
+      gap:10px;
+      margin-top:4px
+    }
+
+    .mobile-drawer .quick .btn {
+      width:100%;
+      justify-content:center
+    }
 
     /* Active (current page) state in the mobile drawer */
-  .mobile-drawer nav a[aria-current="page"]{
-    background: rgba(255,255,255,.18);
-    border-color: rgba(0,0,0,.18);
-  }
+    .mobile-drawer nav a[aria-current="page"] {
+      background:rgba(255,255,255,.18);
+      border-color:rgba(0,0,0,.18);
+    }
 
-  body.drawer-open .drawer-backdrop{ opacity:1; pointer-events:auto }
-  body.drawer-open .mobile-drawer{ transform:none }
-  body.drawer-open{ overflow:hidden }
+    body.drawer-open .drawer-backdrop {
+      opacity:1;
+      pointer-events:auto
+    }
 
-  /* ===== HERO ===== */
-  .hero-section{ background:transparent; color:var(--ink); border-bottom:0 }
-  /* Match Portfolio band + inner padding */
-  .hero-section.band{ padding-top:22px; padding-bottom:var(--band-space) }
-  .hero{padding:6px 0 0}
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    grid-template-areas:
-      "title"
-      "tagline"
-      "intro"
-      "chips";
-    /* gap: clamp(18px, 2.2vw, 24px); */
-    gap:clamp(20px,2.2vw,24px) 26px;
-    align-items:start;
-  }
-  .hero-grid > *{ min-width:0 }
-  .h1{
-    margin:0;font-weight:900;letter-spacing:.2px;font-size:clamp(28px,6vw,56px);
-    line-height:1.08;color:var(--ink);grid-area:title;word-wrap:break-word;text-indent:0;
-  }
-  .tagline{
-    grid-area:tagline;margin:0;color:var(--ink);font-weight:800;letter-spacing:.15px;
-    font-size:clamp(14px,1.6vw,18px); line-height:1.35; white-space:normal;
-  }
-  @supports (text-wrap: balance){ .tagline{ text-wrap:balance } }
-  /* FULL-WIDTH intro (requested) */
-  .intro{
-    grid-area:intro; margin:0;
-    max-width:none; width:100%;
-    color:var(--ink);
-    font-size:clamp(15px,1.7vw,18px); line-height:1.55; font-weight:500;
-  }
-  @supports (text-wrap: balance){ .intro{ text-wrap:balance } }
+    body.drawer-open .mobile-drawer { transform:none }
 
-  /* ===== Chips (gentle + explicit hand cursor) ===== */
-  .chips{
-    grid-area:chips; display:flex; align-items:center; gap:10px 10px;
-    margin:0; padding:0 0 2px; white-space:normal; overflow:visible; flex-wrap:wrap;
-  }
-  .chip{
-    display:inline-block; flex:0 0 auto;
-    background:rgba(17,24,39,.08); color:var(--ink);
-    padding:.55rem .85rem; border-radius:999px;
-    font-weight:800; font-size:clamp(12px,1.3vw,14px);
-    border:1px solid rgba(17,24,39,.08);
-    transform:translateZ(0);
-    transition:
-      transform .22s cubic-bezier(.2,.8,.2,1),
-      background-color .22s ease,
-      border-color .22s ease,
-      box-shadow .22s ease,
-      filter .22s ease;
-    cursor:pointer; /* pointing-hand cursor */
-  }
-  @media (hover:hover){
-    .chip:hover{
+    body.drawer-open { overflow:hidden }
+
+    /* ===== HERO ===== */
+    .hero-section {
+      background:transparent;
+      color:var(--ink);
+      border-bottom:0
+    }
+
+    /* Match Portfolio band + inner padding */
+    .hero-section.band {
+      padding-top:22px;
+      padding-bottom:var(--band-space)
+    }
+
+    .hero { padding:6px 0 0 }
+
+    .hero-grid {
+      display:grid;
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "title"
+        "tagline"
+        "intro"
+        "chips";
+      /* gap: clamp(18px, 2.2vw, 24px); */
+      gap:clamp(20px,2.2vw,24px) 26px;
+      align-items:start;
+    }
+
+    .hero-grid > * { min-width:0 }
+
+    .h1 {
+      margin:0;
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:clamp(28px,6vw,56px);
+      line-height:1.08;
+      color:var(--ink);
+      grid-area:title;
+      word-wrap:break-word;
+      text-indent:0;
+    }
+
+    .tagline {
+      grid-area:tagline;
+      margin:0;
+      color:var(--ink);
+      font-weight:800;
+      letter-spacing:.15px;
+      font-size:clamp(14px,1.6vw,18px);
+      line-height:1.35;
+      white-space:normal;
+    }
+
+    @supports (text-wrap:balance) {
+      .tagline { text-wrap:balance }
+    }
+
+    /* FULL-WIDTH intro (requested) */
+    .intro {
+      grid-area:intro;
+      margin:0;
+      max-width:none;
+      width:100%;
+      color:var(--ink);
+      font-size:clamp(15px,1.7vw,18px);
+      line-height:1.55;
+      font-weight:500;
+    }
+
+    @supports (text-wrap:balance) {
+      .intro { text-wrap:balance }
+    }
+
+    /* ===== Chips (gentle + explicit hand cursor) ===== */
+    .chips {
+      grid-area:chips;
+      display:flex;
+      align-items:center;
+      gap:10px 10px;
+      margin:0;
+      padding:0 0 2px;
+      white-space:normal;
+      overflow:visible;
+      flex-wrap:wrap;
+    }
+
+    .chip {
+      display:inline-block;
+      flex:0 0 auto;
+      background:rgba(17,24,39,.08);
+      color:var(--ink);
+      padding:.55rem .85rem;
+      border-radius:999px;
+      font-weight:800;
+      font-size:clamp(12px,1.3vw,14px);
+      border:1px solid rgba(17,24,39,.08);
+      transform:translateZ(0);
+      transition:
+        transform .22s cubic-bezier(.2,.8,.2,1),
+        background-color .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        filter .22s ease;
+      cursor:pointer; /* pointing-hand cursor */
+    }
+
+    @media (hover:hover) {
+      .chip:hover {
+        transform:translateY(-2px);
+        box-shadow:var(--shadow-hover);
+        background:#fff;
+        border-color:rgba(15,91,102,.22);
+        cursor:pointer; /* reinforce on hover */
+      }
+    }
+
+    .chip:active {
+      transform:translateY(-1px);
+      cursor:pointer
+    }
+
+    .chip:focus-visible {
+      outline:none;
       transform:translateY(-2px);
       box-shadow:var(--shadow-hover);
       background:#fff;
-      border-color:rgba(15,91,102,.22);
-      cursor:pointer; /* reinforce on hover */
+      border-color:rgba(15,91,102,.35);
+      cursor:pointer;
     }
-  }
-  .chip:active{ transform:translateY(-1px); cursor:pointer }
-  .chip:focus-visible{
-    outline:none; transform:translateY(-2px);
-    box-shadow:var(--shadow-hover);
-    background:#fff; border-color:rgba(15,91,102,.35);
-    cursor:pointer;
-  }
-  .chip[aria-pressed="true"]{
-    background:#fff; border-color:rgba(15,91,102,.28); box-shadow:var(--shadow);
-    filter:saturate(105%); cursor:pointer;
-  }
 
-  /* Chips proof dialog */
-  dialog#chipsDialog{ width:min(760px,94vw); border:0; padding:0; border-radius:20px; background:#fff; box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18); animation:modal-in .24s cubic-bezier(.2,.8,.2,1); }
-  dialog#chipsDialog::backdrop{ background:rgba(17,24,39,.55); backdrop-filter:saturate(120%) blur(3px); animation:backdrop-in .24s ease; }
-  #chipsDialog .modal-header{ position: relative; border-bottom: 0; padding:18px 18px 10px; }
-  #chipsDialog .modal-title:focus, #chipsDialog .modal-title:focus-visible{ outline:none !important; box-shadow:none !important; }
-  #chipsDialog .modal-header::after{ content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 1px; border-radius: 999px; background: linear-gradient( 90deg, rgba(15,91,102,var(--divider-edge-alpha)) 0%, rgba(15,91,102,var(--divider-center-alpha)) 50%, rgba(15,91,102,var(--divider-edge-alpha)) 100% ); }
-  #chipsDialog .modal-title{ margin:0; font-weight:900; font-size:1.05rem; color:#0f172a }
-  #chipsDialog .modal-close{ width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
-  #chipsDialog .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
-  #chipsDialog .modal-body{ padding:14px 18px 18px }
-  .chips-content{ opacity:1; transition:opacity .22s ease }
-  .chips-content.is-fading{ opacity:0 }
-  .proof-list{ margin:8px 0 0; padding-left:18px }
-  .proof-list li{ margin:6px 0 }
-  @media (prefers-reduced-motion:reduce){ .chip, .chips-content{ transition:none } }
-
-  /* ===== Sections ===== */
-  main{padding:10px 0 var(--cta-desktop-gap);flex:1 0 auto}
-  section{padding:24px 0}
-
-  /* ===== Featured (larger cards) ===== */
-  .tiles{ display:grid;grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
-  .tile{
-    position:relative;background:var(--surface);border-radius:var(--radius);
-    padding:24px 24px;box-shadow:var(--shadow);
-    transition:transform .18s ease, box-shadow .18s ease; min-height:180px;
-  }
-  .tile:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
-  .tile h3{margin:0 0 10px;font-size:1.15rem}
-  .tile p{margin:0;color:#1f2937;line-height:1.55}
-  .tile a.card-link{position:absolute;inset:0;border-radius:var(--radius);text-indent:-9999px;overflow:hidden}
-
-  .band--cta{ padding-top: calc(var(--band-space) + 14px); padding-bottom: var(--band-space);}
-  .cta-row{ display:flex; flex-wrap:wrap; gap:10px; }
-  @media (max-width:960px){
-    .band--cta{ padding-bottom: 0; }
-  }
-
-  /* ===== Footer ===== */
-  footer{ background: var(--brand-blue-900) !important; color: #ffffff !important; padding: 18px 0; text-align: center; border-top: 1px solid rgba(255,255,255,.18); }
-  footer .wrap{opacity:.95;display:flex;flex-direction:column;gap:14px;align-items:center}
-  .social{display:flex;align-items:center;gap:10px}
-  footer .icon-btn{ display:inline-flex;align-items:center;justify-content:center; width:38px;height:38px;border-radius:999px; background: rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.22); color:#fff; transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
-  footer .icon-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18); }
-  .icon{width:18px;height:18px;fill:currentColor}
-
-  .btn{ display:inline-flex;align-items:center;gap:8px; padding:.7rem 1rem;border-radius:999px;font-weight:800; border:1px solid rgba(0,0,0,.04); background:#fff;color:var(--brand-blue-900); box-shadow:var(--shadow); transition:transform .16s ease, box-shadow .16s ease, filter .16s ease; text-decoration:none; cursor:pointer; }
-  .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);text-decoration:none}
-  .btn:active{transform:translateY(-1px)}
-  .btn-outline{background:transparent;color:var(--ink);border:1px solid #e5e7eb}
-  .btn-primary{ background:var(--brand-blue-700);color:#fff;border-color:transparent; box-shadow:var(--shadow); }
-  .btn-primary:hover{ box-shadow:var(--shadow-hover) }
-  .btn-group{display:inline-flex;gap:8px;flex-wrap:wrap;align-items:center}
-
-  .contact-actions .btn, .form-actions .btn{ box-shadow:var(--shadow) }
-  .contact-actions .btn:hover, .form-actions .btn:hover{ box-shadow:var(--shadow-hover) }
-
-  /* ===== Mobile dock ===== */
-  .mobile-dock{ position:fixed; left:0; right:0; bottom:0; z-index:980; background: var(--brand-blue-900); color: #ffffff; border-top:1px solid rgba(255,255,255,.18); padding:6px 10px calc(6px + env(safe-area-inset-bottom)); display:none; }
-  .mobile-dock .dock{ max-width:var(--w); margin:0 auto; display:flex; justify-content:center; gap:14px; }
-  .mobile-dock .icon-btn{ display:inline-flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; touch-action:manipulation; width:46px; height:46px; border-radius:999px; color:#fff; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.22); transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
-  .mobile-dock .icon{ display:block; width:18px; height:18px; flex:0 0 auto; }
-  .mobile-dock .icon *, .mobile-dock .icon path, .mobile-dock .icon rect, .mobile-dock .icon circle, .mobile-dock .icon polygon, .mobile-dock .icon line{ fill: currentColor; stroke: none; }
-  .mobile-dock .icon-btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.25); background: rgba(255,255,255,.18); }
-
-  /* ===== CONTACT MODAL ===== */
-  dialog#contactDialog{ width:min(840px, 94vw); border:0; padding:0; border-radius:20px; box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18); background:#fff; animation:modal-in .22s cubic-bezier(.2,.8,.2,1); }
-  dialog#contactDialog::backdrop{ background:rgba(17,24,39,.55); backdrop-filter:saturate(120%) blur(3px); animation:backdrop-in .22s ease; }
-  @keyframes modal-in{ from{ transform:translateY(14px) scale(.985); opacity:.0 } to{ transform:none; opacity:1 } }
-  @keyframes backdrop-in{ from{ opacity:.0 } to{ opacity:1 } }
-  .modal-header{ display:flex; align-items:center; justify-content:space-between; padding:18px 18px 6px; border-bottom:1px solid #e5e7eb; }
-  .modal-title{ margin:0; font-weight:900; font-size:1.15rem; letter-spacing:.2px; color:#0f172a; }
-  .modal-close{ width:38px; height:38px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:transform .16s ease, box-shadow .16s ease, background .16s ease; }
-  .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
-  .modal-body{ padding:14px 18px 18px }
-  .contact-actions{ display:flex; gap:12px; flex-wrap:wrap; }
-  .contact-actions .btn{ border-radius:999px }
-  .contact-actions .btn-primary{ filter:saturate(115%) }
-  .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
-  .form-grid{ display:grid; grid-template-columns:120px 1fr; gap:10px 12px; align-items:center; }
-  .form-grid label{ font-weight:700; color:#0f172a }
-  .form-grid input, .form-grid textarea{ width:100%; font:inherit; padding:12px 14px; border-radius:14px; border:1px solid #e5e7eb; background:#f8fafc; transition:border-color .16s ease, box-shadow .16s ease, background .16s ease; box-shadow:inset 0 0 0 1px rgba(255,255,255,.6); }
-  .form-grid textarea{ min-height:160px; resize:vertical }
-  .form-grid input:focus, .form-grid textarea:focus{ outline:none; border-color:#c5d6e2; background:#fff; box-shadow:0 0 0 6px var(--ring); }
-  .form-actions{ grid-column:2 / -1; display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:6px; }
-  .form-hint{ grid-column:2 / -1; margin-top:4px; font-size:.9rem; color: var(--muted); }
-  @media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } .form-actions, .form-hint{ grid-column:1 / -1 } }
-
-  .section-divider{ position:relative; height:4px; margin: var(--divider-gap) 0; border:0; }
-  .section-divider::after{ content:""; position:absolute; inset:0; background: var(--page-bg); z-index:0; }
-  .section-divider::before{ content:""; position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); height:1px; border-radius:999px; background:linear-gradient( 90deg, rgba(15,91,102,var(--divider-edge-alpha)) 0%, rgba(15,91,102,var(--divider-center-alpha)) 50%, rgba(15,91,102,var(--divider-edge-alpha)) 100% ); z-index:1; }
-
-  @media (max-width:1120px){ .tiles{ grid-template-columns:repeat(2,1fr) } }
-  @media (max-width:960px){
-    nav.primary-nav{ display:none }
-    .menu-toggle{ display:inline-flex; align-items:center; justify-content:center }
-    .tiles{ grid-template-columns:1fr }
-    main{ padding-bottom: calc(var(--dock-h) + var(--cta-mobile-gap)); }
-    .mobile-dock{ display:block }
-    footer .social{ display:none !important; }
-  }
-
-  .brand-link--wide:hover .brand-name, .brand-link--wide:focus-visible .brand-name{ color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%); }
-  .brand-link--wide:hover .brand-creds, .brand-link--wide:focus-visible .brand-creds{ color: color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%); }
-  nav.primary-nav a:hover, nav.primary-nav a:focus-visible{ color: color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%); }
-  @supports not (color-mix: in srgb, white 50%, black 50%){ .brand-link--wide:hover .brand-name, .brand-link--wide:hover .brand-creds, nav.primary-nav a:hover{ opacity:.92 } }
-  .skip-link{ position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden; }
-  .skip-link:focus{ left:16px;top:12px;width:auto;height:auto;padding:.5rem .75rem;border-radius:10px; background:#fff;box-shadow:0 0 0 6px var(--ring);z-index:2000 }
-
-  .hero-section .wrap { padding-left: calc(var(--wrap-pad) + env(safe-area-inset-left)); padding-right: calc(var(--wrap-pad) + env(safe-area-inset-right)); }
-  
-  /* First-visit page fade: subtle, fast, professional */
-  @media (prefers-reduced-motion: reduce) {
-    html.intro-anim *, html.intro-ready * { transition: none !important; animation: none !important; }
-  }
-
-  /* Start slightly transparent and settled; applies only when the head script added .intro-anim */
-  html.intro-anim body {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-
-  /* Reveal once the tail script flips to .intro-ready */
-  html.intro-ready body {
-    opacity: 1;
-    transform: none;
-    transition:
-      opacity .28s ease,
-      transform .28s cubic-bezier(.2,.8,.2,1);
-  }  
-  /* Staggered first-visit reveal + subtle header avatar settle */
-  @media (prefers-reduced-motion: no-preference) {
-    /* Hidden state while html has .intro-anim */
-    .intro-anim [data-reveal] {
-      opacity: 0;
-      transform: translateY(6px);
+    .chip[aria-pressed="true"] {
+      background:#fff;
+      border-color:rgba(15,91,102,.28);
+      box-shadow:var(--shadow);
+      filter:saturate(105%);
+      cursor:pointer;
     }
-    /* Shown state once html gets .intro-ready */
-    .intro-ready [data-reveal] {
-      opacity: 1;
-      transform: none;
+
+    /* Chips proof dialog */
+    dialog#chipsDialog {
+      width:min(760px,94vw);
+      border:0;
+      padding:0;
+      border-radius:20px;
+      background:#fff;
+      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+      animation:modal-in .24s cubic-bezier(.2,.8,.2,1);
+    }
+
+    dialog#chipsDialog::backdrop {
+      background:rgba(17,24,39,.55);
+      backdrop-filter:saturate(120%) blur(3px);
+      animation:backdrop-in .24s ease;
+    }
+
+    #chipsDialog .modal-header {
+      position:relative;
+      border-bottom:0;
+      padding:18px 18px 10px;
+    }
+
+    #chipsDialog .modal-title:focus,
+    #chipsDialog .modal-title:focus-visible {
+      outline:none !important;
+      box-shadow:none !important;
+    }
+
+    #chipsDialog .modal-header::after {
+      content:"";
+      position:absolute;
+      left:18px;
+      right:18px;
+      bottom:0;
+      height:1px;
+      border-radius:999px;
+      background:linear-gradient(
+        90deg,
+        rgba(15,91,102,var(--divider-edge-alpha)) 0%,
+        rgba(15,91,102,var(--divider-center-alpha)) 50%,
+        rgba(15,91,102,var(--divider-edge-alpha)) 100%
+      );
+    }
+
+    #chipsDialog .modal-title {
+      margin:0;
+      font-weight:900;
+      font-size:1.05rem;
+      color:#0f172a
+    }
+
+    #chipsDialog .modal-close {
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      color:#0f172a;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:var(--shadow);
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    #chipsDialog .modal-close:hover {
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-hover)
+    }
+
+    #chipsDialog .modal-body { padding:14px 18px 18px }
+
+    .chips-content {
+      opacity:1;
+      transition:opacity .22s ease
+    }
+
+    .chips-content.is-fading { opacity:0 }
+
+    .proof-list {
+      margin:8px 0 0;
+      padding-left:18px
+    }
+
+    .proof-list li { margin:6px 0 }
+
+    @media (prefers-reduced-motion:reduce) {
+      .chip,
+      .chips-content { transition:none }
+    }
+
+    /* ===== Sections ===== */
+    main {
+      padding:10px 0 var(--cta-desktop-gap);
+      flex:1 0 auto
+    }
+
+    section { padding:24px 0 }
+
+    /* ===== Featured (larger cards) ===== */
+    .tiles {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+    }
+
+    .tile {
+      position:relative;
+      background:var(--surface);
+      border-radius:var(--radius);
+      padding:24px 24px;
+      box-shadow:var(--shadow);
+      transition:transform .18s ease, box-shadow .18s ease;
+      min-height:180px;
+    }
+
+    .tile:hover {
+      transform:translateY(-4px);
+      box-shadow:var(--shadow-hover)
+    }
+
+    .tile h3 {
+      margin:0 0 10px;
+      font-size:1.15rem
+    }
+
+    .tile p {
+      margin:0;
+      color:#1f2937;
+      line-height:1.55
+    }
+
+    .tile a.card-link {
+      position:absolute;
+      inset:0;
+      border-radius:var(--radius);
+      text-indent:-9999px;
+      overflow:hidden
+    }
+
+    .band--cta {
+      padding-top:calc(var(--band-space) + 14px);
+      padding-bottom:var(--band-space);
+    }
+
+    .cta-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    @media (max-width:960px) {
+      .band--cta { padding-bottom:0; }
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background:var(--brand-blue-900) !important;
+      color:#ffffff !important;
+      padding:18px 0;
+      text-align:center;
+      border-top:1px solid rgba(255,255,255,.18);
+    }
+
+    footer .wrap {
+      opacity:.95;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:center
+    }
+
+    .social {
+      display:flex;
+      align-items:center;
+      gap:10px
+    }
+
+    footer .icon-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.22);
+      color:#fff;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    footer .icon-btn:hover {
+      transform:translateY(-2px);
+      box-shadow:0 8px 18px rgba(0,0,0,.25);
+      background:rgba(255,255,255,.18);
+    }
+
+    .icon {
+      width:18px;
+      height:18px;
+      fill:currentColor
+    }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:.7rem 1rem;
+      border-radius:999px;
+      font-weight:800;
+      border:1px solid rgba(0,0,0,.04);
+      background:#fff;
+      color:var(--brand-blue-900);
+      box-shadow:var(--shadow);
+      transition:transform .16s ease, box-shadow .16s ease, filter .16s ease;
+      text-decoration:none;
+      cursor:pointer;
+    }
+
+    .btn:hover {
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-hover);
+      text-decoration:none
+    }
+
+    .btn:active { transform:translateY(-1px) }
+
+    .btn-outline {
+      background:transparent;
+      color:var(--ink);
+      border:1px solid #e5e7eb
+    }
+
+    .btn-primary {
+      background:var(--brand-blue-700);
+      color:#fff;
+      border-color:transparent;
+      box-shadow:var(--shadow);
+    }
+
+    .btn-primary:hover { box-shadow:var(--shadow-hover) }
+
+    .btn-group {
+      display:inline-flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center
+    }
+
+    .contact-actions .btn,
+    .form-actions .btn { box-shadow:var(--shadow) }
+
+    .contact-actions .btn:hover,
+    .form-actions .btn:hover { box-shadow:var(--shadow-hover) }
+
+    /* ===== Mobile dock ===== */
+    .mobile-dock {
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:980;
+      background:var(--brand-blue-900);
+      color:#ffffff;
+      border-top:1px solid rgba(255,255,255,.18);
+      padding:6px 10px calc(6px + env(safe-area-inset-bottom));
+      display:none;
+    }
+
+    .mobile-dock .dock {
+      max-width:var(--w);
+      margin:0 auto;
+      display:flex;
+      justify-content:center;
+      gap:14px;
+    }
+
+    .mobile-dock .icon-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
+      width:46px;
+      height:46px;
+      border-radius:999px;
+      color:#fff;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.22);
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .mobile-dock .icon {
+      display:block;
+      width:18px;
+      height:18px;
+      flex:0 0 auto;
+    }
+
+    .mobile-dock .icon *,
+    .mobile-dock .icon path,
+    .mobile-dock .icon rect,
+    .mobile-dock .icon circle,
+    .mobile-dock .icon polygon,
+    .mobile-dock .icon line {
+      fill:currentColor;
+      stroke:none;
+    }
+
+    .mobile-dock .icon-btn:hover {
+      transform:translateY(-2px);
+      box-shadow:0 8px 18px rgba(0,0,0,.25);
+      background:rgba(255,255,255,.18);
+    }
+
+    /* ===== CONTACT MODAL ===== */
+    dialog#contactDialog {
+      width:min(840px, 94vw);
+      border:0;
+      padding:0;
+      border-radius:20px;
+      box-shadow:0 30px 80px rgba(17,24,39,.35), 0 12px 30px rgba(17,24,39,.18);
+      background:#fff;
+      animation:modal-in .22s cubic-bezier(.2,.8,.2,1);
+    }
+
+    dialog#contactDialog::backdrop {
+      background:rgba(17,24,39,.55);
+      backdrop-filter:saturate(120%) blur(3px);
+      animation:backdrop-in .22s ease;
+    }
+
+    @keyframes modal-in {
+      from {
+        transform:translateY(14px) scale(.985);
+        opacity:.0
+      }
+      to {
+        transform:none;
+        opacity:1
+      }
+    }
+
+    @keyframes backdrop-in {
+      from { opacity:.0 }
+      to { opacity:1 }
+    }
+
+    .modal-header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px 18px 6px;
+      border-bottom:1px solid #e5e7eb;
+    }
+
+    .modal-title {
+      margin:0;
+      font-weight:900;
+      font-size:1.15rem;
+      letter-spacing:.2px;
+      color:#0f172a;
+    }
+
+    .modal-close {
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      color:#0f172a;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:var(--shadow);
+      transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .modal-close:hover {
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-hover)
+    }
+
+    .modal-body { padding:14px 18px 18px }
+
+    /* Updated: allow positioning of the call popover */
+    .contact-actions {
+      position:relative;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .contact-actions .btn { border-radius:999px }
+
+    .contact-actions .btn-primary { filter:saturate(115%) }
+
+    .divider {
+      height:1px;
+      background:#e5e7eb;
+      margin:8px 0 14px
+    }
+
+    .form-grid {
+      display:grid;
+      grid-template-columns:120px 1fr;
+      gap:10px 12px;
+      align-items:center;
+    }
+
+    .form-grid label {
+      font-weight:700;
+      color:#0f172a
+    }
+
+    .form-grid input,
+    .form-grid textarea {
+      width:100%;
+      font:inherit;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid #e5e7eb;
+      background:#f8fafc;
+      transition:border-color .16s ease, box-shadow .16s ease, background .16s ease;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
+    }
+
+    .form-grid textarea {
+      min-height:160px;
+      resize:vertical
+    }
+
+    .form-grid input:focus,
+    .form-grid textarea:focus {
+      outline:none;
+      border-color:#c5d6e2;
+      background:#fff;
+      box-shadow:0 0 0 6px var(--ring);
+    }
+
+    .form-actions {
+      grid-column:2 / -1;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+      margin-top:6px;
+    }
+
+    .form-hint {
+      grid-column:2 / -1;
+      margin-top:4px;
+      font-size:.9rem;
+      color:var(--muted);
+    }
+
+    @media (max-width:640px) {
+      .form-grid { grid-template-columns:1fr; }
+
+      .form-actions,
+      .form-hint { grid-column:1 / -1 }
+    }
+
+    .section-divider {
+      position:relative;
+      height:4px;
+      margin:var(--divider-gap) 0;
+      border:0;
+    }
+
+    .section-divider::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:var(--page-bg);
+      z-index:0;
+    }
+
+    .section-divider::before {
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:50%;
+      transform:translateY(-50%);
+      height:1px;
+      border-radius:999px;
+      background:linear-gradient(
+        90deg,
+        rgba(15,91,102,var(--divider-edge-alpha)) 0%,
+        rgba(15,91,102,var(--divider-center-alpha)) 50%,
+        rgba(15,91,102,var(--divider-edge-alpha)) 100%
+      );
+      z-index:1;
+    }
+
+    /* === Single-button call popover === */
+    .btn-xs {
+      padding:.42rem .7rem;
+      font-weight:800;
+      border-radius:12px;
+    }
+
+    /* Normalize popover mini-button text size across Call/Text/Copy */
+    .call-popover .btn-xs { font-size:.95rem; } /* or 1rem if you want a touch bigger */
+
+    .call-popover {
+      position:absolute;
+      z-index:1200;
+      transform:translateY(calc(100% + 8px));
+      left:0;
+      background:#fff;
+      color:var(--ink);
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      padding:10px 12px;
+      font-size:.95rem;
+      white-space:nowrap;
+      pointer-events:auto;
+    }
+
+    .call-popover__copy {
+      appearance:none;
+      border:0;
+      background:transparent;
+      padding:0;
+      margin:0 8px 0 0;
+      font:inherit;
+      font-weight:800;
+      color:var(--ink);
+      cursor:pointer;
+    }
+
+    .call-popover__copy:focus-visible {
+      outline:none;
+      box-shadow:0 0 0 6px var(--ring);
+      border-radius:8px;
+    }
+
+    .call-popover__hint {
+      color:var(--muted);
+      font-weight:600;
+      font-size:.85em
+    }
+
+    .call-popover__actions {
+      display:none;
+      gap:8px;
+      margin-top:8px
+    }
+
+    /* Mobile/touch: center the popover under the row; show Text/Copy actions */
+    @media (hover:none) {
+      .call-popover {
+        left:50% !important;
+        transform:translate(-50%, 10px);
+        max-width:92vw;
+        text-align:center;
+      }
+
+      .call-popover__actions { display:flex }
+
+      .call-popover__hint { display:none }
+    }
+
+    @media (max-width:1120px) {
+      .tiles { grid-template-columns:repeat(2,1fr) }
+    }
+
+    @media (max-width:960px) {
+      nav.primary-nav { display:none }
+
+      .menu-toggle {
+        display:inline-flex;
+        align-items:center;
+        justify-content:center
+      }
+
+      .tiles { grid-template-columns:1fr }
+
+      main { padding-bottom:calc(var(--dock-h) + var(--cta-mobile-gap)); }
+
+      .mobile-dock { display:block }
+
+      footer .social { display:none !important; }
+    }
+
+    .brand-link--wide:hover .brand-name,
+    .brand-link--wide:focus-visible .brand-name {
+      color:color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+    }
+
+    .brand-link--wide:hover .brand-creds,
+    .brand-link--wide:focus-visible .brand-creds {
+      color:color-mix(in srgb, var(--bar-fg) 60%, var(--accent) 40%);
+    }
+
+    nav.primary-nav a:hover,
+    nav.primary-nav a:focus-visible {
+      color:color-mix(in srgb, var(--bar-fg) 70%, var(--accent) 30%);
+    }
+
+    @supports not (color-mix:in srgb, white 50%, black 50%) {
+      .brand-link--wide:hover .brand-name,
+      .brand-link--wide:hover .brand-creds,
+      nav.primary-nav a:hover { opacity:.92 }
+    }
+
+    .skip-link {
+      position:absolute;
+      left:-999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+    }
+
+    .skip-link:focus {
+      left:16px;
+      top:12px;
+      width:auto;
+      height:auto;
+      padding:.5rem .75rem;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 0 0 6px var(--ring);
+      z-index:2000
+    }
+
+    .hero-section .wrap {
+      padding-left:calc(var(--wrap-pad) + env(safe-area-inset-left));
+      padding-right:calc(var(--wrap-pad) + env(safe-area-inset-right));
+    }
+
+    /* First-visit page fade: subtle, fast, professional */
+    @media (prefers-reduced-motion:reduce) {
+      html.intro-anim *,
+      html.intro-ready * {
+        transition:none !important;
+        animation:none !important;
+      }
+    }
+
+    /* Start slightly transparent and settled; applies only when the head script added .intro-anim */
+    html.intro-anim body {
+      opacity:0;
+      transform:translateY(4px);
+    }
+
+    /* Reveal once the tail script flips to .intro-ready */
+    html.intro-ready body {
+      opacity:1;
+      transform:none;
       transition:
         opacity .28s ease,
         transform .28s cubic-bezier(.2,.8,.2,1);
-      transition-delay: var(--rd, 0ms); /* per-element delay set in JS */
     }
 
-    /* Optional: divider line grows in very subtly */
-    .intro-anim .section-divider::before {
-      transform: translateY(-50%) scaleX(0);
-      transform-origin: left;
-    }
-    .intro-ready .section-divider::before {
-      transform: translateY(-50%) scaleX(1);
-      transition: transform .32s ease .16s;
-    }
+    /* Staggered first-visit reveal + subtle header avatar settle */
+    @media (prefers-reduced-motion:no-preference) {
+      /* Hidden state while html has .intro-anim */
+      .intro-anim [data-reveal] {
+        opacity:0;
+        transform:translateY(6px);
+      }
 
-    /* You approved this: tiny avatar settle for first visit */
-    .intro-anim .brand .avatar { transform: scale(.985); }
-    .intro-ready .brand .avatar { transform: none; transition: transform .32s cubic-bezier(.2,.8,.2,1); }
-  }
+      /* Shown state once html gets .intro-ready */
+      .intro-ready [data-reveal] {
+        opacity:1;
+        transform:none;
+        transition:
+          opacity .28s ease,
+          transform .28s cubic-bezier(.2,.8,.2,1);
+        transition-delay:var(--rd, 0ms); /* per-element delay set in JS */
+      }
+
+      /* Optional: divider line grows in very subtly */
+      .intro-anim .section-divider::before {
+        transform:translateY(-50%) scaleX(0);
+        transform-origin:left;
+      }
+
+      .intro-ready .section-divider::before {
+        transform:translateY(-50%) scaleX(1);
+        transition:transform .32s ease .16s;
+      }
+
+      /* You approved this: tiny avatar settle for first visit */
+      .intro-anim .brand .avatar { transform:scale(.985); }
+
+      .intro-ready .brand .avatar {
+        transform:none;
+        transition:transform .32s cubic-bezier(.2,.8,.2,1);
+      }
+    }
   </style>
 
   <!-- Inert polyfill (progressive) -->
@@ -558,18 +1401,18 @@ footer a:hover,
 
   <!-- Lightweight Person schema -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Isaac B. Michael",
-    "jobTitle": "Research Scientist; Program Director",
-    "url": "https://isaacbmichael.com/",
-    "sameAs": [
-      "mailto:isaac.b.michael@gmail.com",
-      "https://www.linkedin.com/in/isaacbmichael",
-      "https://github.com/isaacbmichael"
-    ]
-  }
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Isaac B. Michael",
+      "jobTitle": "Research Scientist; Program Director",
+      "url": "https://isaacbmichael.com/",
+      "sameAs": [
+        "mailto:isaac.b.michael@gmail.com",
+        "https://www.linkedin.com/in/isaacbmichael",
+        "https://github.com/isaacbmichael"
+      ]
+    }
   </script>
 </head>
 <body class="bars-dark">
@@ -589,19 +1432,21 @@ footer a:hover,
         <li><a href="/about/">About</a></li>
         <li><a href="/portfolio/">Portfolio</a></li>
         <li><a href="/cv/">Résumé</a></li>
-        <li><a href="/services/">Services</a></li> 
+        <li><a href="/services/">Services</a></li>
       </ul>
     </nav>
     <div class="quick" aria-label="Quick actions">
       <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email</a>
       <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-      <div class="btn-group call-cluster" data-phone="+12543666861">   
-        <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>   
-        <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>   
-        <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>  
-        <a class="btn btn-outline" data-facetime hidden>FaceTime</a>   
-        <small class="sr-only" data-phonetext>+1 (254) 366-6861</small> 
-      </div>
+      <!-- Single call/text button (no extra buttons) -->
+      <a
+        class="btn call-link"
+        data-phone="+12543666861"
+        href="tel:+12543666861"
+        aria-label="Call or text +1 (254) 366-6861"
+      >
+        Call or text
+      </a>
       <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
   </aside>
@@ -616,21 +1461,30 @@ footer a:hover,
             <div class="avatar-badge">
               <div class="avatar-inner">
                 <div class="avatar-face front">
-                  <img id="logoFront"
-                       src="/assets/brands/logo-white.svg"
-                       data-logo-light="/assets/brands/logo-tealroyal.svg"
-                       data-logo-dark="/assets/brands/logo-white.svg"
-                       alt="Isaac B. Michael logo (front)"
-                       decoding="async" width="96" height="96"
-                       loading="eager" fetchpriority="high" />
+                  <img
+                    id="logoFront"
+                    src="/assets/brands/logo-white.svg"
+                    data-logo-light="/assets/brands/logo-tealroyal.svg"
+                    data-logo-dark="/assets/brands/logo-white.svg"
+                    alt="Isaac B. Michael logo (front)"
+                    decoding="async"
+                    width="96"
+                    height="96"
+                    loading="eager"
+                    fetchpriority="high"
+                  />
                 </div>
                 <div class="avatar-face back">
-                  <img id="logoBack"
-                       src="/assets/brands/logo-white.svg"
-                       data-logo-light="/assets/brands/logo-tealroyal.svg"
-                       data-logo-dark="/assets/brands/logo-white.svg"
-                       alt="Isaac B. Michael logo (mirrored)"
-                       decoding="async" width="96" height="96" />
+                  <img
+                    id="logoBack"
+                    src="/assets/brands/logo-white.svg"
+                    data-logo-light="/assets/brands/logo-tealroyal.svg"
+                    data-logo-dark="/assets/brands/logo-white.svg"
+                    alt="Isaac B. Michael logo (mirrored)"
+                    decoding="async"
+                    width="96"
+                    height="96"
+                  />
                 </div>
               </div>
             </div>
@@ -651,12 +1505,28 @@ footer a:hover,
           <li><a href="/cv/">Résumé</a></li>
           <li><a href="/services/">Services</a></li>
           <!-- contact trigger (header) -->
-          <li><a href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a></li>
+          <li>
+            <a
+              href="/contact/"
+              data-contact-open
+              aria-label="Open contact dialog"
+              aria-controls="contactDialog"
+              aria-haspopup="dialog"
+            >
+              Contact
+            </a>
+          </li>
         </ul>
       </nav>
 
       <!-- Mobile hamburger -->
-      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-controls="mobileDrawer" aria-expanded="false">
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open menu"
+        aria-controls="mobileDrawer"
+        aria-expanded="false"
+      >
         <span class="bars"></span>
       </button>
     </div>
@@ -668,15 +1538,82 @@ footer a:hover,
       <div class="hero-grid">
         <h1 class="h1">Data-Driven Strategy &amp; Execution</h1>
         <p class="tagline">Research Scientist · Mathematical Statistician · Program Director</p>
-        <p class="intro">I help teams turn complicated data questions into clear, defensible decisions. My work blends survey methodology, analytics automation, and executive reporting so leaders can see what's true, what matters, and what to do next—without guesswork or fragile one-off spreadsheets.</p>
+        <p class="intro">
+          I help teams turn complicated data questions into clear, defensible decisions. My work blends survey
+          methodology, analytics automation, and executive reporting so leaders can see what's true, what matters, and
+          what to do next—without guesswork or fragile one-off spreadsheets.
+        </p>
         <div class="chips" aria-label="Expertise chips">
-          <span class="chip" data-chip="public-health" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Public health &amp; education</span>
-          <span class="chip" data-chip="enterprise-strategy" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Enterprise data strategy</span>
-          <span class="chip" data-chip="modernization" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Data modernization</span>
-          <span class="chip" data-chip="governance-quality" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Data governance &amp; quality</span>
-          <span class="chip" data-chip="decision-analytics" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Decision analytics</span>
-          <span class="chip" data-chip="analytics-automation" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Analytics automation</span>
-          <span class="chip" data-chip="survey-methodology" role="button" tabindex="0" aria-controls="chipsDialog" aria-pressed="false">Survey methodology</span>
+          <span
+            class="chip"
+            data-chip="public-health"
+            role="button"
+            tabindex="0"
+            aria-controls="chipsDialog"
+            aria-pressed="false"
+          >
+            Public health &amp; education
+          </span>
+          <span
+            class="chip"
+            data-chip="enterprise-strategy"
+            role="button"
+            tabindex="0"
+            aria-controls="chipsDialog"
+            aria-pressed="false"
+          >
+            Enterprise data strategy
+          </span>
+          <span
+            class="chip"
+            data-chip="modernization"
+            role="button"
+            tabindex="0"
+            aria-controls="chipsDialog"
+            aria-pressed="false"
+          >
+            Data modernization
+          </span>
+          <span
+            class="chip"
+            data-chip="governance-quality"
+            role="button"
+            tabindex="0"
+            aria-controls="chipsDialog"
+            aria-pressed="false"
+          >
+            Data governance &amp; quality
+          </span>
+          <span
+            class="chip"
+            data-chip="decision-analytics"
+            role="button"
+            tabindex="0"
+            aria-controls="chipsDialog"
+            aria-pressed="false"
+          >
+            Decision analytics
+          </span>
+          <span
+            class="chip"
+            data-chip="analytics-automation"
+            role="button"
+            tabindex="0"
+            aria-controls="chipsDialog"
+            aria-pressed="false"
+          >
+            Analytics automation
+          </span>
+          <span
+            class="chip"
+            data-chip="survey-methodology"
+            role="button"
+            tabindex="0"
+            aria-controls="chipsDialog"
+            aria-pressed="false"
+          >
+            Survey methodology
+          </span>
         </div>
       </div>
     </div>
@@ -692,27 +1629,44 @@ footer a:hover,
         <div class="tiles">
           <article class="tile">
             <h3 id="tile-portfolio">Portfolio</h3>
-            <p>A curated set of projects across survey methods, automation, and decision analytics. See examples of PRAMS weighting and delivery, reproducible reporting pipelines, and executive briefings that translate complex results into action.</p>
-            <a class="card-link" href="/portfolio/" aria-labelledby="tile-portfolio">View</a>
+            <p>
+              A curated set of projects across survey methods, automation, and decision analytics. See examples of PRAMS
+              weighting and delivery, reproducible reporting pipelines, and executive briefings that translate complex
+              results into action.
+            </p>
+            <a class="card-link" href="/portfolio/" aria-labelledby="tile-portfolio">
+              View
+            </a>
           </article>
 
           <article class="tile">
             <h3 id="tile-services">Services</h3>
-            <p>Partner on enterprise data strategy, modernization, and analytics enablement. I offer advisory and hands-on support—operating models, SLAs, QA gates, and templates—so your team can deliver reliable insights at pace.</p>
-            <a class="card-link" href="/services/" aria-labelledby="tile-services">View</a>
+            <p>
+              Partner on enterprise data strategy, modernization, and analytics enablement. I offer advisory and
+              hands-on support—operating models, SLAs, QA gates, and templates—so your team can deliver reliable
+              insights at pace.
+            </p>
+            <a class="card-link" href="/services/" aria-labelledby="tile-services">
+              View
+            </a>
           </article>
 
           <article class="tile">
             <h3 id="tile-cv">Résumé &amp; CV</h3>
-            <p>Browse my two-page résumé or full academic CV, including federal and state work, publications, trainings, and leadership. Inline previews make it easy to scan before downloading.</p>
-            <a class="card-link" href="/cv/" aria-labelledby="tile-cv">View</a>
+            <p>
+              Browse my two-page résumé or full academic CV, including federal and state work, publications, trainings,
+              and leadership. Inline previews make it easy to scan before downloading.
+            </p>
+            <a class="card-link" href="/cv/" aria-labelledby="tile-cv">
+              View
+            </a>
           </article>
         </div>
       </section>
     </div>
 
     <div class="section-divider" aria-hidden="true"></div>
-    
+
     <!-- CTA -->
     <section class="band band--cta" aria-labelledby="next">
       <div class="wrap">
@@ -723,30 +1677,69 @@ footer a:hover,
           <a class="btn" href="/portfolio/">Portfolio</a>
           <a class="btn" href="/cv/">Résumé</a>
           <a class="btn" href="/services/">Services</a>
-          <a class="btn" href="/contact/" data-contact-open aria-label="Open contact dialog" aria-controls="contactDialog" aria-haspopup="dialog">Contact</a>
+          <a
+            class="btn"
+            href="/contact/"
+            data-contact-open
+            aria-label="Open contact dialog"
+            aria-controls="contactDialog"
+            aria-haspopup="dialog"
+          >
+            Contact
+          </a>
         </div>
       </div>
     </section>
   </main>
-  
+
   <!-- ===== Footer ===== -->
   <footer>
     <div class="wrap">
       <div class="social" aria-label="External profiles">
         <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z" />
+          </svg>
           <span class="sr-only">Email</span>
         </a>
-        <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Schedule with Calendly">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+        <a
+          class="icon-btn"
+          href="https://calendly.com/isaacbmichael"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Schedule with Calendly"
+        >
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z" />
+          </svg>
           <span class="sr-only">Calendly</span>
         </a>
-        <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+        <a
+          class="icon-btn"
+          href="https://www.linkedin.com/in/isaacbmichael"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="LinkedIn"
+        >
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"
+            />
+          </svg>
           <span class="sr-only">LinkedIn</span>
         </a>
-        <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+        <a
+          class="icon-btn"
+          href="https://github.com/isaacbmichael"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="GitHub"
+        >
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"
+            />
+          </svg>
           <span class="sr-only">GitHub</span>
         </a>
       </div>
@@ -758,19 +1751,49 @@ footer a:hover,
   <div class="mobile-dock" role="region" aria-label="Quick contact">
     <div class="dock">
       <a class="icon-btn" href="mailto:isaac.b.michael@gmail.com" title="Email">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z" />
+        </svg>
         <span class="sr-only">Email</span>
       </a>
-      <a class="icon-btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="Calendly">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/></svg>
+      <a
+        class="icon-btn"
+        href="https://calendly.com/isaacbmichael"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Calendly"
+      >
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2a1 1 0 1 1 2 0v2Zm12 6H5v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z" />
+        </svg>
         <span class="sr-only">Calendly</span>
       </a>
-      <a class="icon-btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer" title="LinkedIn">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"/></svg>
+      <a
+        class="icon-btn"
+        href="https://www.linkedin.com/in/isaacbmichael"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="LinkedIn"
+      >
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9h4v12H3zM9 9h3.8v1.8h.05c.53-1 1.84-2.05 3.8-2.05 4.06 0 4.81 2.67 4.81 6.15V21h-4v-5.3c0-1.26-.03-2.88-1.76-2.88-1.76 0-2.03 1.37-2.03 2.78V21H9z"
+          />
+        </svg>
         <span class="sr-only">LinkedIn</span>
       </a>
-      <a class="icon-btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer" title="GitHub">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"/></svg>
+      <a
+        class="icon-btn"
+        href="https://github.com/isaacbmichael"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="GitHub"
+      >
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 .5a12 12 0 0 0-3.8 23.4c.6 .1 .8-.2 .8-.5v-2c-3.3 .7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7 .1-.7 .1-.7 1.1 .1 1.7 1.1 1.7 1.1 1 .1 .7 2 .7 2 1.8 .3 2.7-1.2 2.7-1.2 .5-1 .8-1.4 .8-1.4-2.7-.3-5.6-1.4-5.6-6.2 0-1.4 .5-2.5 1.2-3.3-.1-.3-.5-1.6 .1-3.3 0 0 1-.3 3.4 1.3a11.6 11.6 0 0 1 6.2 0C18 5 19 5.3 19 5.3c .6 1.7 .2 3 .1 3.3 .8 .8 1.2 1.9 1.2 3.3 0 4.8-2.9 5.9-5.6 6.2 .4 .3 .8 1 .8 2.1v3c0 .3 .2 .6 .8 .5A12 12 0 0 0 12 .5Z"
+          />
+        </svg>
         <span class="sr-only">GitHub</span>
       </a>
     </div>
@@ -781,7 +1804,9 @@ footer a:hover,
     <div class="modal-header">
       <h3 id="chipsTitle" class="modal-title" tabindex="-1">Expertise</h3>
       <button class="modal-close" id="chipsClose" aria-label="Close">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z" />
+        </svg>
       </button>
     </div>
     <div class="modal-body">
@@ -794,20 +1819,65 @@ footer a:hover,
     <div class="modal-header">
       <h3 id="contactTitle" class="modal-title">Contact</h3>
       <button class="modal-close" id="contactClose" aria-label="Close contact dialog">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z" />
+        </svg>
       </button>
     </div>
     <div class="modal-body">
       <div class="contact-actions" aria-label="Quick links">
-        <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-        <div class="btn-group call-cluster" data-phone="+12543666861">   
-          <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>   
-          <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>   
-          <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>   
-          <a class="btn btn-outline" data-facetime hidden>FaceTime</a>   
-          <small class="sr-only" data-phonetext>+1 (254) 366-6861</small> 
-        </div>
-        <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a
+          class="btn btn-primary"
+          href="https://calendly.com/isaacbmichael"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Schedule on Calendly
+        </a>
+
+        <!-- Single call/text button with popover to copy or text -->
+        <a
+          class="btn call-link"
+          data-phone="+12543666861"
+          href="tel:+12543666861"
+          aria-describedby="callTip"
+        >
+          Call or text
+        </a>
+        <span
+          id="callTip"
+          class="call-popover"
+          data-popover
+          hidden
+          role="dialog"
+          aria-label="Phone options"
+        >
+          <!-- Number is clickable to copy on all devices -->
+          <button
+            type="button"
+            class="call-popover__copy"
+            data-copy-number="+12543666861"
+            aria-label="Copy phone number"
+          >
+            +1 (254) 366-6861
+          </button>
+
+          <!-- Mobile/touch actions -->
+          <div class="call-popover__actions" data-mobile-actions>
+            <a class="btn btn-primary btn-xs" data-call href="tel:+12543666861">Call</a>
+            <a class="btn btn-outline btn-xs" data-text href="sms:+12543666861">Text</a>
+            <button type="button" class="btn btn-outline btn-xs" data-copy>Copy</button>
+          </div>
+        </span>
+
+        <a
+          class="btn"
+          href="https://www.linkedin.com/in/isaacbmichael"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          LinkedIn
+        </a>
         <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
 
@@ -825,7 +1895,9 @@ footer a:hover,
           <button type="button" class="btn btn-outline" id="contactCancel">Cancel</button>
           <button type="submit" class="btn btn-primary">Send via Email</button>
         </div>
-        <small class="form-hint">Submitting opens your email client with your message pre-filled (no data is stored on this site).</small>
+        <small class="form-hint">
+          Submitting opens your email client with your message pre-filled (no data is stored on this site).
+        </small>
       </form>
     </div>
   </dialog>
@@ -836,29 +1908,36 @@ footer a:hover,
 
     // Preload logos (both variants)
     const logoFront = document.getElementById('logoFront');
-    const logoBack  = document.getElementById('logoBack');
-    function preload(src){ return new Promise(res => { const i = new Image(); i.onload = res; i.onerror = res; i.src = src; }); }
-    Promise.all([ logoFront.dataset.logoLight, logoFront.dataset.logoDark ].map(preload));
+    const logoBack = document.getElementById('logoBack');
+    function preload(src) {
+      return new Promise(res => {
+        const i = new Image();
+        i.onload = res;
+        i.onerror = res;
+        i.src = src;
+      });
+    }
+    Promise.all([logoFront.dataset.logoLight, logoFront.dataset.logoDark].map(preload));
 
     // Contact modal
     const dialog = document.getElementById('contactDialog');
     const contactClose = document.getElementById('contactClose');
     const contactCancel = document.getElementById('contactCancel');
-    const quickForm    = document.getElementById('quickForm');
+    const quickForm = document.getElementById('quickForm');
 
-    function openDialog(e){
+    function openDialog(e) {
       if (e) e.preventDefault();
-      if (!dialog.open){
+      if (!dialog.open) {
         dialog.showModal();
-        document.querySelector('main')?.setAttribute('inert','');
-        document.querySelector('header.site-header')?.setAttribute('inert','');
-        document.querySelector('.mobile-dock')?.setAttribute('inert','');
+        document.querySelector('main')?.setAttribute('inert', '');
+        document.querySelector('header.site-header')?.setAttribute('inert', '');
+        document.querySelector('.mobile-dock')?.setAttribute('inert', '');
         document.getElementById('qName')?.focus();
       }
     }
-    function closeDialog(e){
+    function closeDialog(e) {
       if (e) e.preventDefault();
-      if (dialog.open){
+      if (dialog.open) {
         dialog.close();
         document.querySelector('main')?.removeAttribute('inert');
         document.querySelector('header.site-header')?.removeAttribute('inert');
@@ -868,7 +1947,7 @@ footer a:hover,
     }
 
     document.querySelectorAll('[data-contact-open]').forEach(el => {
-      el.addEventListener('click', (e) => {
+      el.addEventListener('click', e => {
         if (typeof dialog?.showModal === 'function') {
           e.preventDefault();
           window.__lastFocused = el;
@@ -879,63 +1958,75 @@ footer a:hover,
 
     contactClose?.addEventListener('click', closeDialog);
     contactCancel?.addEventListener('click', closeDialog);
-    dialog.addEventListener('click', (e)=>{ if (e.target === dialog) closeDialog(); });
-    dialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeDialog(); });
+    dialog.addEventListener('click', e => {
+      if (e.target === dialog) closeDialog();
+    });
+    dialog.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeDialog();
+    });
 
-    quickForm.addEventListener('submit', (e)=>{
+    quickForm.addEventListener('submit', e => {
       e.preventDefault();
-      const name  = (document.getElementById('qName').value || '').trim();
+      const name = (document.getElementById('qName').value || '').trim();
       const email = (document.getElementById('qEmail').value || '').trim();
-      const msg   = (document.getElementById('qMsg').value || '').trim();
+      const msg = (document.getElementById('qMsg').value || '').trim();
       const subject = encodeURIComponent('Website inquiry');
-      const body    = encodeURIComponent(`${msg}\n\n— ${name}${email ? ' <'+email+'>' : ''}`);
+      const body = encodeURIComponent(`${msg}\n\n— ${name}${email ? ' <' + email + '>' : ''}`);
       window.location.href = `mailto:isaac.b.michael@gmail.com?subject=${subject}&body=${body}`;
       closeDialog();
     });
 
     // === Mobile drawer (open/close) ===
-    const drawer    = document.getElementById('mobileDrawer');
-    const backdrop  = document.getElementById('drawerBackdrop');
-    const menuBtn   = document.getElementById('menuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const backdrop = document.getElementById('drawerBackdrop');
+    const menuBtn = document.getElementById('menuToggle');
     const menuClose = document.getElementById('menuClose');
 
-    function setAppInert(on){
-      ['main','header.site-header','.hero-section','footer','.mobile-dock'].forEach(sel=>{
+    function setAppInert(on) {
+      ['main', 'header.site-header', '.hero-section', 'footer', '.mobile-dock'].forEach(sel => {
         const el = document.querySelector(sel);
         if (!el) return;
-        on ? el.setAttribute('inert','') : el.removeAttribute('inert');
+        on ? el.setAttribute('inert', '') : el.removeAttribute('inert');
       });
     }
-    function trapFocusWithin(el){
+    function trapFocusWithin(el) {
       if (el.__trapBound) return;
       el.__trapBound = true;
-      el.addEventListener('keydown', (e) => {
+      el.addEventListener('keydown', e => {
         if (e.key !== 'Tab') return;
         const focusables = el.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
         if (!focusables.length) return;
-        const first = focusables[0], last = focusables[focusables.length - 1];
-        if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        const first = focusables[0],
+          last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       });
     }
 
-    function openDrawer(e){
+    function openDrawer(e) {
       if (e) e.preventDefault();
       backdrop.hidden = false;
       document.body.classList.add('drawer-open');
-      drawer.setAttribute('aria-hidden','false');
-      menuBtn?.setAttribute('aria-expanded','true');
+      drawer.setAttribute('aria-hidden', 'false');
+      menuBtn?.setAttribute('aria-expanded', 'true');
       setAppInert(true);
       drawer.querySelector('a')?.focus();
       trapFocusWithin(drawer);
     }
 
-    function closeDrawer(e){
+    function closeDrawer(e) {
       if (e) e.preventDefault();
       document.body.classList.remove('drawer-open');
-      drawer.setAttribute('aria-hidden','true');
-      menuBtn?.setAttribute('aria-expanded','false');
-      setTimeout(()=>{ backdrop.hidden = true; }, 220);
+      drawer.setAttribute('aria-hidden', 'true');
+      menuBtn?.setAttribute('aria-expanded', 'false');
+      setTimeout(() => {
+        backdrop.hidden = true;
+      }, 220);
       setAppInert(false);
       menuBtn?.focus();
     }
@@ -944,165 +2035,205 @@ footer a:hover,
     menuClose?.addEventListener('click', closeDrawer);
     backdrop?.addEventListener('click', closeDrawer);
     drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeDrawer()));
-    document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeDrawer();
+    });
 
     // Brand link: spin once, then go home (site-relative)
     const brandLink = document.getElementById('brandLink');
-    brandLink?.addEventListener('click', (e)=>{
+    brandLink?.addEventListener('click', e => {
       e.preventDefault();
       const inner = brandLink.querySelector('.avatar-inner');
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){ window.location.href = '/'; return; }
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        window.location.href = '/';
+        return;
+      }
       inner.style.setProperty('--spin', '1turn');
-      const goHome = () => { window.location.href = '/'; };
+      const goHome = () => {
+        window.location.href = '/';
+      };
       let done = false;
-      const onEnd = (evt) => { if (!done && evt.propertyName === 'transform'){ done = true; inner.removeEventListener('transitionend', onEnd); goHome(); } };
+      const onEnd = evt => {
+        if (!done && evt.propertyName === 'transform') {
+          done = true;
+          inner.removeEventListener('transitionend', onEnd);
+          goHome();
+        }
+      };
       inner.addEventListener('transitionend', onEnd);
       setTimeout(goHome, 800);
     });
 
     // Adaptive bars: dark at top, switch to light after hero exits viewport
     const hero = document.querySelector('.hero-section');
-    function setBarsDark(isDark){
+    function setBarsDark(isDark) {
       document.body.classList.toggle('bars-dark', isDark);
       const src = isDark ? logoFront.dataset.logoDark : logoFront.dataset.logoLight;
-      logoFront.src = src; logoBack.src  = src;
+      logoFront.src = src;
+      logoBack.src = src;
     }
     setBarsDark(true);
-    if ('IntersectionObserver' in window){
-      const io = new IntersectionObserver(entries=>{ entries.forEach(entry=> setBarsDark(entry.isIntersecting)); }, {threshold: 0});
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => setBarsDark(entry.isIntersecting));
+        },
+        { threshold:0 }
+      );
       io.observe(hero);
     } else {
-      window.addEventListener('scroll', ()=>{ setBarsDark(window.scrollY < 60); });
+      window.addEventListener('scroll', () => {
+        setBarsDark(window.scrollY < 60);
+      });
     }
 
     // Mark current page
-    document.querySelectorAll('nav.primary-nav a, .mobile-drawer nav a').forEach(a=>{
-      try{
-        const here = new URL(a.href, location.origin).pathname.replace(/\/+$/,'') || '/';
-        const path = location.pathname.replace(/\/+$/,'') || '/';
-        if (here === path) a.setAttribute('aria-current','page');
-      }catch(_){ }
+    document.querySelectorAll('nav.primary-nav a, .mobile-drawer nav a').forEach(a => {
+      try {
+        const here = new URL(a.href, location.origin).pathname.replace(/\/+$/, '') || '/';
+        const path = location.pathname.replace(/\/+$/, '') || '/';
+        if (here === path) a.setAttribute('aria-current', 'page');
+      } catch (_) {}
     });
 
     // ===== Chips dialog behavior =====
-    const chipsDialog   = document.getElementById('chipsDialog');
-    const chipsTitleEl  = document.getElementById('chipsTitle');
-    const chipsContent  = document.getElementById('chipsContent');
+    const chipsDialog = document.getElementById('chipsDialog');
+    const chipsTitleEl = document.getElementById('chipsTitle');
+    const chipsContent = document.getElementById('chipsContent');
     const chipsCloseBtn = document.getElementById('chipsClose');
 
     const CHIP_PROOFS = {
-      "public-health": {
-        title: "Public health & education",
-        bullets: [
-          "PRAMS multi-state delivery: standardized weighting & outputs across jurisdictions (CDC program).",
-          "State enablement: on-site SAS training (weighted freq/crosstabs) and QA upgrades.",
-          "STEM leadership: LSU Virtual Math Circle / BEE programs (AMS Epsilon; 100+ participants)."
+      'public-health': {
+        title:'Public health & education',
+        bullets:[
+          'PRAMS multi-state delivery: standardized weighting & outputs across jurisdictions (CDC program).',
+          'State enablement: on-site SAS training (weighted freq/crosstabs) and QA upgrades.',
+          'STEM leadership: LSU Virtual Math Circle / BEE programs (AMS Epsilon; 100+ participants).'
         ]
       },
-      "enterprise-strategy": {
-        title: "Enterprise data strategy",
-        bullets: [
-          "Operating model & SLAs with KPI scorecards for public-sector analytics programs.",
-          "FERPA-governed data-sharing MOU and profit-sharing SOW for productized services.",
-          "Cross-jurisdiction service design from survey design → weighting → delivery."
+      'enterprise-strategy': {
+        title:'Enterprise data strategy',
+        bullets:[
+          'Operating model & SLAs with KPI scorecards for public-sector analytics programs.',
+          'FERPA-governed data-sharing MOU and profit-sharing SOW for productized services.',
+          'Cross-jurisdiction service design from survey design → weighting → delivery.'
         ]
       },
-      "modernization": {
-        title: "Data modernization",
-        bullets: [
-          "Modular SAS/SQL pipelines with automated QA and SAS↔R parity validation.",
-          "Retired legacy intake: moved forms to HR/ops systems; built searchable archives.",
-          "Version-controlled regeneration of analytics outputs (templates + documentation)."
+      modernization: {
+        title:'Data modernization',
+        bullets:[
+          'Modular SAS/SQL pipelines with automated QA and SAS↔R parity validation.',
+          'Retired legacy intake: moved forms to HR/ops systems; built searchable archives.',
+          'Version-controlled regeneration of analytics outputs (templates + documentation).'
         ]
       },
-      "governance-quality": {
-        title: "Data governance & quality",
-        bullets: [
-          "Sampling-verification protocols, audit logs, and scorecards for program oversight.",
-          "Section 508-compliant codebooks; ARF alignment and variable curation.",
-          "Legacy dataset validation: missingness scans and naming standards."
+      'governance-quality': {
+        title:'Data governance & quality',
+        bullets:[
+          'Sampling-verification protocols, audit logs, and scorecards for program oversight.',
+          'Section 508-compliant codebooks; ARF alignment and variable curation.',
+          'Legacy dataset validation: missingness scans and naming standards.'
         ]
       },
-      "decision-analytics": {
-        title: "Decision analytics",
-        bullets: [
-          "Exec dashboards/briefings improving federal–state coordination and transparency.",
-          "Risk & funding-aware sampling/bias analysis informing approvals and priorities.",
-          "Undercount & mobility modeling to support policy decisions."
+      'decision-analytics': {
+        title:'Decision analytics',
+        bullets:[
+          'Exec dashboards/briefings improving federal–state coordination and transparency.',
+          'Risk & funding-aware sampling/bias analysis informing approvals and priorities.',
+          'Undercount & mobility modeling to support policy decisions.'
         ]
       },
-      "analytics-automation": {
-        title: "Analytics automation",
-        bullets: [
-          "Reusable SAS templates for weighted tables; distributed and maintained for sites.",
-          "Automated sampling-verification macros reducing manual checks.",
-          "End-to-end pipelines with QA gates and job controls for reproducible delivery."
+      'analytics-automation': {
+        title:'Analytics automation',
+        bullets:[
+          'Reusable SAS templates for weighted tables; distributed and maintained for sites.',
+          'Automated sampling-verification macros reducing manual checks.',
+          'End-to-end pipelines with QA gates and job controls for reproducible delivery.'
         ]
       },
-      "survey-methodology": {
-        title: "Survey methodology",
-        bullets: [
-          "Leadership on complex survey weighting for PRAMS across jurisdictions.",
-          "Nonresponse-bias research informing federal guidance.",
-          "Survey design/review at U.S. Census; formal trainings on weighting & verification."
+      'survey-methodology': {
+        title:'Survey methodology',
+        bullets:[
+          'Leadership on complex survey weighting for PRAMS across jurisdictions.',
+          'Nonresponse-bias research informing federal guidance.',
+          'Survey design/review at U.S. Census; formal trainings on weighting & verification.'
         ]
       }
     };
 
     let activeChip = null;
 
-    function setPageInert(on){
-      ['main','header.site-header','.mobile-dock','.hero-section'].forEach(sel=>{
+    function setPageInert(on) {
+      ['main', 'header.site-header', '.mobile-dock', '.hero-section'].forEach(sel => {
         const el = document.querySelector(sel);
         if (!el) return;
-        on ? el.setAttribute('inert','') : el.removeAttribute('inert');
+        on ? el.setAttribute('inert', '') : el.removeAttribute('inert');
       });
     }
 
-    function fillChipsContent(key){
+    function fillChipsContent(key) {
       const data = CHIP_PROOFS[key];
       if (!data) return;
       chipsTitleEl.textContent = data.title;
       const html = `
         <ul class="proof-list">
-          ${data.bullets.map(b=>`<li>${b}</li>`).join('')}
+          ${data.bullets.map(b => `<li>${b}</li>`).join('')}
         </ul>
       `;
       chipsContent.classList.add('is-fading');
-      setTimeout(()=>{ chipsContent.innerHTML = html; chipsContent.classList.remove('is-fading'); }, 160);
+      setTimeout(() => {
+        chipsContent.innerHTML = html;
+        chipsContent.classList.remove('is-fading');
+      }, 160);
     }
 
-    function openChipsDialogFor(chipEl){
+    function openChipsDialogFor(chipEl) {
       const key = chipEl.dataset.chip;
       if (!key) return;
-      document.querySelectorAll('.chips .chip[aria-pressed="true"]').forEach(c=>c.setAttribute('aria-pressed','false'));
-      chipEl.setAttribute('aria-pressed','true');
+      document.querySelectorAll('.chips .chip[aria-pressed="true"]').forEach(c => c.setAttribute('aria-pressed', 'false'));
+      chipEl.setAttribute('aria-pressed', 'true');
       activeChip = chipEl;
-      if (!chipsDialog.open){ chipsDialog.showModal(); setPageInert(true); }
+      if (!chipsDialog.open) {
+        chipsDialog.showModal();
+        setPageInert(true);
+      }
       fillChipsContent(key);
       chipsTitleEl.focus?.();
     }
 
-    function closeChipsDialog(){
-      if (chipsDialog.open){
+    function closeChipsDialog() {
+      if (chipsDialog.open) {
         chipsDialog.close();
         setPageInert(false);
-        if (activeChip){ activeChip.setAttribute('aria-pressed','false'); activeChip.focus(); activeChip = null; }
+        if (activeChip) {
+          activeChip.setAttribute('aria-pressed', 'false');
+          activeChip.focus();
+          activeChip = null;
+        }
       }
     }
 
-    document.querySelectorAll('.chips .chip').forEach(chip=>{
-      chip.addEventListener('click', ()=> openChipsDialogFor(chip));
-      chip.addEventListener('keydown', e=>{ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChipsDialogFor(chip); } });
+    document.querySelectorAll('.chips .chip').forEach(chip => {
+      chip.addEventListener('click', () => openChipsDialogFor(chip));
+      chip.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openChipsDialogFor(chip);
+        }
+      });
     });
 
     chipsCloseBtn?.addEventListener('click', closeChipsDialog);
-    chipsDialog.addEventListener('click', (e)=>{ if (e.target === chipsDialog) closeChipsDialog(); });
-    chipsDialog.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeChipsDialog(); });
+    chipsDialog.addEventListener('click', e => {
+      if (e.target === chipsDialog) closeChipsDialog();
+    });
+    chipsDialog.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeChipsDialog();
+    });
 
     // === Measure mobile dock height for proper bottom gap ===
-    (function(){
-      function setDockVars(){
+    (function () {
+      function setDockVars() {
         var dock = document.querySelector('.mobile-dock');
         var h = dock ? dock.offsetHeight : 0;
         document.documentElement.style.setProperty('--dock-h', h + 'px');
@@ -1113,7 +2244,7 @@ footer a:hover,
       window.addEventListener('orientationchange', setDockVars);
     })();
 
-    (function(){
+    (function () {
       // Respect reduced motion; only run if first-visit gate is active
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;
@@ -1122,107 +2253,151 @@ footer a:hover,
       // Build reveal sequence: hero elements first, then the three tiles
       var seq = [];
       var heroKids = document.querySelectorAll('.hero-grid > *'); // h1, tagline, intro, chips
-      var tiles    = document.querySelectorAll('.tiles .tile');    // featured tiles
-      heroKids.forEach(function(el){ seq.push(el); });
-      tiles.forEach(function(el){ seq.push(el); });
+      var tiles = document.querySelectorAll('.tiles .tile');    // featured tiles
+      heroKids.forEach(function (el) { seq.push(el); });
+      tiles.forEach(function (el) { seq.push(el); });
 
       // Tag and stagger
       var base = 40;  // ms
       var step = 60;  // ms between elements
-      seq.forEach(function(el, i){
+      seq.forEach(function (el, i) {
         el.setAttribute('data-reveal', '');
         el.style.setProperty('--rd', (base + i * step) + 'ms');
       });
     })();
-    
-    (function(){
+
+    (function () {
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce || !document.documentElement.classList.contains('intro-anim')) return;
 
       // rAF twice: ensure the initial styles apply before we reveal
-      requestAnimationFrame(function(){
-        requestAnimationFrame(function(){
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
           document.documentElement.classList.add('intro-ready');
           document.documentElement.classList.remove('intro-anim');
         });
       });
     })();
-    
+
     // Optional: replay the intro when the page is restored from bfcache
     window.addEventListener('pageshow', function (e) {
       if (e.persisted && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         // Re-apply the classes to trigger the transitions again
         document.documentElement.classList.remove('intro-ready');
         document.documentElement.classList.add('intro-anim');
-        requestAnimationFrame(function(){
-          requestAnimationFrame(function(){
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
             document.documentElement.classList.add('intro-ready');
             document.documentElement.classList.remove('intro-anim');
           });
         });
       }
     });
-  (function(){
-    // Enhance every "call cluster"
-    const clusters = document.querySelectorAll('.call-cluster');
-    if (!clusters.length) return;
 
-    const UA = navigator.userAgent || '';
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
-    const isMac = /Macintosh|Mac OS X/i.test(UA);
-    const canLikelyCall = isMobile || isMac; // dialer/FaceTime paths
+    /* ===== Single-button call behavior with copy/text popover ===== */
+    (function () {
+      const UA = navigator.userAgent || '';
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
+      const isMac = /Macintosh|Mac OS X/i.test(UA);
+      const canLikelyCall = isMobile || isMac;
 
-    clusters.forEach(cluster => {
-      const phone = cluster.getAttribute('data-phone') || '';
-      const prettyEl = cluster.querySelector('[data-phonetext]');
-      const prettyNumber = (prettyEl && prettyEl.textContent.trim()) || phone;
+      // Keep tel: hrefs in sync with data-phone (drawer + dialog)
+      document.querySelectorAll('.call-link[data-phone]').forEach(a => {
+        const ph = a.getAttribute('data-phone') || '';
+        if (ph) a.setAttribute('href', 'tel:' + ph);
+      });
 
-      // Wire up main anchors
-      const callLink = cluster.querySelector('[data-call]');
-      const smsLink  = cluster.querySelector('[data-sms]');
-      const ftLink   = cluster.querySelector('[data-facetime]');
-      const copyBtn  = cluster.querySelector('[data-copy]');
+      // Dialog popover
+      const callBtn = document.querySelector('#contactDialog .call-link[data-phone]');
+      const pop = document.querySelector('#contactDialog [data-popover]');
+      if (!callBtn || !pop) return;
 
-      if (callLink) callLink.href = `tel:${phone}`;
-      if (smsLink)  smsLink.href  = `sms:${phone}`;
+      const copyBtn = pop.querySelector('.call-popover__copy');
+      const copyBtn2 = pop.querySelector('[data-copy]');
+      const textLink = pop.querySelector('[data-text]');
+      const callLink = pop.querySelector('[data-call]');
+      const phone = (copyBtn?.getAttribute('data-copy-number') || callBtn.getAttribute('data-phone') || '').trim();
 
-      // macOS → expose FaceTime Audio
-      if (isMac && ftLink) {
-        ftLink.hidden = false;
-        ftLink.href = `facetime-audio://${phone}`;
-        ftLink.setAttribute('rel','noopener');
+      // Position (desktop: align under the trigger; mobile: CSS centers it)
+      function position() {
+        if (window.matchMedia('(hover:none)').matches) return; // centered by CSS on touch
+        const btn = callBtn.getBoundingClientRect();
+        const row = callBtn.closest('.contact-actions').getBoundingClientRect();
+        pop.style.left = (btn.left - row.left) + 'px';
       }
 
-      // Desktop without a likely handler → show Copy (graceful fallback)
-      if (!canLikelyCall) {
-        if (copyBtn) copyBtn.hidden = false;
-        // Optional: reveal "Text" if you want to encourage SMS from desktop apps that support it
-        // smsLink && (smsLink.hidden = false);
-        // Add a gentle title to set expectations
-        callLink && callLink.setAttribute('title','Your computer may ask which app to use for calls (Teams, Skype, etc.).');
-      }
+      const show = () => { pop.hidden = false; position(); };
+      const hide = () => { pop.hidden = true; };
 
-      // Copy button behavior
-      copyBtn && copyBtn.addEventListener('click', async () => {
+      // Keep open while either trigger OR popover is hovered/focused
+      let refs = 0, timer = null;
+      const enter = () => {
+        refs++;
+        clearTimeout(timer);
+        show();
+      };
+      const leave = () => {
+        refs = Math.max(0, refs - 1);
+        if (!refs) timer = setTimeout(hide, 200);
+      };
+
+      // Mouse + keyboard
+      callBtn.addEventListener('mouseenter', enter);
+      callBtn.addEventListener('mouseleave', leave);
+      callBtn.addEventListener('focus', enter);
+      callBtn.addEventListener('blur', leave);
+      pop.addEventListener('mouseenter', enter);
+      pop.addEventListener('mouseleave', leave);
+      pop.addEventListener('focusin', enter);
+      pop.addEventListener('focusout', leave);
+
+      // Touch: show on press but don't interfere with the native dialer
+      callBtn.addEventListener(
+        'pointerdown',
+        () => {
+          if (window.matchMedia('(hover:none)').matches) {
+            enter();
+            clearTimeout(timer);
+            timer = setTimeout(hide, 4000); // auto-hide after a moment
+          }
+        },
+        { passive:true }
+      );
+
+      window.addEventListener(
+        'resize',
+        () => {
+          if (!pop.hidden) position();
+        },
+        { passive:true }
+      );
+
+      // Copy helpers
+      async function doCopy() {
         try {
           await navigator.clipboard.writeText(phone);
           const prev = copyBtn.textContent;
           copyBtn.textContent = 'Copied';
-          setTimeout(()=> copyBtn.textContent = prev, 1200);
-        } catch(_) {
-          // Clipboard blocked → show an alert as last resort
-          alert('Phone number: ' + prettyNumber);
+          setTimeout(() => (copyBtn.textContent = prev), 1000);
+        } catch (_) {
+          alert('Phone number: ' + (copyBtn.textContent || phone));
         }
-      });
-    });
-  })();
+      }
 
+      copyBtn?.addEventListener('click', doCopy);
+      copyBtn2?.addEventListener('click', doCopy);
+
+      // Desktop hint if there may be no handler
+      if (!canLikelyCall) {
+        callBtn.title = 'Your computer may ask which app to use (Teams, Skype, etc.). Hover to copy the number.';
+      }
+
+      // Ensure the call/text links carry the same phone value
+      if (phone) {
+        callLink?.setAttribute('href', 'tel:' + phone);
+        textLink?.setAttribute('href', 'sms:' + phone);
+      }
+    })();
   </script>
 </body>
 </html>
-
-
-
-
-
-
