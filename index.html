@@ -1214,12 +1214,6 @@
       font-size:.85em
     }
 
-    .call-popover__actions {
-      display:none;
-      gap:8px;
-      margin-top:8px
-    }
-
     /* Mobile/touch: center the popover under the row; show Text/Copy actions */
     @media (hover:none) {
       .call-popover {
@@ -1228,10 +1222,6 @@
         max-width:92vw;
         text-align:center;
       }
-
-      .call-popover__actions { display:flex }
-
-      .call-popover__hint { display:none }
     }
 
     @media (max-width:1120px) {
@@ -1838,13 +1828,6 @@
           >
             +1 (254) 366-6861
           </button>
-
-          <!-- Mobile/touch actions -->
-          <div class="call-popover__actions" data-mobile-actions>
-            <a class="btn btn-primary btn-xs" data-call href="tel:+12543666861">Call</a>
-            <a class="btn btn-outline btn-xs" data-text href="sms:+12543666861">Text</a>
-            <button type="button" class="btn btn-outline btn-xs" data-copy>Copy</button>
-          </div>
         </span>
 
         <a
@@ -2301,9 +2284,6 @@
     if (!callBtn || !pop) return;
 
     const copyBtn = pop.querySelector('.call-popover__copy');
-    const copyBtn2 = pop.querySelector('[data-copy]');
-    const textLink = pop.querySelector('[data-text]');
-    const callLink = pop.querySelector('[data-call]');
     const phone =
       (copyBtn?.getAttribute('data-copy-number') ||
         callBtn.getAttribute('data-phone') ||
@@ -2374,21 +2354,15 @@
     }
 
     copyBtn?.addEventListener('click', doCopy);
-    copyBtn2?.addEventListener('click', doCopy);
 
     // Desktop hint if there may be no call handler
     if (!canLikelyCall) {
       callBtn.title =
         'Your computer may ask which app to use (Teams, Skype, etc.). Hover to copy the number.';
     }
-
-    // Ensure the call/text links carry the same phone value
-    if (phone) {
-      callLink?.setAttribute('href', 'tel:' + phone);
-      textLink?.setAttribute('href', 'sms:' + phone);
-    }
   })();
 </script>
 </body>
 </html>
+
 
