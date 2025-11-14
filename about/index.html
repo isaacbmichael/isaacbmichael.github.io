@@ -141,7 +141,7 @@
         will-change: transform;             /* pre-promote each icon */
         transform: translateZ(0);           /* make its own layer */
         backface-visibility: hidden;
-        contain: paint;                     /* isolate repaints */
+        contain: paint;                      /* isolate repaints */
       }
 
       :where(footer .icon-btn:hover, .mobile-dock .icon-btn:hover){
@@ -149,9 +149,9 @@
         transform: translate3d(0, -2px, 0);  /* ONLY the hovered one moves */
       }
 
-      /* Optional: scope underlines to text links, not icon buttons */
-      footer a:hover,
-      .mobile-dock a:hover { text-decoration: none; }
+/* Optional: scope underlines to text links, not icon buttons */
+footer a:hover,
+.mobile-dock a:hover { text-decoration: none; }
 
       /* Visually hidden text */
       .sr-only{
@@ -379,50 +379,6 @@
       .contact-actions .btn{ border-radius:999px }
       .contact-actions .btn-primary{ filter:saturate(115%) }
 
-      /* Call-or-text helper (shared pattern) */
-      .call-group{
-        position:relative;
-        display:inline-flex;
-        align-items:center;
-      }
-      .call-link{
-        position:relative;
-      }
-      .call-popover{
-        position:absolute;
-        top:100%;
-        left:0;
-        margin-top:6px;
-        z-index:30;
-      }
-      .call-popover[hidden]{ display:none; }
-      .call-popover__copy{
-        display:inline-flex;
-        align-items:center;
-        gap:6px;
-        padding:6px 10px;
-        border-radius:999px;
-        border:1px solid #e5e7eb;
-        background:#fff;
-        font-size:.85rem;
-        font-weight:700;
-        color:#0f172a;
-        box-shadow:var(--shadow);
-        cursor:pointer;
-        transition:transform .14s ease, box-shadow .14s ease, background .14s ease;
-      }
-      .call-popover__copy:hover{
-        transform:translateY(-1px);
-        box-shadow:var(--shadow-hover);
-        background:#f9fafb;
-      }
-      .call-popover__number{
-        font-variant-numeric:tabular-nums;
-      }
-      @media (max-width:720px){
-        .call-popover{ display:none !important; }
-      }
-
       .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
 
       .form-grid{
@@ -545,9 +501,10 @@
         align-items:center;
         margin-top:6px;        /* small breathing room under the h2 */
       }
+
       .btn{
         display:inline-flex;align-items:center;gap:8px;
-        padding:.7rem 1rem; border-radius:999px;font-weight:800;
+        padding:.7rem 1rem;border-radius:999px;font-weight:800;
         border:1px solid rgba(0,0,0,.04);
         background:#fff;color:var(--brand-blue-900);
         box-shadow:var(--shadow);
@@ -755,14 +712,13 @@
       <div class="quick" aria-label="Quick actions">
         <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email</a>
         <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-        <a
-          class="btn call-link"
-          href="tel:+12543666861"
-          data-phone="+12543666861"
-          aria-label="Call or text +1 (254) 366-6861"
-        >
-          Call or text
-        </a>
+        <div class="btn-group call-cluster" data-phone="+12543666861">   
+          <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>   
+          <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>   
+          <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>   
+          <a class="btn btn-outline" data-facetime hidden>FaceTime</a>   
+          <small class="sr-only" data-phonetext>+1 (254) 366-6861</small> 
+        </div>
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </div>
     </aside>
@@ -873,12 +829,11 @@
             </figure>
           </div>
 
-          <!-- In-hero anchor chips -->
+          <!-- NEW: In-hero anchor chips -->
           <nav class="chip-row" aria-label="Section shortcuts">
             <a class="chip" href="#impact">Recent impact</a>
             <a class="chip" href="#how">How I work</a>
             <a class="chip" href="#credentials">Credentials</a>
-            <a class="chip" href="#next">Contact &amp; links</a>
           </nav>
 
           <!-- Scroll cue -->
@@ -990,6 +945,9 @@
                   <li><strong>On Birman’s sequence of Hardy–Rellich-type inequalities</strong> — J. Differential Equations (2018)</li>
                   <li><strong>Net regular signed trees</strong> — Australas. J. Combin. (2016)</li>
                 </ul>
+                <!-- <p style="margin-top:8px">
+                  <a href="/writing/" aria-label="See publications and writing">View all publications</a>
+                </p> -->
               </details>
             </div>
 
@@ -1050,7 +1008,7 @@
       <!-- CTA -->
       <section class="band band--cta" aria-labelledby="next">
         <div class="wrap">
-          <h2 id="next">Contact &amp; links</h2>
+          <h2 id="next">What would you like to explore?</h2>
           <div class="cta-row" aria-label="Quick navigation">
             <a class="btn" href="/">Home</a>
             <a class="btn btn-primary" href="/about/">About</a>
@@ -1121,30 +1079,12 @@
       <div class="modal-body">
         <div class="contact-actions" aria-label="Quick links">
           <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-          <div class="btn-group call-group">
-            <a
-              class="btn call-link"
-              href="tel:+12543666861"
-              data-phone="+12543666861"
-              aria-label="Call or text +1 (254) 366-6861"
-              aria-describedby="callTip"
-            >
-              Call or text
-            </a>
-
-            <!-- Desktop-only helper: small copy pill under the button -->
-            <div class="call-popover" id="callTip" data-popover hidden>
-              <button
-                type="button"
-                class="call-popover__copy"
-                data-popover-copy
-                aria-label="Copy phone number"
-              >
-                <span class="call-popover__number" data-popover-number>
-                  +1 (254) 366-6861
-                </span>
-              </button>
-            </div>
+          <div class="btn-group call-cluster" data-phone="+12543666861">   
+            <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>   
+            <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>   
+            <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>   
+            <a class="btn btn-outline" data-facetime hidden>FaceTime</a>   
+            <small class="sr-only" data-phonetext>+1 (254) 366-6861</small> 
           </div>
           <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -1423,14 +1363,18 @@
           { t: "Call me Ishmael.", a: "Herman Melville" }
         ];
 
-        var showingBack = false;
-        var idx = 0;
+        var showingBack = false, idx = 0;
         var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        // One-time intro spin per load (skips if reduced motion)
+        /* One-time intro spin (persisted). Add ?intro=1 to force for testing. */
         var coin = badge.querySelector('.coin');
-        if (!reduceMotion && coin){
+        var LS_KEY = 'aboutBadgeIntroSeen';
+        var forceIntro = /\bintro=1\b/i.test(location.search);
+        var shouldSpin = !reduceMotion;
+
+        if (shouldSpin && coin) {
+          // Delay slightly so layout/IO observers settle (prevents jank)
           var startIntro = function(){
+            // If user already flipped before timeout, skip.
             if (badge.classList.contains('is-flipped')) return;
 
             badge.classList.add('intro-spin');
@@ -1442,14 +1386,17 @@
               done = true;
               badge.classList.remove('intro-spin');
               badge.removeAttribute('aria-busy');
+              // 1turn ends where it starts, so no visual jump.
             };
 
-            coin.addEventListener('animationend', cleanup, { once:true });
-            setTimeout(cleanup, 1300);
-          };
+    coin.addEventListener('animationend', cleanup, { once: true });
+    setTimeout(cleanup, 1300); // Fallback
 
-          requestAnimationFrame(function(){ setTimeout(startIntro, 120); });
-        }
+    try { localStorage.setItem(LS_KEY, '1'); } catch(_) {}
+  };
+
+  requestAnimationFrame(function(){ setTimeout(startIntro, 120); });
+}
 
         function setTilt(rxDeg, ryDeg){
           tilt.style.setProperty('--rx', rxDeg + 'deg');
@@ -1489,12 +1436,7 @@
         badge.addEventListener('pointermove', onPointerMove);
         badge.addEventListener('pointerleave', onLeave);
         badge.addEventListener('click', flip);
-        badge.addEventListener('keydown', function(e){
-          if (e.key === 'Enter' || e.key === ' '){
-            e.preventDefault();
-            flip();
-          }
-        });
+        badge.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); flip(); } });
 
         if (reduceMotion){
           badge.removeEventListener('pointermove', onPointerMove);
@@ -1502,99 +1444,60 @@
           setTilt(0, 0);
         }
       })();
+  (function(){
+    // Enhance every "call cluster"
+    const clusters = document.querySelectorAll('.call-cluster');
+    if (!clusters.length) return;
 
-      /* Call or text: shared behavior + desktop copy pill */
-      (function(){
-        // Make every .call-link[data-phone] a tel: link
-        var links = document.querySelectorAll('.call-link[data-phone]');
-        if (links.length){
-          Array.prototype.forEach.call(links, function(a){
-            var ph = a.getAttribute('data-phone') || '';
-            if (ph){
-              a.setAttribute('href', 'tel:' + ph);
-            }
-          });
+    const UA = navigator.userAgent || '';
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
+    const isMac = /Macintosh|Mac OS X/i.test(UA);
+    const canLikelyCall = isMobile || isMac; // dialer/FaceTime paths
+
+    clusters.forEach(cluster => {
+      const phone = cluster.getAttribute('data-phone') || '';
+      const prettyEl = cluster.querySelector('[data-phonetext]');
+      const prettyNumber = (prettyEl && prettyEl.textContent.trim()) || phone;
+
+      // Wire up main anchors
+      const callLink = cluster.querySelector('[data-call]');
+      const smsLink  = cluster.querySelector('[data-sms]');
+      const ftLink   = cluster.querySelector('[data-facetime]');
+      const copyBtn  = cluster.querySelector('[data-copy]');
+
+      if (callLink) callLink.href = `tel:${phone}`;
+      if (smsLink)  smsLink.href  = `sms:${phone}`;
+
+      // macOS → expose FaceTime Audio
+      if (isMac && ftLink) {
+        ftLink.hidden = false;
+        ftLink.href = `facetime-audio://${phone}`;
+        ftLink.setAttribute('rel','noopener');
+      }
+
+      // Desktop without a likely handler → show Copy (graceful fallback)
+      if (!canLikelyCall) {
+        if (copyBtn) copyBtn.hidden = false;
+        // Optional: reveal "Text" if you want to encourage SMS from desktop apps that support it
+        // smsLink && (smsLink.hidden = false);
+        // Add a gentle title to set expectations
+        callLink && callLink.setAttribute('title','Your computer may ask which app to use for calls (Teams, Skype, etc.).');
+      }
+
+      // Copy button behavior
+      copyBtn && copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(phone);
+          const prev = copyBtn.textContent;
+          copyBtn.textContent = 'Copied';
+          setTimeout(()=> copyBtn.textContent = prev, 1200);
+        } catch(_) {
+          // Clipboard blocked → show an alert as last resort
+          alert('Phone number: ' + prettyNumber);
         }
-
-        // Popover only on hover-capable pointers (desktop/laptop)
-        var mqHoverFine = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)');
-        if (!mqHoverFine || !mqHoverFine.matches) return;
-
-        var dlg = document.getElementById('contactDialog');
-        if (!dlg) return;
-
-        var callBtn = dlg.querySelector('.call-link[data-phone]');
-        var pop     = dlg.querySelector('[data-popover]');
-        if (!callBtn || !pop) return;
-
-        var copyBtn = pop.querySelector('[data-popover-copy]');
-        var numEl   = pop.querySelector('[data-popover-number]');
-        var phone   = callBtn.getAttribute('data-phone') || '';
-        if (!copyBtn || !phone) return;
-
-        if (numEl && !numEl.textContent.trim()){
-          numEl.textContent = phone;
-        }
-
-        function position(){
-          var group = callBtn.closest('.call-group') || callBtn.parentElement;
-          if (!group) return;
-          var btnRect   = callBtn.getBoundingClientRect();
-          var groupRect = group.getBoundingClientRect();
-          pop.style.left = (btnRect.left - groupRect.left) + 'px';
-        }
-
-        var inside = 0;
-        function show(){
-          position();
-          pop.hidden = false;
-        }
-        function hide(){
-          pop.hidden = true;
-        }
-
-        ['mouseenter','focusin'].forEach(function(ev){
-          callBtn.addEventListener(ev, function(){
-            inside++;
-            show();
-          });
-          pop.addEventListener(ev, function(){
-            inside++;
-            show();
-          });
-        });
-        ['mouseleave','focusout'].forEach(function(ev){
-          callBtn.addEventListener(ev, function(){
-            inside = Math.max(0, inside-1);
-            if (!inside) hide();
-          });
-          pop.addEventListener(ev, function(){
-            inside = Math.max(0, inside-1);
-            if (!inside) hide();
-          });
-        });
-
-        window.addEventListener('resize', function(){
-          if (!pop.hidden) position();
-        });
-
-        copyBtn.addEventListener('click', function(){
-          if (!phone) return;
-          var text = numEl ? numEl.textContent.trim() : phone;
-
-          if (navigator.clipboard && navigator.clipboard.writeText){
-            navigator.clipboard.writeText(phone).then(function(){
-              var prev = copyBtn.textContent;
-              copyBtn.textContent = 'Copied';
-              setTimeout(function(){ copyBtn.textContent = prev; }, 1200);
-            }).catch(function(){
-              alert('Phone number: ' + text);
-            });
-          } else {
-            alert('Phone number: ' + text);
-          }
-        });
-      })();
+      });
+    });
+  })();
     </script>
   </body>
 </html>
