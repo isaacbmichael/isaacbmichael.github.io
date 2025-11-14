@@ -1083,42 +1083,93 @@ footer a:hover,
     </div>
 
     <!-- Contact Modal -->
-    <dialog id="contactDialog" aria-labelledby="contactTitle">
-      <div class="modal-header">
-        <h3 id="contactTitle" class="modal-title">Contact</h3>
-        <button class="modal-close" id="contactClose" aria-label="Close contact dialog">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z"/></svg>
+<dialog id="contactDialog" aria-labelledby="contactTitle">
+  <div class="modal-header">
+    <h3 id="contactTitle" class="modal-title">Contact</h3>
+    <button class="modal-close" id="contactClose" aria-label="Close contact dialog">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.2 5l5.8 5.8L17.8 5 19 6.2 13.2 12 19 17.8 17.8 19 12 13.2 6.2 19 5 17.8 10.8 12 5 6.2 6.2 5z"/>
+      </svg>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="contact-actions" aria-label="Quick links">
+      <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">
+        Schedule on Calendly
+      </a>
+
+      <!-- Canonical call/text pill cluster -->
+      <div class="btn-group call-cluster" data-phone="+12543666861">
+        <a
+          class="btn"
+          data-call
+          href="tel:+12543666861"
+          aria-label="Call or text +1 (254) 366-6861"
+        >
+          Call or text
+        </a>
+        <button class="btn btn-outline" type="button" data-copy hidden>
+          Copy
+        </button>
+        <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>
+          Text
+        </a>
+        <a class="btn btn-outline" data-facetime hidden>
+          FaceTime
+        </a>
+        <small class="sr-only" data-phonetext>+1 (254) 366-6861</small>
+      </div>
+
+      <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">
+        LinkedIn
+      </a>
+      <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">
+        GitHub
+      </a>
+    </div>
+
+    <div class="divider" aria-hidden="true"></div>
+
+    <form id="quickForm" class="form-grid">
+      <label for="qName">Name</label>
+      <input
+        id="qName"
+        name="name"
+        autocomplete="name"
+        placeholder="Your name"
+      />
+
+      <label for="qEmail">Email</label>
+      <input
+        id="qEmail"
+        name="email"
+        type="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+      />
+
+      <label for="qMsg">Message</label>
+      <textarea
+        id="qMsg"
+        name="message"
+        placeholder="Tell me a little about your project or request…"
+      ></textarea>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" id="contactCancel">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Send via Email
         </button>
       </div>
-      <div class="modal-body">
-        <div class="contact-actions" aria-label="Quick links">
-          <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-          <div class="btn-group call-cluster" data-phone="+12543666861">
-          <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>
-          <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>
-          <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>
-          <a class="btn btn-outline" data-facetime hidden>FaceTime</a>
-          <small class="sr-only" data-phonetext>+1 (254) 366-6861</small>
-        </div>
-          <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </div>
-        <div class="divider" aria-hidden="true"></div>
-        <form id="quickForm" class="form-grid">
-          <label for="qName">Name</label>
-          <input id="qName" name="name" autocomplete="name" placeholder="Your name" />
-          <label for="qEmail">Email</label>
-          <input id="qEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
-          <label for="qMsg">Message</label>
-          <textarea id="qMsg" name="message" placeholder="Tell me a little about your project or request…"></textarea>
-          <div class="form-actions">
-            <button type="button" class="btn btn-outline" id="contactCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary">Send via Email</button>
-          </div>
-          <small class="form-hint">Submitting opens your email client with your message pre-filled (no data is stored on this site).</small>
-        </form>
-      </div>
-    </dialog>
+
+      <small class="form-hint">
+        Submitting opens your email client with your message pre-filled (no data is stored on this site).
+      </small>
+    </form>
+  </div>
+</dialog>
 
     <script>
       /* ========== Util helpers ========== */
