@@ -375,9 +375,53 @@ footer a:hover,
       .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
 
       .modal-body{ padding:14px 18px 18px }
-      .contact-actions{ display:flex; gap:12px; flex-wrap:wrap }
+      .contact-actions{
+        display:flex; gap:12px; flex-wrap:wrap;
+        position:relative; /* anchor for call-popover pill */
+      }
       .contact-actions .btn{ border-radius:999px }
       .contact-actions .btn-primary{ filter:saturate(115%) }
+
+      /* Call/text popover pill (shared with Home) */
+      .call-popover{
+        position:absolute;
+        z-index:1200;
+        transform: translateY(calc(100% + 8px));
+        left:0;
+        background:#fff;
+        color:var(--ink);
+        border:1px solid #e5e7eb;
+        border-radius:12px;
+        box-shadow:var(--shadow);
+        padding:10px 12px;
+        font-size:.95rem;
+        white-space:nowrap;
+        pointer-events:auto;
+      }
+      .call-popover__copy{
+        appearance:none;
+        border:0;
+        background:transparent;
+        padding:0;
+        margin:0 8px 0 0;
+        font:inherit;
+        font-weight:800;
+        color:var(--ink);
+        cursor:pointer;
+      }
+      .call-popover__copy:focus-visible{
+        outline:none;
+        box-shadow:0 0 0 6px var(--ring);
+        border-radius:8px;
+      }
+      @media (hover:none){
+        .call-popover{
+          left:50% !important;
+          transform: translate(-50%, 10px);
+          max-width:92vw;
+          text-align:center;
+        }
+      }
 
       .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
 
@@ -727,6 +771,7 @@ footer a:hover,
           <small class="sr-only" data-phonetext>+1 (254) 366-6861</small>
         </div>
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </aside>
 
@@ -1086,20 +1131,34 @@ footer a:hover,
       <div class="modal-body">
         <div class="contact-actions" aria-label="Quick links">
           <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-          <div class="btn-group call-cluster" data-phone="+12543666861">
-            <a class="btn"
-               data-call
-               href="tel:+12543666861"
-               aria-label="Call or text +1 (254) 366-6861">
-              Call or text
-            </a>
-            <button class="btn btn-outline"
-                    type="button"
-                    data-copy>
+
+          <!-- Canonical Call/Text pill (shared with Home) -->
+          <a
+            class="btn call-link"
+            data-phone="+12543666861"
+            href="tel:+12543666861"
+            aria-describedby="callTip"
+          >
+            Call or text
+          </a>
+          <span
+            id="callTip"
+            class="call-popover"
+            data-popover
+            hidden
+            role="dialog"
+            aria-label="Phone options"
+          >
+            <button
+              type="button"
+              class="call-popover__copy"
+              data-copy-number="+12543666861"
+              aria-label="Copy phone number"
+            >
               +1 (254) 366-6861
             </button>
-            <small class="sr-only" data-phonetext>+1 (254) 366-6861</small>
-          </div>
+          </span>
+
           <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
@@ -1458,60 +1517,165 @@ footer a:hover,
           setTilt(0, 0);
         }
       })();
-  (function(){
-    // Enhance every "call cluster"
-    const clusters = document.querySelectorAll('.call-cluster');
-    if (!clusters.length) return;
 
-    const UA = navigator.userAgent || '';
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
-    const isMac = /Macintosh|Mac OS X/i.test(UA);
-    const canLikelyCall = isMobile || isMac; // dialer/FaceTime paths
+      /* Single-button Call/Text behavior with copy popover (parity with Home) */
+      (function () {
+        var UA = navigator.userAgent || '';
+        var isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
+        var isMac = /Macintosh|Mac OS X/i.test(UA);
+        var canLikelyCall = isMobile || isMac;
 
-    clusters.forEach(cluster => {
-      const phone = cluster.getAttribute('data-phone') || '';
-      const prettyEl = cluster.querySelector('[data-phonetext]');
-      const prettyNumber = (prettyEl && prettyEl.textContent.trim()) || phone;
+        /* Keep tel: href in sync with data-phone for all .call-link buttons */
+        Array.prototype.forEach.call(
+          document.querySelectorAll('.call-link[data-phone]'),
+          function (a) {
+            var ph = a.getAttribute('data-phone') || '';
+            if (ph) a.setAttribute('href', 'tel:' + ph);
+          }
+        );
 
-      // Wire up main anchors
-      const callLink = cluster.querySelector('[data-call]');
-      const smsLink  = cluster.querySelector('[data-sms]');
-      const ftLink   = cluster.querySelector('[data-facetime]');
-      const copyBtn  = cluster.querySelector('[data-copy]');
-
-      if (callLink) callLink.href = `tel:${phone}`;
-      if (smsLink)  smsLink.href  = `sms:${phone}`;
-
-      // macOS → expose FaceTime Audio
-      if (isMac && ftLink) {
-        ftLink.hidden = false;
-        ftLink.href = `facetime-audio://${phone}`;
-        ftLink.setAttribute('rel','noopener');
-      }
-
-      // Desktop without a likely handler → show Copy (graceful fallback)
-      if (!canLikelyCall) {
-        if (copyBtn) copyBtn.hidden = false;
-        // Optional: reveal "Text" if you want to encourage SMS from desktop apps that support it
-        // smsLink && (smsLink.hidden = false);
-        // Add a gentle title to set expectations
-        callLink && callLink.setAttribute('title','Your computer may ask which app to use for calls (Teams, Skype, etc.).');
-      }
-
-      // Copy button behavior
-      copyBtn && copyBtn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(phone);
-          const prev = copyBtn.textContent;
-          copyBtn.textContent = 'Copied';
-          setTimeout(()=> copyBtn.textContent = prev, 1200);
-        } catch(_) {
-          // Clipboard blocked → show an alert as last resort
-          alert('Phone number: ' + prettyNumber);
+        /* Only enable fancy popover on hover/fine-pointer devices (desktop/laptop) */
+        var mqHoverFine =
+          window.matchMedia &&
+          window.matchMedia('(hover:hover) and (pointer:fine)');
+        if (!mqHoverFine || !mqHoverFine.matches) {
+          // On touch/mobile, button is a plain tel: link
+          return;
         }
-      });
-    });
-  })();
+
+        var callBtn = document.querySelector('#contactDialog .call-link[data-phone]');
+        var pop = document.querySelector('#contactDialog [data-popover]');
+        if (!callBtn || !pop) return;
+
+        var copyBtn = pop.querySelector('.call-popover__copy');
+        var phone =
+          ((copyBtn && copyBtn.getAttribute('data-copy-number')) ||
+            callBtn.getAttribute('data-phone') ||
+            '').trim();
+
+        function position() {
+          var btnRect = callBtn.getBoundingClientRect();
+          var row = callBtn.closest('.contact-actions').getBoundingClientRect();
+          pop.style.left = (btnRect.left - row.left) + 'px';
+        }
+
+        function show() {
+          pop.hidden = false;
+          position();
+        }
+        function hide() {
+          pop.hidden = true;
+        }
+
+        var refs = 0;
+        var timer = null;
+
+        function enter() {
+          refs++;
+          if (timer) clearTimeout(timer);
+          show();
+        }
+        function leave() {
+          refs = Math.max(0, refs - 1);
+          if (!refs) {
+            timer = setTimeout(hide, 200);
+          }
+        }
+
+        ['mouseenter','focus'].forEach(function (evt) {
+          callBtn.addEventListener(evt, enter);
+        });
+        ['mouseleave','blur'].forEach(function (evt) {
+          callBtn.addEventListener(evt, leave);
+        });
+        pop.addEventListener('mouseenter', enter);
+        pop.addEventListener('mouseleave', leave);
+        pop.addEventListener('focusin', enter);
+        pop.addEventListener('focusout', leave);
+
+        window.addEventListener('resize', function () {
+          if (!pop.hidden) position();
+        }, { passive:true });
+
+        function doCopy() {
+          if (!phone) return;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(phone).then(function () {
+              if (!copyBtn) return;
+              var prev = copyBtn.textContent;
+              copyBtn.textContent = 'Copied';
+              setTimeout(function () {
+                copyBtn.textContent = prev;
+              }, 1000);
+            }).catch(function () {
+              alert('Phone number: ' + (copyBtn ? copyBtn.textContent : phone));
+            });
+          } else {
+            alert('Phone number: ' + (copyBtn ? copyBtn.textContent : phone));
+          }
+        }
+        if (copyBtn) copyBtn.addEventListener('click', doCopy);
+
+        if (!canLikelyCall) {
+          callBtn.title =
+            'Your computer may ask which app to use (Teams, Skype, etc.). Hover to copy the number.';
+        }
+      })();
+
+      (function(){
+        // Enhance every "call cluster"
+        const clusters = document.querySelectorAll('.call-cluster');
+        if (!clusters.length) return;
+
+        const UA = navigator.userAgent || '';
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(UA);
+        const isMac = /Macintosh|Mac OS X/i.test(UA);
+        const canLikelyCall = isMobile || isMac; // dialer/FaceTime paths
+
+        clusters.forEach(cluster => {
+          const phone = cluster.getAttribute('data-phone') || '';
+          const prettyEl = cluster.querySelector('[data-phonetext]');
+          const prettyNumber = (prettyEl && prettyEl.textContent.trim()) || phone;
+
+          // Wire up main anchors
+          const callLink = cluster.querySelector('[data-call]');
+          const smsLink  = cluster.querySelector('[data-sms]');
+          const ftLink   = cluster.querySelector('[data-facetime]');
+          const copyBtn  = cluster.querySelector('[data-copy]');
+
+          if (callLink) callLink.href = `tel:${phone}`;
+          if (smsLink)  smsLink.href  = `sms:${phone}`;
+
+          // macOS → expose FaceTime Audio
+          if (isMac && ftLink) {
+            ftLink.hidden = false;
+            ftLink.href = `facetime-audio://${phone}`;
+            ftLink.setAttribute('rel','noopener');
+          }
+
+          // Desktop without a likely handler → show Copy (graceful fallback)
+          if (!canLikelyCall) {
+            if (copyBtn) copyBtn.hidden = false;
+            // Optional: reveal "Text" if you want to encourage SMS from desktop apps that support it
+            // smsLink && (smsLink.hidden = false);
+            // Add a gentle title to set expectations
+            callLink && callLink.setAttribute('title','Your computer may ask which app to use for calls (Teams, Skype, etc.).');
+          }
+
+          // Copy button behavior
+          copyBtn && copyBtn.addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(phone);
+              const prev = copyBtn.textContent;
+              copyBtn.textContent = 'Copied';
+              setTimeout(()=> copyBtn.textContent = prev, 1200);
+            } catch(_) {
+              // Clipboard blocked → show an alert as last resort
+              alert('Phone number: ' + prettyNumber);
+            }
+          });
+        });
+      })();
     </script>
   </body>
 </html>
