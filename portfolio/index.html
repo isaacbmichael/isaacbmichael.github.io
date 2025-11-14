@@ -518,9 +518,38 @@ footer a:hover,
       .modal-close:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover) }
 
       .modal-body{ padding:14px 18px 18px }
-      .contact-actions{ display:flex; gap:12px; flex-wrap:wrap }
+      .contact-actions{ display:flex; gap:12px; flex-wrap:wrap; position:relative }
       .contact-actions .btn{ border-radius:999px }
       .contact-actions .btn-primary{ filter:saturate(115%) }
+      .call-popover{
+        position:absolute;
+        top:100%;
+        left:0;
+        margin-top:8px;
+        background:#fff;
+        border-radius:12px;
+        border:1px solid #e5e7eb;
+        box-shadow:var(--shadow);
+        padding:4px;
+        z-index:20;
+      }
+      .call-popover__copy{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding:6px 10px;
+        border-radius:999px;
+        border:1px solid transparent;
+        background:transparent;
+        font:inherit;
+        font-weight:800;
+        color:var(--brand-blue-900);
+        cursor:pointer;
+      }
+      .call-popover__copy:focus-visible{
+        outline:none;
+        box-shadow:0 0 0 6px var(--ring);
+      }
 
       .divider{ height:1px; background:#e5e7eb; margin:8px 0 14px }
 
@@ -606,13 +635,14 @@ footer a:hover,
       <div class="quick" aria-label="Quick actions">
         <a class="btn btn-primary" href="mailto:isaac.b.michael@gmail.com">Email</a>
         <a class="btn" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-        <div class="btn-group call-cluster" data-phone="+12543666861">
-          <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>
-          <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>
-          <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>
-          <a class="btn btn-outline" data-facetime hidden>FaceTime</a>
-          <small class="sr-only" data-phonetext>+1 (254) 366-6861</small>
-        </div>
+        <a
+          class="btn call-link"
+          data-phone="+12543666861"
+          href="tel:+12543666861"
+          aria-label="Call or text +1 (254) 366-6861"
+        >
+          Call or text
+        </a>
         <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </div>
     </aside>
@@ -1093,13 +1123,31 @@ footer a:hover,
       <div class="modal-body">
         <div class="contact-actions" aria-label="Quick links">
           <a class="btn btn-primary" href="https://calendly.com/isaacbmichael" target="_blank" rel="noopener noreferrer">Schedule on Calendly</a>
-          <div class="btn-group call-cluster" data-phone="+12543666861">
-          <a class="btn" data-call href="tel:+12543666861" aria-label="Call or text +1 (254) 366-6861">Call or text</a>
-          <button class="btn btn-outline" type="button" data-copy hidden>Copy</button>
-          <a class="btn btn-outline" data-sms href="sms:+12543666861" hidden>Text</a>
-          <a class="btn btn-outline" data-facetime hidden>FaceTime</a>
-          <small class="sr-only" data-phonetext>+1 (254) 366-6861</small>
-        </div>
+          <a
+            class="btn call-link"
+            data-phone="+12543666861"
+            href="tel:+12543666861"
+            aria-describedby="callTip"
+          >
+            Call or text
+          </a>
+          <span
+            id="callTip"
+            class="call-popover"
+            data-popover
+            hidden
+            role="dialog"
+            aria-label="Phone options"
+          >
+            <button
+              type="button"
+              class="call-popover__copy"
+              data-copy-number="+12543666861"
+              aria-label="Copy phone number"
+            >
+              +1 (254) 366-6861
+            </button>
+          </span>
           <a class="btn" href="https://www.linkedin.com/in/isaacbmichael" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a class="btn" href="https://github.com/isaacbmichael" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
@@ -1310,6 +1358,105 @@ footer a:hover,
         window.addEventListener('load', setDockVars);
         window.addEventListener('resize', setDockVars, { passive:true });
         window.addEventListener('orientationchange', setDockVars);
+      })();
+      (function(){
+        const callLinks = document.querySelectorAll('.call-link[data-phone]');
+        if (!callLinks.length) return;
+
+        callLinks.forEach(link => {
+          const phone = link.getAttribute('data-phone');
+          if (phone) {
+            link.setAttribute('href', 'tel:' + phone);
+          }
+        });
+
+        const ua = navigator.userAgent || '';
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(ua);
+        const isMac = /Macintosh|Mac OS X/i.test(ua);
+        const canLikelyCall = isMobile || isMac;
+
+        const mqHoverFine = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)');
+        const hoverFine = mqHoverFine && mqHoverFine.matches;
+
+        const callBtn = document.querySelector('#contactDialog .call-link[data-phone]');
+        const pop = document.querySelector('#contactDialog [data-popover]');
+        if (!callBtn || !pop) return;
+
+        if (!canLikelyCall) {
+          callBtn.title = 'Your computer may ask which app to use for calls (Teams, Skype, etc.). Hover to copy the number.';
+        }
+
+        if (!hoverFine) {
+          // On touch / non-hover, just behave as a normal tel: link; popover stays hidden.
+          return;
+        }
+
+        const copyBtn = pop.querySelector('.call-popover__copy');
+        const phone = (copyBtn && copyBtn.getAttribute('data-copy-number')) || callBtn.getAttribute('data-phone') || '';
+        let hoverCount = 0;
+        let hideTimer;
+
+        const positionPopover = () => {
+          const row = callBtn.closest('.contact-actions');
+          if (!row) return;
+          const btnRect = callBtn.getBoundingClientRect();
+          const rowRect = row.getBoundingClientRect();
+          pop.style.left = (btnRect.left - rowRect.left) + 'px';
+        };
+
+        const show = () => {
+          hoverCount++;
+          clearTimeout(hideTimer);
+          positionPopover();
+          pop.hidden = false;
+        };
+
+        const scheduleHide = () => {
+          hoverCount--;
+          clearTimeout(hideTimer);
+          if (hoverCount <= 0) {
+            hideTimer = setTimeout(() => {
+              if (hoverCount <= 0) {
+                pop.hidden = true;
+              }
+            }, 180);
+          }
+        };
+
+        ['mouseenter','focus'].forEach(evt => {
+          callBtn.addEventListener(evt, show);
+        });
+        ['mouseleave','blur'].forEach(evt => {
+          callBtn.addEventListener(evt, scheduleHide);
+        });
+        ['mouseenter','focusin'].forEach(evt => {
+          pop.addEventListener(evt, show);
+        });
+        ['mouseleave','focusout'].forEach(evt => {
+          pop.addEventListener(evt, scheduleHide);
+        });
+
+        if (copyBtn) {
+          copyBtn.addEventListener('click', async () => {
+            if (!phone) return;
+            try {
+              await navigator.clipboard.writeText(phone);
+              const prev = copyBtn.textContent;
+              copyBtn.textContent = 'Copied';
+              setTimeout(() => {
+                copyBtn.textContent = prev;
+              }, 1000);
+            } catch (_) {
+              alert('Phone number: ' + phone);
+            }
+          });
+        }
+
+        window.addEventListener('resize', () => {
+          if (!pop.hidden) {
+            positionPopover();
+          }
+        });
       })();
   (function(){
     // Enhance every "call cluster"
