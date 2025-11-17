@@ -1433,10 +1433,8 @@ footer a:hover,
 
         var showingBack = false, idx = 0;
         var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        /* One-time intro spin (persisted). Add ?intro=1 to force for testing. */
+        /* Intro spin on each visit (for non–reduced-motion users). */
         var coin = badge.querySelector('.coin');
-        var LS_KEY = 'aboutBadgeIntroSeen';
-        var forceIntro = /\bintro=1\b/i.test(location.search);
         var shouldSpin = !reduceMotion;
 
         if (shouldSpin && coin) {
@@ -1459,8 +1457,6 @@ footer a:hover,
 
     coin.addEventListener('animationend', cleanup, { once: true });
     setTimeout(cleanup, 1300); // Fallback
-
-    try { localStorage.setItem(LS_KEY, '1'); } catch(_) {}
   };
 
   requestAnimationFrame(function(){ setTimeout(startIntro, 120); });
