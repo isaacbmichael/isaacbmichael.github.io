@@ -1356,8 +1356,13 @@
         transition:transform .32s cubic-bezier(.2,.8,.2,1);
       }
     }
-    /* Ensure featured tiles keep their lift/3D feel on hover, even after intro-ready */
-    .intro-ready .tiles .tile:hover {
+    /* Home: keep tiles snappy like About, even after intro-ready runs */
+    .intro-ready .tiles .tile{
+      /* copy About-page motion exactly */
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+
+    .intro-ready .tiles .tile:hover{
       transform:translateY(-4px);
       box-shadow:var(--shadow-hover);
     }
@@ -2371,6 +2376,7 @@
 </script>
 </body>
 </html>
+
 
 
 
